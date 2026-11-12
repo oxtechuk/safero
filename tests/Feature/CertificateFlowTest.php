@@ -33,7 +33,7 @@ class CertificateFlowTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard'));
+        $response->assertRedirect(route('apps'));
     }
 
     public function test_dashboard_displays_odoo_style_modules_and_stats(): void
@@ -45,6 +45,18 @@ class CertificateFlowTest extends TestCase
         $response->assertSee('مديولات النظام (Odoo-Style Apps)');
         $response->assertSee('شهادات الفحص والمعايرة');
         $response->assertSee('إدارة العملاء');
+    }
+
+    public function test_authenticated_user_can_view_apps_launcher(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('apps'));
+        $response->assertStatus(200);
+        $response->assertSee('All your business on');
+        $response->assertSee('one platform.');
+        $response->assertSee('شهادات التدريب');
+        $response->assertSee('شهادات الفحص');
     }
 
     public function test_customer_can_be_created(): void

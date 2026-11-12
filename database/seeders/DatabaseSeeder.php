@@ -103,5 +103,7 @@ class DatabaseSeeder extends Seeder
                 'created_by' => $engineer->id,
             ]
         );
+
+        $this->call(TrainingCertificateSeeder::class);
     }
 }

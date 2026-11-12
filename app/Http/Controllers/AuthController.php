@@ -12,7 +12,7 @@ class AuthController extends Controller
     public function showLoginForm(): View|RedirectResponse
     {
         if (Auth::check()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('apps');
         }
 
         return view('auth.login');
@@ -30,7 +30,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('apps'));
         }
 
         return back()->withErrors([

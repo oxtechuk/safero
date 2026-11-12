@@ -4,11 +4,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TraineeController;
+use App\Http\Controllers\TrainingCertificateController;
 use Illuminate\Support\Facades\Route;
 
-// Redirect root to dashboard or login
+// Redirect root to /app (Apps Launcher) or login
 Route::get('/', function () {
-    return auth()->check() ? redirect()->route('dashboard') : redirect()->route('login');
+    return auth()->check() ? redirect()->route('apps') : redirect()->route('login');
 });
 
 // Authentication
@@ -22,8 +24,18 @@ Route::get('/embed/certificate/{uuid}', [CertificateController::class, 'embed'])
 Route::get('/verify-lookup', [CertificateController::class, 'verifyLookup'])->name('certificates.verify.lookup');
 Route::get('/certificates/{certificate}/pdf', [CertificateController::class, 'pdf'])->name('certificates.pdf');
 
+// Public Training Certificate routes (QR Code scan, Embed & PDF)
+Route::get('/verify/training/{uuid}', [TrainingCertificateController::class, 'verify'])->name('training-certificates.verify');
+Route::get('/embed/training-certificate/{uuid}', [TrainingCertificateController::class, 'embed'])->where('uuid', '.*')->name('training-certificates.embed');
+Route::get('/training-certificates/{trainingCertificate}/pdf', [TrainingCertificateController::class, 'pdf'])->name('training-certificates.pdf');
+
 // Protected ERP routes
 Route::middleware('auth')->group(function () {
+    // Odoo-Style App Modules Launcher (/app)
+    Route::get('/app', [DashboardController::class, 'apps'])->name('apps');
+    Route::get('/apps', fn () => redirect()->route('apps'));
+
+    // ERP Management Dashboard & Reports (/dashboard)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Customers CRM
@@ -31,4 +43,10 @@ Route::middleware('auth')->group(function () {
 
     // Inspection & Certificates
     Route::resource('certificates', CertificateController::class);
+
+    // Trainees CRM
+    Route::resource('trainees', TraineeController::class);
+
+    // Training Certificates Module
+    Route::resource('training-certificates', TrainingCertificateController::class);
 });
