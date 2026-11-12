@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" width="320" height="120">
+  <path d="M 30,80 C 45,30 60,20 75,65 C 85,95 95,45 105,70 C 120,40 135,80 150,55 C 160,40 180,60 195,50 C 210,40 230,75 250,45 C 265,25 280,35 295,40" 
+        fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M 50,75 Q 160,110 290,75" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" />
+  <text x="35" y="105" font-family="'Segoe Script', 'Brush Script MT', cursive, sans-serif" font-size="20" fill="#1e3a8a" font-style="italic">Mohammed fathy</text>
+</svg>
+

@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
+@theme {
+    --color-safero-blue: #0E4DA4;
+    --color-safero-blue-dark: #0a3a7d;
+    --color-safero-blue-light: #E6F2FF;
+    --color-safero-green: #22A447;
+    --color-safero-green-dark: #1b8539;
+    --color-safero-green-light: #E8F7EC;
+    --color-safero-bg: #F4F6F8;
+    --font-cairo: 'Cairo', system-ui, sans-serif;
+    --font-poppins: 'Poppins', system-ui, sans-serif;
+}
