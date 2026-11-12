@@ -149,7 +149,7 @@
             </div>
         @endif
 
-        @if($errors->any())
+        @if(isset($errors) && $errors->any())
             <div class="p-3 mb-3 rounded-lg bg-red-50 border border-red-200 text-red-900 text-xs shadow-xs">
                 <div class="font-bold mb-1">يرجى تصحيح الأخطاء التالية:</div>
                 <ul class="list-disc list-inside space-y-0.5">

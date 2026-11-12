@@ -1,165 +1,378 @@
 @extends('layouts.app')
 
-@section('title', 'شهادات وتقارير الفحص')
+@section('title', 'شهادات الفحص الشامل - Inspection Certificates')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-4">
 
-    <!-- Top Action Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-            <h1 class="text-2xl font-black text-slate-900">سجل شهادات الفحص والمعايرة</h1>
-            <p class="text-xs text-slate-500 mt-0.5">تقارير فحص معدات الرفع الشاملة المطابقة لمعايير LOLER 1998 و ISO المعتمدة</p>
-        </div>
-        <div class="flex items-center gap-2">
-            <a href="{{ route('certificates.create') }}" 
-               class="px-4 py-2.5 rounded-xl bg-[#22A447] hover:bg-[#1b8539] text-white font-bold text-xs sm:text-sm shadow-sm transition flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                <span>إصدار شهادة جديدة</span>
-            </a>
-            <a href="{{ route('certificates.verify.lookup') }}" 
-               class="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                <span>أداة التحقق</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- Filters & Search -->
-    <div class="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-sm">
-        <form method="GET" action="{{ route('certificates.index') }}" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-            <div class="sm:col-span-2 relative">
-                <input type="text" 
-                       name="search" 
-                       value="{{ request('search') }}"
-                       placeholder="بحث برقم الشهادة، أمر الشغل، العميل أو وصف المعدة..."
-                       class="w-full pr-10 pl-4 py-2 rounded-xl border border-slate-300 focus:border-[#0E4DA4] focus:ring-2 focus:ring-[#0E4DA4]/20 outline-none text-xs sm:text-sm">
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <!-- Odoo Enterprise Control Panel -->
+    <x-odoo-control-panel 
+        title="شهادات الفحص والمعايرة"
+        new-url="{{ route('certificates.create') }}"
+        new-text="New"
+        new-color="bg-[#0E4DA4]"
+        search-action="{{ route('certificates.index') }}"
+        search-value="{{ request('search') }}"
+        search-placeholder="البحث برقم الشهادة، أمر الشغل، العميل، المعدة..."
+        :paginator="$certificates"
+        :badge="['label' => 'LOLER / ISO', 'class' => 'bg-blue-50 text-[#0E4DA4] border border-blue-200']"
+    >
+        <!-- Filter Popover Content -->
+        <div class="space-y-3">
+            <div>
+                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">الحالة (Status)</span>
+                <div class="flex flex-wrap gap-1.5">
+                    <a href="{{ route('certificates.index', array_merge(request()->except(['status', 'page']), ['status' => 'issued'])) }}" 
+                       class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('status') === 'issued' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
+                        ✓ سارية ومعتمدة (In Progress)
+                    </a>
+                    <a href="{{ route('certificates.index', array_merge(request()->except(['status', 'page']), ['status' => 'draft'])) }}" 
+                       class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('status') === 'draft' ? 'bg-sky-600 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
+                        مسودة (Draft)
+                    </a>
+                    <a href="{{ route('certificates.index', array_merge(request()->except(['status', 'page']), ['status' => 'revoked'])) }}" 
+                       class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('status') === 'revoked' ? 'bg-red-600 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
+                        ملغاة (Revoked)
+                    </a>
                 </div>
             </div>
 
-            <div>
-                <select name="status" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#0E4DA4] outline-none text-xs sm:text-sm bg-white">
-                    <option value="">جميع الحالات</option>
-                    <option value="issued" {{ request('status') === 'issued' ? 'selected' : '' }}>معتمدة ومصدرة (Issued)</option>
-                    <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>مسودة (Draft)</option>
-                    <option value="revoked" {{ request('status') === 'revoked' ? 'selected' : '' }}>ملغاة (Revoked)</option>
-                </select>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <a href="{{ route('certificates.index') }}" class="text-[11px] text-slate-500 hover:text-slate-800 underline">
+                    إعادة ضبط الفلاتر
+                </a>
+                <span class="text-[10px] text-slate-400 font-en">Odoo 17 Filter Logic</span>
             </div>
+        </div>
+    </x-odoo-control-panel>
 
-            <div class="flex items-center gap-2">
-                <button type="submit" class="flex-1 py-2 px-4 rounded-xl bg-[#0E4DA4] text-white font-bold text-xs sm:text-sm hover:bg-[#0a3a7d] transition">
-                    تصفية
-                </button>
-                @if(request()->hasAny(['search', 'status']))
-                    <a href="{{ route('certificates.index') }}" class="py-2 px-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs sm:text-sm font-semibold">
-                        إعادة ضبط
-                    </a>
-                @endif
-            </div>
-        </form>
+    <div class="px-4 sm:px-6 lg:px-8 py-3 space-y-3">
+
+        <!-- Batch Selection Toolbar -->
+    <div id="batchActionBar" class="hidden bg-slate-900 text-white px-4 py-2.5 rounded-lg flex items-center justify-between shadow-lg text-xs animate-fade-in">
+        <div class="flex items-center gap-3">
+            <span class="font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                تم تحديد <span id="selectedCount" class="font-en text-amber-300 font-extrabold">0</span> سجل
+            </span>
+            <span class="text-slate-400">|</span>
+            <button type="button" onclick="batchPrintPdf()" class="hover:text-blue-300 font-medium flex items-center gap-1 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                <span>طباعة مجمعة</span>
+            </button>
+            <button type="button" onclick="batchExportCsv()" class="hover:text-sky-300 font-medium flex items-center gap-1 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>تصدير Excel</span>
+            </button>
+        </div>
+        <button type="button" onclick="clearAllSelections()" class="text-slate-400 hover:text-white transition">
+            إلغاء التحديد ✕
+        </button>
     </div>
 
-    <!-- Certificates Table -->
-    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+    <!-- Active Filters Pills -->
+    @if(request()->hasAny(['search', 'status']))
+        <div class="flex items-center gap-2 text-xs flex-wrap px-1">
+            <span class="text-slate-400">الفلاتر النشطة:</span>
+            @if(request('search'))
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800 text-xs">
+                    بحث: "{{ request('search') }}"
+                    <a href="{{ route('certificates.index', request()->except(['search', 'page'])) }}" class="hover:text-red-600 font-bold">×</a>
+                </span>
+            @endif
+            @if(request('status'))
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-100 text-[#0E4DA4] text-xs font-semibold">
+                    الحالة: {{ request('status') }}
+                    <a href="{{ route('certificates.index', request()->except(['status', 'page'])) }}" class="hover:text-red-600 font-bold">×</a>
+                </span>
+            @endif
+            <a href="{{ route('certificates.index') }}" class="text-[#0E4DA4] hover:underline text-xs font-semibold mr-1">
+                مسح الكل
+            </a>
+        </div>
+    @endif
+
+    <!-- 1. Odoo Data Table View -->
+    <div id="odooListView" class="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-right text-xs">
-                <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+            <table class="w-full text-right text-xs border-collapse">
+                <thead class="bg-[#F8FAFC] text-slate-600 border-b border-slate-200 select-none">
                     <tr>
-                        <th class="p-3.5 font-bold">رقم الشهادة</th>
-                        <th class="p-3.5 font-bold">العميل</th>
-                        <th class="p-3.5 font-bold">المعدة والمواصفة</th>
-                        <th class="p-3.5 font-bold">SWL</th>
-                        <th class="p-3.5 font-bold">تاريخ الفحص</th>
-                        <th class="p-3.5 font-bold">الفحص القادم</th>
-                        <th class="p-3.5 font-bold">القرار الفني</th>
-                        <th class="p-3.5 font-bold text-center">الإجراءات والـ PDF</th>
+                        <th class="w-10 px-3 py-2.5 text-center">
+                            <input type="checkbox" 
+                                   id="masterCheckbox" 
+                                   onchange="toggleSelectAll(this)" 
+                                   class="rounded border-slate-300 text-[#0E4DA4] focus:ring-[#0E4DA4] w-3.5 h-3.5 cursor-pointer">
+                        </th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Certificate No</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Customer</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Equipment / Standard</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">SWL</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Exam Date</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Next Due</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Inspector</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Status</th>
+                        <th class="w-16 px-3 py-2.5 text-center text-slate-400">
+                            <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                            </svg>
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @forelse($certificates as $cert)
-                        <tr class="hover:bg-slate-50/80 transition">
-                            <td class="p-3.5 font-bold text-[#0E4DA4] font-en">
-                                <a href="{{ route('certificates.show', $cert) }}" class="hover:underline flex items-center gap-1.5">
-                                    <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    <span>{{ $cert->certificate_number }}</span>
+                        <tr class="hover:bg-slate-50/90 transition-colors group">
+                            <!-- Checkbox -->
+                            <td class="w-10 px-3 py-2.5 text-center">
+                                <input type="checkbox" 
+                                       value="{{ $cert->id }}" 
+                                       data-pdf="{{ route('certificates.pdf', $cert) }}"
+                                       onchange="updateBatchBar()" 
+                                       class="cert-row-checkbox rounded border-slate-300 text-[#0E4DA4] focus:ring-[#0E4DA4] w-3.5 h-3.5 cursor-pointer">
+                            </td>
+
+                            <!-- Serial Number (Bold, Odoo Style) -->
+                            <td class="px-3 py-2.5 whitespace-nowrap">
+                                <a href="{{ route('certificates.show', $cert) }}" 
+                                   class="font-mono font-bold text-slate-900 group-hover:text-[#0E4DA4] transition font-en tracking-wide text-xs">
+                                    {{ $cert->certificate_number }}
                                 </a>
                                 @if($cert->order_no)
-                                    <span class="text-[10px] text-slate-400 font-en block">Order #{{ $cert->order_no }}</span>
+                                    <div class="text-[10px] text-slate-400 font-en">PO #{{ $cert->order_no }}</div>
                                 @endif
                             </td>
-                            <td class="p-3.5 font-semibold text-slate-900">
-                                <a href="{{ route('customers.show', $cert->customer) }}" class="hover:text-[#0E4DA4]">
-                                    {{ $cert->customer?->name }}
-                                </a>
-                                <span class="text-[11px] text-slate-400 block truncate max-w-xs">{{ $cert->examination_address }}</span>
+
+                            <!-- Customer Name -->
+                            <td class="px-3 py-2.5">
+                                <div class="font-medium text-slate-900">
+                                    <a href="{{ route('customers.show', $cert->customer) }}" class="hover:underline">
+                                        {{ $cert->customer?->name }}
+                                    </a>
+                                </div>
+                                <div class="text-[11px] text-slate-400 truncate max-w-xs">{{ $cert->examination_address }}</div>
                             </td>
-                            <td class="p-3.5 text-slate-700">
-                                <span class="font-bold text-slate-900 block">{{ $cert->equipment_description }}</span>
-                                <span class="text-[10px] text-slate-400 font-en">{{ $cert->reference_standard }} | عدد: {{ $cert->quantity }}</span>
+
+                            <!-- Equipment / Standard -->
+                            <td class="px-3 py-2.5">
+                                <div class="font-semibold text-slate-800">{{ $cert->equipment_description }}</div>
+                                <div class="text-[10px] text-slate-400 truncate max-w-xs font-en">{{ $cert->reference_standard }} | Qty: {{ $cert->quantity }}</div>
                             </td>
-                            <td class="p-3.5 font-black text-slate-900 font-en">
-                                {{ $cert->swl }}
+
+                            <!-- SWL -->
+                            <td class="px-3 py-2.5 whitespace-nowrap font-en">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-slate-800 text-[11px]">
+                                    {{ $cert->swl }}
+                                </span>
                             </td>
-                            <td class="p-3.5 text-slate-600 font-en">
-                                {{ $cert->thorough_examination_date->format('Y-m-d') }}
+
+                            <!-- Exam Date -->
+                            <td class="px-3 py-2.5 whitespace-nowrap font-en text-slate-600">
+                                {{ $cert->thorough_examination_date?->format('m/d/Y') }}
                             </td>
-                            <td class="p-3.5 text-slate-600 font-en">
-                                {{ $cert->next_examination_due_date->format('Y-m-d') }}
-                            </td>
-                            <td class="p-3.5">
-                                @if($cert->is_safe_to_operate)
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#E8F7EC] text-[#22A447]">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-[#22A447]"></span>
-                                        آمن للتشغيل
+
+                            <!-- Next Due Date (Red if overdue) -->
+                            <td class="px-3 py-2.5 whitespace-nowrap font-en">
+                                @if($cert->next_examination_due_date && $cert->next_examination_due_date->isPast())
+                                    <span class="text-rose-600 font-bold" title="مستحق الفحص">
+                                        {{ $cert->next_examination_due_date->format('m/d/Y') }}
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-700">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
-                                        غير آمن
+                                    <span class="text-slate-600">
+                                        {{ $cert->next_examination_due_date?->format('m/d/Y') }}
                                     </span>
                                 @endif
                             </td>
-                            <td class="p-3.5 text-center">
-                                <div class="inline-flex items-center gap-1.5">
+
+                            <!-- Inspector (Avatar initial + Name) -->
+                            <td class="px-3 py-2.5 whitespace-nowrap">
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-5 h-5 rounded-full bg-[#0E4DA4] text-white flex items-center justify-center font-bold font-en text-[10px] uppercase shrink-0">
+                                        {{ mb_substr($cert->issuer_name ?? 'A', 0, 1) }}
+                                    </div>
+                                    <span class="text-slate-700 text-xs">{{ $cert->issuer_name ?? 'Inspector' }}</span>
+                                </div>
+                            </td>
+
+                            <!-- Status (Odoo Pill Badges) -->
+                            <td class="px-3 py-2.5 text-center whitespace-nowrap">
+                                @if($cert->status === 'issued')
+                                    <span class="inline-flex items-center justify-center min-w-[90px] px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E8F7EC] text-[#15803D] border border-emerald-200">
+                                        In Progress
+                                    </span>
+                                @elseif($cert->status === 'draft')
+                                    <span class="inline-flex items-center justify-center min-w-[90px] px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0369A1] border border-sky-200">
+                                        Draft
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center justify-center min-w-[90px] px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#FFE4E6] text-[#BE123C] border border-rose-200">
+                                        Revoked
+                                    </span>
+                                @endif
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="px-3 py-2.5 text-center whitespace-nowrap">
+                                <div class="flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition">
                                     <a href="{{ route('certificates.show', $cert) }}" 
-                                       class="p-1.5 rounded-lg bg-slate-100 hover:bg-[#E6F2FF] text-slate-700 hover:text-[#0E4DA4] transition" 
-                                       title="معاينة الشهادة والـ QR">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                       class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition" 
+                                       title="معاينة الشهادة">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                     </a>
                                     <a href="{{ route('certificates.pdf', $cert) }}" 
                                        target="_blank"
-                                       class="p-1.5 rounded-lg bg-[#E8F7EC] hover:bg-[#22A447] text-[#22A447] hover:text-white transition" 
-                                       title="تحميل PDF رسمي">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                       class="p-1 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition" 
+                                       title="تحميل / طباعة PDF">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                                     </a>
                                     <a href="{{ route('certificates.edit', $cert) }}" 
-                                       class="p-1.5 rounded-lg bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-600 transition" 
+                                       class="p-1 rounded text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition" 
                                        title="تعديل">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                     </a>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="p-8 text-center text-slate-400">
-                                لا توجد شهادات مطابقة للبحث.
+                            <td colspan="10" class="py-12 text-center text-slate-400">
+                                <div class="max-w-sm mx-auto space-y-3">
+                                    <div class="w-12 h-12 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="font-bold text-slate-700 text-sm">لا توجد شهادات فحص مطابقة</div>
+                                    <p class="text-xs text-slate-500">لم يتم العثور على أي شهادات فحص في هذا النطاق، يمكنك إصدار شهادة فحص جديدة الآن.</p>
+                                    <a href="{{ route('certificates.create') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#0E4DA4] text-white font-bold text-xs hover:bg-[#0a3a7d] transition">
+                                        + إصدار شهادة فحص جديدة
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-
-        @if($certificates->hasPages())
-            <div class="p-4 border-t border-slate-100">
-                {{ $certificates->links() }}
-            </div>
-        @endif
     </div>
 
-</div>
-@endsection
+    <!-- 2. Odoo Kanban View -->
+    <div id="odooKanbanView" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @forelse($certificates as $cert)
+            <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-xs hover:shadow-md transition relative flex flex-col justify-between group">
+                <div>
+                    <!-- Top -->
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="font-mono font-bold text-[#0E4DA4] text-xs font-en">
+                            {{ $cert->certificate_number }}
+                        </span>
+                        @if($cert->status === 'issued')
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E8F7EC] text-[#15803D]">
+                                In Progress
+                            </span>
+                        @elseif($cert->status === 'draft')
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E0F2FE] text-[#0369A1]">
+                                Draft
+                            </span>
+                        @else
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FFE4E6] text-[#BE123C]">
+                                Revoked
+                            </span>
+                        @endif
+                    </div>
 
+                    <!-- Customer -->
+                    <h3 class="text-sm font-bold text-slate-900 group-hover:text-[#0E4DA4] transition">
+                        <a href="{{ route('certificates.show', $cert) }}">
+                            {{ $cert->customer?->name }}
+                        </a>
+                    </h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5 truncate">{{ $cert->examination_address }}</p>
+
+                    <!-- Equipment & SWL -->
+                    <div class="mt-3 p-2.5 rounded bg-slate-50 border border-slate-100 text-xs">
+                        <div class="font-bold text-slate-800">{{ $cert->equipment_description }}</div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 mt-1 font-en">
+                            <span>SWL: <strong>{{ $cert->swl }}</strong></span>
+                            <span>Exam: {{ $cert->thorough_examination_date?->format('m/d/Y') }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-5 h-5 rounded-full bg-[#0E4DA4] text-white flex items-center justify-center font-bold font-en text-[10px] uppercase">
+                            {{ mb_substr($cert->issuer_name ?? 'A', 0, 1) }}
+                        </div>
+                        <span class="text-[11px]">{{ $cert->issuer_name ?? 'Inspector' }}</span>
+                    </div>
+
+                    <div class="flex items-center gap-1">
+                        <a href="{{ route('certificates.pdf', $cert) }}" target="_blank" class="p-1 rounded text-slate-400 hover:text-red-600 transition" title="PDF">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        </a>
+                        <a href="{{ route('certificates.show', $cert) }}" class="p-1 rounded text-slate-400 hover:text-slate-800 transition" title="عرض">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="col-span-3 text-center py-8 text-slate-400">
+                لا توجد شهادات فحص معروضة
+            </div>
+        @endforelse
+    </div>
+
+    </div>
+</div>
+
+<!-- Interactive Batch Actions Script -->
+<script>
+    function toggleSelectAll(master) {
+        const checkboxes = document.querySelectorAll('.cert-row-checkbox');
+        checkboxes.forEach(cb => cb.checked = master.checked);
+        updateBatchBar();
+    }
+
+    function updateBatchBar() {
+        const checked = document.querySelectorAll('.cert-row-checkbox:checked');
+        const count = checked.length;
+        const bar = document.getElementById('batchActionBar');
+        const countSpan = document.getElementById('selectedCount');
+        const master = document.getElementById('masterCheckbox');
+
+        if (countSpan) countSpan.textContent = count;
+        if (bar) {
+            if (count > 0) {
+                bar.classList.remove('hidden');
+            } else {
+                bar.classList.add('hidden');
+                if (master) master.checked = false;
+            }
+        }
+    }
+
+    function clearAllSelections() {
+        const checkboxes = document.querySelectorAll('.cert-row-checkbox');
+        checkboxes.forEach(cb => cb.checked = false);
+        const master = document.getElementById('masterCheckbox');
+        if (master) master.checked = false;
+        updateBatchBar();
+    }
+
+    function batchPrintPdf() {
+        const checked = document.querySelectorAll('.cert-row-checkbox:checked');
+        checked.forEach(cb => {
+            const pdfUrl = cb.getAttribute('data-pdf');
+            if (pdfUrl) {
+                window.open(pdfUrl, '_blank');
+            }
+        });
+    }
+
+    function batchExportCsv() {
+        alert('جاري تجهيز تقرير Excel لشهادات الفحص المحددة...');
+    }
+</script>
+@endsection

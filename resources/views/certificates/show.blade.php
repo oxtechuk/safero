@@ -3,6 +3,63 @@
 @section('title', 'شهادة فحص رقم ' . $certificate->certificate_number)
 
 @section('content')
+<!-- Odoo Form View Header & Action Bar -->
+<div class="bg-white border-b border-slate-200 px-4 sm:px-6 py-2.5 -mx-4 sm:-mx-6 lg:-mx-8 -mt-6 mb-6 sticky top-14 z-40 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+    <!-- Left: Breadcrumbs & Action Buttons -->
+    <div class="flex items-center gap-3">
+        <a href="{{ route('certificates.index') }}" 
+           class="p-1.5 rounded hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition" 
+           title="الرجوع للقائمة">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        </a>
+
+        <a href="{{ route('certificates.create') }}" 
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#0E4DA4] hover:bg-[#0a3a7d] text-white font-bold text-xs shadow-xs transition">
+            <span class="font-en font-black">New</span>
+        </a>
+
+        <!-- Breadcrumbs -->
+        <div class="flex items-center gap-1.5 text-xs text-slate-500">
+            <a href="{{ route('certificates.index') }}" class="hover:underline">شهادات الفحص</a>
+            <span>/</span>
+            <span class="font-bold text-slate-900 font-mono">{{ $certificate->certificate_number }}</span>
+        </div>
+    </div>
+
+    <!-- Right: Smart Actions & Pipeline Stage Indicator -->
+    <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+        <!-- Download PDF Button -->
+        <a href="{{ route('certificates.pdf', $certificate) }}" 
+           target="_blank"
+           class="px-3 py-1.5 rounded-md bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 text-xs font-bold transition flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>طباعة PDF</span>
+        </a>
+
+        <!-- Edit Button -->
+        <a href="{{ route('certificates.edit', $certificate) }}" 
+           class="px-3 py-1.5 rounded-md border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            <span>تعديل</span>
+        </a>
+
+        <!-- Odoo Status Pipeline -->
+        <div class="inline-flex items-center rounded border border-slate-300 overflow-hidden text-[11px] font-bold select-none bg-white">
+            <span class="px-2.5 py-1 {{ $certificate->status === 'draft' ? 'bg-sky-50 text-sky-700 font-extrabold border-r border-slate-200' : 'text-slate-400 border-r border-slate-200' }}">
+                Draft
+            </span>
+            <span class="px-2.5 py-1 {{ $certificate->status === 'issued' ? 'bg-[#E8F7EC] text-[#006837] font-extrabold' : 'text-slate-400' }}">
+                ✓ In Progress
+            </span>
+            @if($certificate->status === 'revoked')
+                <span class="px-2.5 py-1 bg-rose-50 text-rose-700 font-extrabold border-l border-slate-200">
+                    Revoked
+                </span>
+            @endif
+        </div>
+    </div>
+</div>
+
 <div class="max-w-5xl mx-auto space-y-6">
 
     <!-- Top Action Toolbar -->
