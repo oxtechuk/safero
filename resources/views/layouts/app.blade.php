@@ -289,41 +289,6 @@
 
                     </nav>
 
-                            <div x-show="open" 
-                                 x-cloak
-                                 x-transition:enter="transition ease-out duration-100"
-                                 x-transition:enter-start="opacity-0 scale-95"
-                                 x-transition:enter-end="opacity-100 scale-100"
-                                 x-transition:leave="transition ease-in duration-75"
-                                 x-transition:leave-start="opacity-100 scale-100"
-                                 x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 top-full mt-0.5 w-60 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
-                                 style="display: none;">
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    إعدادات النظام
-                                </div>
-                                <a href="{{ route('apps') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                    شاشة التطبيقات (Apps Launcher)
-                                </a>
-                                <a href="{{ route('certificates.verify.lookup') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                    أداة التحقق من الشهادات
-                                </a>
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-t border-slate-100 mt-1">
-                                    المعايير الهندسية
-                                </div>
-                                <div class="px-3 py-1 text-[11px] text-slate-500 flex items-center justify-between">
-                                    <span>ISO/IEC 17020</span>
-                                    <span class="text-[9px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-mono font-bold">Standard</span>
-                                </div>
-                                <div class="px-3 py-1 text-[11px] text-slate-500 flex items-center justify-between">
-                                    <span>LOLER 1998 / PUWER</span>
-                                    <span class="text-[9px] bg-blue-50 text-[#0E4DA4] px-1.5 py-0.5 rounded font-mono font-bold">Lifting</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </nav>
-
                 </div>
 
                 <!-- Right Utilities (Exact Match to Image 1: Clock + Chat + Company + Avatar + Logout) -->
