@@ -70,186 +70,206 @@
                     <nav class="hidden lg:flex items-center gap-0.5">
                         
                         <!-- 1. Inspection Certificates Dropdown (Odoo Style) -->
-                        <div class="relative group">
+                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
                             <a href="{{ route('certificates.index') }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('certificates.*') && !request()->routeIs('certificates.verify.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
                                 <img src="{{ asset('branding/odoo-icons/quality_control.svg') }}" class="w-3.5 h-3.5 object-contain">
                                 <span>شهادات الفحص</span>
-                                <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </a>
                             
-                            <!-- Odoo Cascading Sub-menu Dropdown Popup (Image 3 Style) -->
-                            <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute right-0 top-full mt-0.5 w-68 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs">
+                            <!-- Odoo Cascading Sub-menu Dropdown (Text-only, No Icons, Closed by default, Opens on hover) -->
+                            <div x-show="open" 
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="opacity-0 scale-95"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 scale-100"
+                                 x-transition:leave-end="opacity-0 scale-95"
+                                 class="absolute right-0 top-full mt-0.5 w-64 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 style="display: none;">
                                 
                                 <!-- Section 1: Types -->
                                 <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    نماذج الفحص المعتمدة (Inspection Models)
+                                    نماذج الفحص المعتمدة
                                 </div>
-                                <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-blue-50 text-slate-700 hover:text-[#0E4DA4] transition">
-                                    <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <div class="truncate">
-                                        <span class="font-bold block text-xs">فحص الأوناش والروافع</span>
-                                        <span class="text-[10px] text-slate-400 font-en">Lifting Appliances (Cranes - LOLER)</span>
-                                    </div>
+                                <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition">
+                                    <span class="font-bold block text-xs">فحص الأوناش والروافع</span>
+                                    <span class="text-[10px] text-slate-400 font-en">Lifting Appliances (Cranes - LOLER)</span>
                                 </a>
-                                <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-blue-50 text-slate-700 hover:text-[#0E4DA4] transition">
-                                    <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <div class="truncate">
-                                        <span class="font-bold block text-xs">مهمات الرفع والحبال</span>
-                                        <span class="text-[10px] text-slate-400 font-en">Lifting Accessories (Slings / Shackles)</span>
-                                    </div>
+                                <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition">
+                                    <span class="font-bold block text-xs">مهمات الرفع والحبال</span>
+                                    <span class="text-[10px] text-slate-400 font-en">Lifting Accessories (Slings / Shackles)</span>
                                 </a>
-                                <a href="{{ route('certificates.create', ['type' => 'general']) }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-blue-50 text-slate-700 hover:text-[#0E4DA4] transition">
-                                    <img src="{{ asset('branding/odoo-icons/repair.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <div class="truncate">
-                                        <span class="font-bold block text-xs">معدات عامة وباليتات</span>
-                                        <span class="text-[10px] text-slate-400 font-en">General Cargo Units</span>
-                                    </div>
+                                <a href="{{ route('certificates.create', ['type' => 'general']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition">
+                                    <span class="font-bold block text-xs">معدات عامة وباليتات</span>
+                                    <span class="text-[10px] text-slate-400 font-en">General Cargo Units</span>
                                 </a>
 
                                 <!-- Section 2: Records -->
                                 <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-t border-slate-100 mt-1">
-                                    السجلات والعمليات (Records &amp; Operations)
+                                    السجلات والعمليات
                                 </div>
-                                <a href="{{ route('certificates.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/documents.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>جميع الشهادات (All Certificates)</span>
+                                <a href="{{ route('certificates.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition">
+                                    جميع الشهادات (All Certificates)
                                 </a>
-                                <a href="{{ route('certificates.index', ['status' => 'issued']) }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <span class="w-4 h-4 rounded-full bg-emerald-100 text-[#22A447] flex items-center justify-center font-bold text-[10px]">✓</span>
-                                    <span>الشهادات السارية المعتمدة</span>
+                                <a href="{{ route('certificates.index', ['status' => 'issued']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition">
+                                    الشهادات السارية المعتمدة
                                 </a>
-                                <a href="{{ route('certificates.index', ['status' => 'draft']) }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <span class="w-4 h-4 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-[10px] font-en">D</span>
-                                    <span>المسودات قيد المراجعة</span>
+                                <a href="{{ route('certificates.index', ['status' => 'draft']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition">
+                                    المسودات قيد المراجعة
                                 </a>
 
                                 <!-- Section 3: Compliance -->
                                 <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-t border-slate-100 mt-1">
-                                    التحقق والامتثال (Verification)
+                                    التحقق والامتثال
                                 </div>
-                                <a href="{{ route('certificates.verify.lookup') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-purple-50 text-slate-700 hover:text-purple-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/approvals.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>فحص رمز الاستجابة QR Code</span>
+                                <a href="{{ route('certificates.verify.lookup') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-purple-700 transition">
+                                    فحص رمز الاستجابة QR Code
                                 </a>
                             </div>
                         </div>
 
                         <!-- 2. Training Certificates Dropdown -->
-                        <div class="relative group">
+                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
                             <a href="{{ route('training-certificates.index') }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('training-certificates.*') || request()->routeIs('trainees.*') ? 'bg-slate-100 text-[#006837]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
                                 <img src="{{ asset('branding/odoo-icons/industry_certification.svg') }}" class="w-3.5 h-3.5 object-contain">
                                 <span>شهادات التدريب</span>
-                                <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </a>
 
-                            <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute right-0 top-full mt-0.5 w-64 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs">
+                            <div x-show="open" 
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="opacity-0 scale-95"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 scale-100"
+                                 x-transition:leave-end="opacity-0 scale-95"
+                                 class="absolute right-0 top-full mt-0.5 w-60 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 style="display: none;">
                                 <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    شهادات المتدربين (Training Certs)
+                                    شهادات المتدربين
                                 </div>
-                                <a href="{{ route('training-certificates.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-emerald-50 text-slate-700 hover:text-[#006837] transition">
-                                    <img src="{{ asset('branding/odoo-icons/industry_certification.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>إصدار شهادة تدريب جديدة</span>
+                                <a href="{{ route('training-certificates.create') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition">
+                                    إصدار شهادة تدريب جديدة
                                 </a>
-                                <a href="{{ route('training-certificates.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/documents.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>سجل شهادات التدريب المعتمدة</span>
+                                <a href="{{ route('training-certificates.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition">
+                                    سجل شهادات التدريب المعتمدة
                                 </a>
-                                <a href="{{ route('training-certificates.index', ['status' => 'issued']) }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <span class="w-4 h-4 rounded-full bg-emerald-100 text-[#22A447] flex items-center justify-center font-bold text-[10px]">✓</span>
-                                    <span>الشهادات السارية المعتمدة</span>
+                                <a href="{{ route('training-certificates.index', ['status' => 'issued']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition">
+                                    الشهادات السارية المعتمدة
                                 </a>
 
                                 <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-t border-slate-100 mt-1">
-                                    إدارة المتدربين (Trainees CRM)
+                                    إدارة المتدربين
                                 </div>
-                                <a href="{{ route('trainees.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/contacts.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>قاعدة بيانات المتدربين</span>
+                                <a href="{{ route('trainees.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition">
+                                    قاعدة بيانات المتدربين
                                 </a>
-                                <a href="{{ route('trainees.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-emerald-50 text-slate-700 hover:text-[#006837] transition">
-                                    <img src="{{ asset('branding/odoo-icons/industry_driving_school.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>تسجيل متدرب جديد</span>
+                                <a href="{{ route('trainees.create') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition">
+                                    تسجيل متدرب جديد
                                 </a>
                             </div>
                         </div>
 
                         <!-- 3. Customers Dropdown -->
-                        <div class="relative group">
+                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
                             <a href="{{ route('customers.index') }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('customers.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
                                 <img src="{{ asset('branding/odoo-icons/crm.svg') }}" class="w-3.5 h-3.5 object-contain">
                                 <span>العملاء والشركات</span>
-                                <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </a>
 
-                            <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute right-0 top-full mt-0.5 w-56 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs">
+                            <div x-show="open" 
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="opacity-0 scale-95"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 scale-100"
+                                 x-transition:leave-end="opacity-0 scale-95"
+                                 class="absolute right-0 top-full mt-0.5 w-56 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 style="display: none;">
                                 <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    إدارة العملاء (Accounts)
+                                    إدارة العملاء
                                 </div>
-                                <a href="{{ route('customers.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/crm.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>دليل الشركات والمصانع</span>
+                                <a href="{{ route('customers.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition">
+                                    دليل الشركات والمصانع
                                 </a>
-                                <a href="{{ route('customers.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-blue-50 text-slate-700 hover:text-[#0E4DA4] transition">
-                                    <img src="{{ asset('branding/odoo-icons/contacts.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>إضافة عميل أو شركة جديدة</span>
+                                <a href="{{ route('customers.create') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition">
+                                    إضافة عميل أو شركة جديدة
                                 </a>
                             </div>
                         </div>
 
                         <!-- 4. Reporting (Image 1 'Reporting') -->
-                        <div class="relative group">
+                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
                             <a href="{{ route('dashboard') }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('dashboard') ? 'bg-slate-100 text-amber-600' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
                                 <img src="{{ asset('branding/odoo-icons/board.svg') }}" class="w-3.5 h-3.5 object-contain">
                                 <span>التقارير والمؤشرات</span>
-                                <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </a>
 
-                            <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute right-0 top-full mt-0.5 w-60 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs">
+                            <div x-show="open" 
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="opacity-0 scale-95"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 scale-100"
+                                 x-transition:leave-end="opacity-0 scale-95"
+                                 class="absolute right-0 top-full mt-0.5 w-56 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 style="display: none;">
                                 <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    التحليلات والمؤشرات (Analytics)
+                                    التحليلات والمؤشرات
                                 </div>
-                                <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/board.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>لوحة المؤشرات الشاملة</span>
+                                <a href="{{ route('dashboard') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition">
+                                    لوحة المؤشرات الشاملة
                                 </a>
-                                <a href="{{ route('certificates.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>تقرير فحص الأوناش والمعدات</span>
+                                <a href="{{ route('certificates.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition">
+                                    تقرير فحص الأوناش والمعدات
                                 </a>
-                                <a href="{{ route('training-certificates.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/industry_certification.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>تقرير شهادات التدريب</span>
+                                <a href="{{ route('training-certificates.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition">
+                                    تقرير شهادات التدريب
                                 </a>
                             </div>
                         </div>
 
                         <!-- 5. Configuration / Technical (Image 1 'Configuration' & Image 3 'Technical') -->
-                        <div class="relative group">
+                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
                             <button type="button" 
                                     class="px-2.5 py-1.5 rounded text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition flex items-center gap-1.5">
                                 <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-3.5 h-3.5 object-contain">
                                 <span>التهيئة والإعدادات</span>
-                                <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
 
-                            <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute right-0 top-full mt-0.5 w-60 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs">
+                            <div x-show="open" 
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="opacity-0 scale-95"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 scale-100"
+                                 x-transition:leave-end="opacity-0 scale-95"
+                                 class="absolute right-0 top-full mt-0.5 w-60 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 style="display: none;">
                                 <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    إعدادات النظام (System Configuration)
+                                    إعدادات النظام
                                 </div>
-                                <a href="{{ route('apps') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/apps.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>شاشة التطبيقات (Apps Launcher)</span>
+                                <a href="{{ route('apps') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
+                                    شاشة التطبيقات (Apps Launcher)
                                 </a>
-                                <a href="{{ route('certificates.verify.lookup') }}" class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-slate-100 text-slate-700 transition">
-                                    <img src="{{ asset('branding/odoo-icons/approvals.svg') }}" class="w-4 h-4 object-contain shrink-0">
-                                    <span>أداة التحقق من الشهادات</span>
+                                <a href="{{ route('certificates.verify.lookup') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
+                                    أداة التحقق من الشهادات
                                 </a>
                                 <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-t border-slate-100 mt-1">
-                                    المعايير الهندسية (Standards)
+                                    المعايير الهندسية
                                 </div>
                                 <div class="px-3 py-1 text-[11px] text-slate-500 flex items-center justify-between">
                                     <span>ISO/IEC 17020</span>
@@ -336,36 +356,31 @@
         <div x-show="mobileMenuOpen" 
              x-cloak 
              @click.away="mobileMenuOpen = false" 
-             class="lg:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-2 text-xs shadow-lg">
+             class="lg:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-2 text-xs shadow-lg"
+             style="display: none;">
             
             <div class="font-bold text-slate-400 uppercase text-[10px]">شهادات الفحص</div>
             <div class="grid grid-cols-2 gap-1.5">
-                <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="flex items-center gap-1.5 p-2 rounded bg-slate-50 font-bold text-slate-700">
-                    <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-4 h-4">
+                <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
                     <span>فحص أوناش</span>
                 </a>
-                <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="flex items-center gap-1.5 p-2 rounded bg-slate-50 font-bold text-slate-700">
-                    <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-4 h-4">
+                <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
                     <span>مهمات رفع</span>
                 </a>
-                <a href="{{ route('certificates.create', ['type' => 'general']) }}" class="flex items-center gap-1.5 p-2 rounded bg-slate-50 font-bold text-slate-700">
-                    <img src="{{ asset('branding/odoo-icons/repair.svg') }}" class="w-4 h-4">
+                <a href="{{ route('certificates.create', ['type' => 'general']) }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
                     <span>معدات عامة</span>
                 </a>
-                <a href="{{ route('certificates.index') }}" class="flex items-center gap-1.5 p-2 rounded bg-slate-50 font-bold text-slate-700">
-                    <img src="{{ asset('branding/odoo-icons/documents.svg') }}" class="w-4 h-4">
+                <a href="{{ route('certificates.index') }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
                     <span>سجل الشهادات</span>
                 </a>
             </div>
 
             <div class="font-bold text-slate-400 uppercase text-[10px] pt-2 border-t border-slate-100">شهادات التدريب</div>
             <div class="grid grid-cols-2 gap-1.5">
-                <a href="{{ route('training-certificates.create') }}" class="flex items-center gap-1.5 p-2 rounded bg-slate-50 font-bold text-slate-700">
-                    <img src="{{ asset('branding/odoo-icons/industry_certification.svg') }}" class="w-4 h-4">
+                <a href="{{ route('training-certificates.create') }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
                     <span>إصدار تدريب</span>
                 </a>
-                <a href="{{ route('trainees.index') }}" class="flex items-center gap-1.5 p-2 rounded bg-slate-50 font-bold text-slate-700">
-                    <img src="{{ asset('branding/odoo-icons/contacts.svg') }}" class="w-4 h-4">
+                <a href="{{ route('trainees.index') }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
                     <span>المتدربين</span>
                 </a>
             </div>
@@ -374,10 +389,6 @@
                 <a href="{{ route('customers.index') }}" class="font-bold text-slate-700">دليل العملاء</a>
                 <a href="{{ route('dashboard') }}" class="font-bold text-amber-600">لوحة المؤشرات</a>
                 <a href="{{ route('apps') }}" class="font-bold text-[#0E4DA4]">جميع التطبيقات</a>
-            </div>
-        </div>
-    </header>
-
             </div>
         </div>
     </header>
@@ -401,22 +412,19 @@
 
                         <!-- Type 1: Crane -->
                         <a href="{{ route('certificates.create', ['type' => 'crane']) }}" 
-                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.create') && request('type', 'crane') === 'crane') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:text-[#0E4DA4] hover:bg-blue-50/50' }}">
-                            <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Cranes">
+                           class="inline-flex items-center px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.create') && request('type', 'crane') === 'crane') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:text-[#0E4DA4] hover:bg-blue-50/50' }}">
                             <span>فحص الأوناش والروافع</span>
                         </a>
 
                         <!-- Type 2: Slings / Accessories -->
                         <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" 
-                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.create') && request('type') === 'accessory') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:text-[#0E4DA4] hover:bg-blue-50/50' }}">
-                            <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Accessories">
+                           class="inline-flex items-center px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.create') && request('type') === 'accessory') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:text-[#0E4DA4] hover:bg-blue-50/50' }}">
                             <span>مهمات الرفع والحبال</span>
                         </a>
 
                         <!-- Type 3: General Equipment -->
                         <a href="{{ route('certificates.create', ['type' => 'general']) }}" 
-                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.create') && request('type') === 'general') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:text-[#0E4DA4] hover:bg-blue-50/50' }}">
-                            <img src="{{ asset('branding/odoo-icons/repair.svg') }}" class="w-3.5 h-3.5 object-contain" alt="General">
+                           class="inline-flex items-center px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.create') && request('type') === 'general') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:text-[#0E4DA4] hover:bg-blue-50/50' }}">
                             <span>معدات عامة وباليتات</span>
                         </a>
                     </div>
