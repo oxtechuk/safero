@@ -132,6 +132,55 @@
         </div>
     </header>
 
+    <!-- Secondary Sub-Navbar for Inspection Certificates Module -->
+    @if(request()->routeIs('certificates.*'))
+        <div class="bg-white border-b border-slate-200 shadow-2xs">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-10 gap-4 text-xs">
+                    <!-- Left: 3 Certificate Types Sub-Tabs -->
+                    <div class="flex items-center gap-1.5 overflow-x-auto py-1">
+                        <a href="{{ route('certificates.index') }}" 
+                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-bold transition {{ request()->routeIs('certificates.index') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                            <span>سجل الشهادات</span>
+                        </a>
+
+                        <span class="text-slate-300">|</span>
+
+                        <span class="text-slate-400 font-semibold text-[11px] hidden sm:inline">إصدار نموذج:</span>
+
+                        <!-- Type 1: Crane -->
+                        <a href="{{ route('certificates.create', ['type' => 'crane']) }}" 
+                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.create') && request('type', 'crane') === 'crane') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:text-[#0E4DA4] hover:bg-blue-50/50' }}">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            <span>فحص الأوناش والروافع</span>
+                        </a>
+
+                        <!-- Type 2: Slings / Accessories -->
+                        <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" 
+                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.create') && request('type') === 'accessory') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:text-[#0E4DA4] hover:bg-blue-50/50' }}">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                            <span>مهمات الرفع والحبال</span>
+                        </a>
+
+                        <!-- Type 3: General Equipment -->
+                        <a href="{{ route('certificates.create', ['type' => 'general']) }}" 
+                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.create') && request('type') === 'general') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:text-[#0E4DA4] hover:bg-blue-50/50' }}">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                            <span>معدات عامة وباليتات</span>
+                        </a>
+                    </div>
+
+                    <!-- Right: Quick Status -->
+                    <div class="hidden md:flex items-center gap-2 text-slate-400 text-[11px]">
+                        <span>نظام الفحص الهندسي المعتمد (ISO 17020)</span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#22A447]"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Flash Messages -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
         @if(session('success'))

@@ -101,10 +101,7 @@
             <div class="flex items-center gap-6">
                 <a href="{{ route('apps') }}" class="flex items-center gap-2.5 group">
                     <img src="{{ asset('branding/safero_logo.jpg') }}" alt="Safero Logo" class="h-10 w-auto object-contain">
-                    <div class="hidden sm:block text-right">
-                        <span class="block text-sm font-black text-[#006837] tracking-wider font-en leading-tight">SAFERO ERP</span>
-                        <span class="block text-[10px] text-slate-500 font-semibold">بوابة التطبيقات المعتمدة</span>
-                    </div>
+                    
                 </a>
 
                 <!-- Instant Search / Filter Box -->

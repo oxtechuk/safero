@@ -109,7 +109,13 @@
                     <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60">
                         <span class="text-slate-400 block mb-1">المعدة المفحوصة (Equipment)</span>
                         <span class="font-bold text-slate-900 text-sm block">{{ $certificate->equipment_description }}</span>
-                        <span class="text-[11px] text-slate-500 font-en block mt-0.5">ID: {{ $certificate->equipment_id_range ?? '—' }} | عدد: {{ $certificate->quantity }}</span>
+                        @if($certificate->equipment_type === 'crane')
+                            <span class="text-[11px] text-[#0E4DA4] font-en block mt-0.5">Model: {{ $certificate->model ?? '—' }} &bull; Chassis: {{ $certificate->chassis_no ?? '—' }} &bull; Hook: {{ $certificate->hook_block ?? '—' }}</span>
+                        @elseif($certificate->equipment_type === 'accessory')
+                            <span class="text-[11px] text-[#0E4DA4] font-en block mt-0.5">Safety Factor: {{ $certificate->safety_factor ?? '7:1' }} &bull; Length: {{ $certificate->length ?? '—' }} &bull; Qty: {{ $certificate->quantity }}</span>
+                        @else
+                            <span class="text-[11px] text-slate-500 font-en block mt-0.5">ID: {{ $certificate->equipment_id_range ?? '—' }} | عدد: {{ $certificate->quantity }}</span>
+                        @endif
                     </div>
 
                     <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60">

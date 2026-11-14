@@ -80,6 +80,27 @@ class CertificateFlowTest extends TestCase
         $response->assertRedirect(route('customers.show', $customer));
     }
 
+    public function test_create_certificate_screen_renders_successfully(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('certificates.create'));
+        $response->assertStatus(200);
+        $response->assertSee('فحص الأوناش والروافع');
+        $response->assertSee('Lifting Appliances');
+        $response->assertSee('Outriggers');
+
+        $responseAcc = $this->actingAs($user)->get(route('certificates.create', ['type' => 'accessory']));
+        $responseAcc->assertStatus(200);
+        $responseAcc->assertSee('مهمات الرفع');
+        $responseAcc->assertSee('Round Sling');
+
+        $responseGen = $this->actingAs($user)->get(route('certificates.create', ['type' => 'general']));
+        $responseGen->assertStatus(200);
+        $responseGen->assertSee('معدات عامة');
+        $responseGen->assertSee('Move Pallet');
+    }
+
     public function test_certificate_can_be_created_and_viewed_with_qr(): void
     {
         $user = User::factory()->create();
@@ -250,5 +271,115 @@ class CertificateFlowTest extends TestCase
                     'swl' => '50 Ton',
                 ],
             ]);
+    }
+
+    public function test_crane_certificate_creation_with_specialized_fields_and_checklist(): void
+    {
+        $user = User::factory()->create();
+        $customer = Customer::factory()->create(['name' => 'Rosiport Company']);
+
+        $postData = [
+            'certificate_number' => 'SAF/RS/2026090101',
+            'order_no' => '100000',
+            'customer_id' => $customer->id,
+            'examination_address' => 'Dabaa NPP',
+            'thorough_examination_date' => '2026-09-01',
+            'next_examination_due_date' => '2027-02-28',
+            'reference_standard' => 'EN 13000',
+            'equipment_type' => 'crane',
+            'equipment_description' => 'Mobile Telescopic Crane',
+            'manufacturer' => 'Liebherr',
+            'model' => 'LTM 1090-4.1',
+            'capacity' => '90 Ton',
+            'chassis_no' => '071490',
+            'main_wire' => '19 mm',
+            'hook_block' => '59.2 Ton',
+            'load_test_cert_no' => 'SAF/RS/2026090101',
+            'date_of_load_test' => '2026-09-01',
+            'test_point' => 'Boom length: 15.5m / Radius: 6.0m / Test Load: 15.5 Ton',
+            'swl' => '90 Ton',
+            'quantity' => 1,
+            'is_first_examination_after_installation' => 0,
+            'was_examination_within_6_months' => 1,
+            'has_equipment_installed_correctly' => 1,
+            'was_examination_within_12_months' => 0,
+            'in_accordance_with_scheme' => 1,
+            'after_exceptional_circumstances' => 0,
+            'defect_identification' => 'NONE',
+            'is_defect_danger_to_process' => 0,
+            'repair_particulars' => 'NONE',
+            'tests_carried_out' => 'Visual and Functional Thorough Examination and Load Test has been conducted Satisfactorily in accordance with EN 13000',
+            'is_safe_to_operate' => 1,
+            'issuer_name' => 'Eng. Mohammed fathy',
+            'authenticator_name' => 'Dr. Hany Nabil',
+            'status' => 'issued',
+        ];
+
+        $response = $this->actingAs($user)->post('/certificates', $postData);
+        $certificate = Certificate::where('certificate_number', 'SAF/RS/2026090101')->first();
+
+        $this->assertNotNull($certificate);
+        $this->assertEquals('crane', $certificate->equipment_type);
+        $this->assertEquals('Liebherr', $certificate->manufacturer);
+        $this->assertEquals('071490', $certificate->chassis_no);
+        $this->assertNotEmpty($certificate->checklist_items);
+        $this->assertCount(28, $certificate->checklist_items);
+
+        $response->assertRedirect(route('certificates.show', $certificate));
+
+        // Test show view contains checklist and crane specs
+        $showResponse = $this->actingAs($user)->get(route('certificates.show', $certificate));
+        $showResponse->assertStatus(200);
+        $showResponse->assertSee('LTM 1090-4.1');
+        $showResponse->assertSee('071490');
+        $showResponse->assertSee('MOBILE CRANE INSPECTION CHECKLIST');
+        $showResponse->assertSee('Outriggers');
+
+        // Test PDF streaming
+        $pdfResponse = $this->get(route('certificates.pdf', $certificate));
+        $pdfResponse->assertStatus(200);
+        $this->assertEquals('application/pdf', $pdfResponse->headers->get('content-type'));
+    }
+
+    public function test_accessory_certificate_creation(): void
+    {
+        $user = User::factory()->create();
+        $customer = Customer::factory()->create(['name' => 'Lifting Solutions']);
+
+        $postData = [
+            'certificate_number' => 'SAF/RS/2026090105',
+            'order_no' => '100000',
+            'customer_id' => $customer->id,
+            'examination_address' => 'Alexandria Port',
+            'thorough_examination_date' => '2026-09-01',
+            'next_examination_due_date' => '2027-02-28',
+            'reference_standard' => 'BS EN 1492-2',
+            'equipment_type' => 'accessory',
+            'equipment_description' => 'Round Sling BS EN 1492-2',
+            'safety_factor' => '7:1',
+            'length' => '6.0 M',
+            'swl' => '30 Ton',
+            'quantity' => 4,
+            'equipment_id_range' => 'From R00772 To R00775',
+            'tests_carried_out' => 'Visual and Functional Thorough Examination has been conducted Satisfactorily in accordance with BS EN 1492-2',
+            'is_safe_to_operate' => 1,
+            'issuer_name' => 'Eng. Mohammed fathy',
+            'authenticator_name' => 'Dr. Hany Nabil',
+            'status' => 'issued',
+        ];
+
+        $response = $this->actingAs($user)->post('/certificates', $postData);
+        $certificate = Certificate::where('certificate_number', 'SAF/RS/2026090105')->first();
+
+        $this->assertNotNull($certificate);
+        $this->assertEquals('accessory', $certificate->equipment_type);
+        $this->assertEquals('7:1', $certificate->safety_factor);
+        $this->assertEquals('6.0 M', $certificate->length);
+
+        $showResponse = $this->actingAs($user)->get(route('certificates.show', $certificate));
+        $showResponse->assertStatus(200);
+        $showResponse->assertSee('Round Sling BS EN 1492-2');
+        $showResponse->assertSee('7:1');
+        $showResponse->assertSee('6.0 M');
     }
 }
