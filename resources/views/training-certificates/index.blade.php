@@ -193,10 +193,13 @@
                             </td>
 
                             <!-- Activities (Icon + Label, Odoo Reference) -->
+                            <!-- Activities (Image 1 Match: Clean SVG Icons) -->
                             <td class="px-3 py-2.5 whitespace-nowrap">
-                                <div class="flex items-center gap-1.5 text-slate-600 text-[11px]">
-                                    <span class="text-emerald-600">🎓</span>
-                                    <span>دورة معتمدة</span>
+                                <div class="inline-flex items-center gap-1.5 text-xs">
+                                    <span class="text-emerald-600" title="دورة معتمدة">
+                                        <svg class="w-3.5 h-3.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"/></svg>
+                                    </span>
+                                    <span class="text-slate-600 text-[11px]">دورة معتمدة</span>
                                 </div>
                             </td>
 
@@ -205,18 +208,18 @@
                                 {{ $cert->hours }} hrs
                             </td>
 
-                            <!-- Status (Odoo Pill Badges: In Progress / Draft / Revoked) -->
+                            <!-- Status (Image 1 Match: Saturated Rounded Full Pills) -->
                             <td class="px-3 py-2.5 text-center whitespace-nowrap">
                                 @if($cert->status === 'issued')
-                                    <span class="inline-flex items-center justify-center min-w-[90px] px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E8F7EC] text-[#15803D] border border-[#22A447]/20">
+                                    <span class="inline-flex items-center justify-center min-w-[95px] px-3 py-0.5 rounded-full text-[11px] font-bold bg-[#198754] text-white shadow-2xs font-en">
                                         In Progress
                                     </span>
                                 @elseif($cert->status === 'draft')
-                                    <span class="inline-flex items-center justify-center min-w-[90px] px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0369A1] border border-sky-200">
-                                        Draft
+                                    <span class="inline-flex items-center justify-center min-w-[95px] px-3 py-0.5 rounded-full text-[11px] font-bold bg-[#017E84] text-white shadow-2xs font-en">
+                                        Quotation
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center justify-center min-w-[90px] px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#FFE4E6] text-[#BE123C] border border-rose-200">
+                                    <span class="inline-flex items-center justify-center min-w-[95px] px-3 py-0.5 rounded-full text-[11px] font-bold bg-rose-600 text-white shadow-2xs font-en">
                                         Revoked
                                     </span>
                                 @endif

@@ -103,17 +103,21 @@
                                    onchange="toggleSelectAll(this)" 
                                    class="rounded border-slate-300 text-[#0E4DA4] focus:ring-[#0E4DA4] w-3.5 h-3.5 cursor-pointer">
                         </th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Certificate No</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Number</th>
                         <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Customer</th>
                         <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Equipment / Standard</th>
                         <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">SWL</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Exam Date</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Next Due</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 whitespace-nowrap">
+                            <span>Next Exam</span>
+                            <span class="text-slate-400 font-mono text-[10px]">^</span>
+                        </th>
                         <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Inspector</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Activities</th>
                         <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Status</th>
                         <th class="w-16 px-3 py-2.5 text-center text-slate-400">
+                            <!-- Column Config Icon (Image 1 match) -->
                             <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
                             </svg>
                         </th>
                     </tr>
@@ -164,46 +168,75 @@
                                 </span>
                             </td>
 
-                            <!-- Exam Date -->
-                            <td class="px-3 py-2.5 whitespace-nowrap font-en text-slate-600">
-                                {{ $cert->thorough_examination_date?->format('m/d/Y') }}
-                            </td>
-
-                            <!-- Next Due Date (Red if overdue) -->
+                            <!-- Next Due Date (Red if overdue, Image 1 match) -->
                             <td class="px-3 py-2.5 whitespace-nowrap font-en">
                                 @if($cert->next_examination_due_date && $cert->next_examination_due_date->isPast())
-                                    <span class="text-rose-600 font-bold" title="مستحق الفحص">
+                                    <span class="text-rose-600 font-bold" title="مستحق الفحص / متأخر">
                                         {{ $cert->next_examination_due_date->format('m/d/Y') }}
                                     </span>
                                 @else
                                     <span class="text-slate-600">
-                                        {{ $cert->next_examination_due_date?->format('m/d/Y') }}
+                                        {{ $cert->next_examination_due_date?->format('m/d/Y') ?? 'N/A' }}
                                     </span>
                                 @endif
                             </td>
 
-                            <!-- Inspector (Avatar initial + Name) -->
+                            <!-- Inspector (Image 1 Match: Pink/Plum Square Badge + Name) -->
                             <td class="px-3 py-2.5 whitespace-nowrap">
                                 <div class="flex items-center gap-1.5">
-                                    <div class="w-5 h-5 rounded-full bg-[#0E4DA4] text-white flex items-center justify-center font-bold font-en text-[10px] uppercase shrink-0">
+                                    <div class="w-5 h-5 rounded bg-[#9E1B62] text-white flex items-center justify-center font-bold font-en text-[10px] uppercase shrink-0">
                                         {{ mb_substr($cert->issuer_name ?? 'A', 0, 1) }}
                                     </div>
-                                    <span class="text-slate-700 text-xs">{{ $cert->issuer_name ?? 'Inspector' }}</span>
+                                    <span class="text-slate-700 text-xs font-medium">{{ $cert->issuer_name ?? 'Administrator' }}</span>
                                 </div>
                             </td>
 
-                            <!-- Status (Odoo Pill Badges) -->
+                            <!-- Activities Column (Image 1 Match: Phone, Clock, Upload, Mail) -->
+                            <td class="px-3 py-2.5 text-center whitespace-nowrap">
+                                <div class="inline-flex items-center gap-1.5 text-xs">
+                                    <!-- WhatsApp / Call -->
+                                    <a href="https://wa.me/?text={{ urlencode('Safero Inspection Certificate: ' . $cert->certificate_number . ' - ' . route('certificates.show', $cert)) }}" 
+                                       target="_blank"
+                                       class="text-emerald-600 hover:text-emerald-700 p-0.5" 
+                                       title="مشاركة عبر واتساب / اتصال">
+                                        <svg class="w-3.5 h-3.5 inline" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                                        </svg>
+                                    </a>
+                                    <!-- Schedule / Clock -->
+                                    <span class="text-slate-400 p-0.5" title="موعد الفحص الدوري">
+                                        <svg class="w-3.5 h-3.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </span>
+                                    <!-- PDF Document Upload / Download -->
+                                    <a href="{{ route('certificates.pdf', $cert) }}" 
+                                       target="_blank"
+                                       class="text-emerald-600 hover:text-emerald-700 p-0.5" 
+                                       title="مستند PDF المعتمد">
+                                        <svg class="w-3.5 h-3.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                    </a>
+                                    <!-- Verification / QR Tool -->
+                                    <a href="{{ route('certificates.verify.lookup', ['cert' => $cert->certificate_number]) }}" 
+                                       class="text-amber-500 hover:text-amber-600 p-0.5" 
+                                       title="التحقق الرقمي من الشهادة">
+                                        <svg class="w-3.5 h-3.5 inline" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+
+                            <!-- Status (Image 1 Match: Saturated Rounded Full Pills) -->
                             <td class="px-3 py-2.5 text-center whitespace-nowrap">
                                 @if($cert->status === 'issued')
-                                    <span class="inline-flex items-center justify-center min-w-[90px] px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E8F7EC] text-[#15803D] border border-emerald-200">
+                                    <span class="inline-flex items-center justify-center min-w-[95px] px-3 py-0.5 rounded-full text-[11px] font-bold bg-[#198754] text-white shadow-2xs font-en">
                                         In Progress
                                     </span>
                                 @elseif($cert->status === 'draft')
-                                    <span class="inline-flex items-center justify-center min-w-[90px] px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E0F2FE] text-[#0369A1] border border-sky-200">
-                                        Draft
+                                    <span class="inline-flex items-center justify-center min-w-[95px] px-3 py-0.5 rounded-full text-[11px] font-bold bg-[#017E84] text-white shadow-2xs font-en">
+                                        Quotation
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center justify-center min-w-[90px] px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#FFE4E6] text-[#BE123C] border border-rose-200">
+                                    <span class="inline-flex items-center justify-center min-w-[95px] px-3 py-0.5 rounded-full text-[11px] font-bold bg-rose-600 text-white shadow-2xs font-en">
                                         Revoked
                                     </span>
                                 @endif

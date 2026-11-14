@@ -30,10 +30,14 @@
     <!-- Top Action & Navigation Bar -->
     <div class="bg-white rounded-xl border border-slate-200 p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-[#E6F2FF] text-[#0E4DA4] flex items-center justify-center shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $activeMeta['icon'] }}"/>
-                </svg>
+            <div class="w-10 h-10 rounded-lg bg-[#E6F2FF] text-[#0E4DA4] flex items-center justify-center shrink-0 p-1.5 border border-blue-100">
+                @if($type === 'crane')
+                    <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-7 h-7 object-contain" alt="Cranes">
+                @elseif($type === 'accessory')
+                    <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-7 h-7 object-contain" alt="Accessories">
+                @else
+                    <img src="{{ asset('branding/odoo-icons/repair.svg') }}" class="w-7 h-7 object-contain" alt="General">
+                @endif
             </div>
             <div>
                 <div class="flex items-center gap-2">

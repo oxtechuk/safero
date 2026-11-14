@@ -2,7 +2,7 @@
     'title' => '',
     'newUrl' => null,
     'newText' => 'New',
-    'newColor' => 'bg-[#006837]', // or bg-[#0E4DA4]
+    'newColor' => 'bg-[#714B67]', // Authentic Odoo Plum from Image 1
     'searchAction' => '',
     'searchValue' => '',
     'searchPlaceholder' => 'البحث...',

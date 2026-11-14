@@ -125,3 +125,4 @@ The Control Panel provides the standard Odoo header for list and kanban views:
    - Grid layout: 3 to 4 columns on desktop, 2 on tablet, 1 on mobile.
 3. **No Emojis**: Always use SVG icons or vector assets from `public/branding/odoo-icons/`.
 4. **Fast Actions**: Provide batch and "Mark All" capabilities (e.g. `Pass All` button for crane checklists).
+

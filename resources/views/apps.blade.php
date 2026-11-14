@@ -166,18 +166,13 @@
         <div class="curved-arch">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                <!-- The Apps Grid (6 columns on desktop, exactly like the image) -->
+                <!-- The Apps Grid (6 columns on desktop, exactly like Odoo Enterprise) -->
                 <div id="appsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 sm:gap-8 justify-items-center">
 
                     <!-- 1. Training Certificates (شهادات التدريب) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="training certificates شهادات التدريب دورات">
-                        <a href="{{ route('training-certificates.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative">
-                            <!-- Custom Colorful Odoo-Style Icon: Graduation Cap / Certificate -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white flex items-center justify-center shadow-md shadow-emerald-500/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"/>
-                                </svg>
-                            </div>
+                        <a href="{{ route('training-certificates.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/industry_certification.svg') }}" class="w-16 h-16 object-contain" alt="Training Certificates">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-[#22A447] text-white shadow-sm font-en">
                                 {{ $stats['total_training_certificates'] }}
                             </span>
@@ -190,13 +185,8 @@
 
                     <!-- 2. Trainees CRM (سجل المتدربين) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="trainees متدربين متدرب crm">
-                        <a href="{{ route('trainees.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative">
-                            <!-- Custom Colorful Odoo-Style Icon: Users Team -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 text-white flex items-center justify-center shadow-md shadow-blue-500/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                </svg>
-                            </div>
+                        <a href="{{ route('trainees.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/contacts.svg') }}" class="w-16 h-16 object-contain" alt="Trainees CRM">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-[#0E4DA4] text-white shadow-sm font-en">
                                 {{ $stats['total_trainees'] }}
                             </span>
@@ -209,14 +199,8 @@
 
                     <!-- 3. Inspection Certificates (شهادات الفحص) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="inspection certificates فحص معايرة معدات">
-                        <a href="{{ route('certificates.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative">
-                            <!-- Custom Colorful Odoo-Style Icon: Document Check -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#0E4DA4] to-indigo-500 text-white flex items-center justify-center shadow-md shadow-[#0E4DA4]/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
-                                </svg>
-                            </div>
+                        <a href="{{ route('certificates.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/quality_control.svg') }}" class="w-16 h-16 object-contain" alt="Inspection Certificates">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-600 text-white shadow-sm font-en">
                                 {{ $stats['total_certificates'] }}
                             </span>
@@ -229,13 +213,8 @@
 
                     <!-- 4. Customers CRM (إدارة العملاء) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="customers crm عملاء شركات مصانع">
-                        <a href="{{ route('customers.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative">
-                            <!-- Custom Colorful Odoo-Style Icon: Handshake CRM -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-500 text-white flex items-center justify-center shadow-md shadow-rose-500/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                </svg>
-                            </div>
+                        <a href="{{ route('customers.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/crm.svg') }}" class="w-16 h-16 object-contain" alt="Customers CRM">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500 text-white shadow-sm font-en">
                                 {{ $stats['total_customers'] }}
                             </span>
@@ -246,64 +225,43 @@
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Customers CRM</span>
                     </div>
 
-                    <!-- 5. Issue Training Cert (إصدار شهادة تدريب) -->
-                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="new training cert اصدار شهادة تدريب جديدة">
-                        <a href="{{ route('training-certificates.create') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center">
-                            <!-- Custom Colorful Odoo-Style Icon: Plus in Emerald Green -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-600 to-green-400 text-white flex items-center justify-center shadow-md shadow-emerald-500/25">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                </svg>
-                            </div>
+                    <!-- 5. Issue Crane Inspection (فحص الأوناش والروافع) -->
+                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="crane inspection أوناش روافع فحص">
+                        <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/fleet.svg') }}" class="w-16 h-16 object-contain" alt="Cranes Inspection">
                         </a>
-                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-emerald-600 transition">
-                            إصدار تدريب
+                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#0E4DA4] transition">
+                            فحص الأوناش
                         </span>
-                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">New Training</span>
+                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Cranes LOLER</span>
                     </div>
 
-                    <!-- 6. Issue Inspection Cert (إصدار شهادة فحص) -->
-                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="new inspection cert اصدار شهادة فحص جديدة">
-                        <a href="{{ route('certificates.create') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center">
-                            <!-- Custom Colorful Odoo-Style Icon: Plus in Royal Blue -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-700 to-sky-400 text-white flex items-center justify-center shadow-md shadow-blue-500/25">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
+                    <!-- 6. Issue Accessories Inspection (مهمات الرفع والحبال) -->
+                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="slings accessories مهمات رفع حبال سلاسل">
+                        <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/maintenance.svg') }}" class="w-16 h-16 object-contain" alt="Lifting Accessories">
                         </a>
-                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-blue-700 transition">
-                            إصدار فحص
+                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#0E4DA4] transition">
+                            مهمات الرفع
                         </span>
-                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">New Inspection</span>
+                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Accessories</span>
                     </div>
 
                     <!-- 7. Verify Tool (أداة التحقق) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="verify check qr كود تحقق شهادة">
-                        <a href="{{ route('certificates.verify.lookup') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center">
-                            <!-- Custom Colorful Odoo-Style Icon: Shield Check -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-400 text-white flex items-center justify-center shadow-md shadow-purple-500/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                </svg>
-                            </div>
+                        <a href="{{ route('certificates.verify.lookup') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/approvals.svg') }}" class="w-16 h-16 object-contain" alt="Verification Tool">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-purple-600 transition">
                             أداة التحقق
                         </span>
-                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Verify Tool</span>
+                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Verify QR</span>
                     </div>
 
                     <!-- 8. Dashboard Analytics (لوحة التقارير) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="dashboard analytics احصائيات تقارير لوحة">
-                        <a href="{{ route('dashboard') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center">
-                            <!-- Custom Colorful Odoo-Style Icon: Pie Chart / Speedometer -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-400 text-white flex items-center justify-center shadow-md shadow-amber-500/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
-                                </svg>
-                            </div>
+                        <a href="{{ route('dashboard') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/board.svg') }}" class="w-16 h-16 object-contain" alt="Dashboard">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-amber-600 transition">
                             لوحة الإحصائيات
@@ -311,15 +269,32 @@
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Analytics</span>
                     </div>
 
-                    <!-- 9. Environmental Studies (الدراسات البيئية) -->
+                    <!-- 9. Issue Training Cert (إصدار تدريب جديد) -->
+                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="new training cert اصدار شهادة تدريب جديدة">
+                        <a href="{{ route('training-certificates.create') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/industry_driving_school.svg') }}" class="w-16 h-16 object-contain" alt="New Training">
+                        </a>
+                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-emerald-600 transition">
+                            إصدار تدريب
+                        </span>
+                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">New Training</span>
+                    </div>
+
+                    <!-- 10. Technical Consultations (الاستشارات الفنية والمعايير) -->
+                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="consultations استشارات سلامة ايزو standard iso">
+                        <a href="javascript:void(0)" onclick="alert('قسم المعايير الهندسية (ISO 17020 / LOLER 1998) مدمج تلقائياً في فحص ومراجعة الشهادات.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/industry_surveyor.svg') }}" class="w-16 h-16 object-contain" alt="Engineering Standards">
+                        </a>
+                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight">
+                            معايير الفحص
+                        </span>
+                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">ISO 17020</span>
+                    </div>
+
+                    <!-- 11. Environmental Studies (الدراسات البيئية) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32 opacity-85" data-name="environmental بصمة كربونية بيئة دراسات">
-                        <a href="javascript:void(0)" onclick="alert('موديول الدراسات البيئية وحساب البصمة الكربونية قيد التجهيز وسيتم تفعيله قريباً.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center">
-                            <!-- Custom Colorful Odoo-Style Icon: Leaf / Eco -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-lime-500 to-emerald-400 text-white flex items-center justify-center shadow-md shadow-lime-500/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
+                        <a href="javascript:void(0)" onclick="alert('موديول الدراسات البيئية وحساب البصمة الكربونية قيد التجهيز وسيتم تفعيله قريباً.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/industry_environmental_agency.svg') }}" class="w-16 h-16 object-contain" alt="Environmental">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight">
                             دراسات بيئية
@@ -327,36 +302,15 @@
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Environmental</span>
                     </div>
 
-                    <!-- 10. Technical Consultations (الاستشارات الفنية) -->
-                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32 opacity-85" data-name="consultations استشارات سلامة ايزو">
-                        <a href="javascript:void(0)" onclick="alert('موديول الاستشارات الهندسية وبناء القدرات قيد التجهيز وسيتم تفعيله قريباً.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center">
-                            <!-- Custom Colorful Odoo-Style Icon: Compass & Tools -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-500 text-white flex items-center justify-center shadow-md shadow-sky-500/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
-                                </svg>
-                            </div>
+                    <!-- 12. Settings & System (إعدادات النظام) -->
+                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="settings إعدادات النظام تهيئة">
+                        <a href="{{ route('dashboard') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
+                            <img src="{{ asset('branding/odoo-icons/tiles/settings.svg') }}" class="w-16 h-16 object-contain" alt="Settings">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight">
-                            استشارات فنية
+                            الإعدادات
                         </span>
-                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Consultations</span>
-                    </div>
-
-                    <!-- 11. Studio Customizer (استوديو الشهادات) -->
-                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32 opacity-85" data-name="studio قوالب استوديو تصميم شهادات">
-                        <a href="javascript:void(0)" onclick="alert('استوديو تخصيص قوالب الشهادات والشورت كود قيد التطوير.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center">
-                            <!-- Custom Colorful Odoo-Style Icon: Studio Magic Wand -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-fuchsia-600 to-pink-500 text-white flex items-center justify-center shadow-md shadow-fuchsia-500/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
-                                </svg>
-                            </div>
-                        </a>
-                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight">
-                            الاستوديو
-                        </span>
-                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Studio</span>
+                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Settings</span>
                     </div>
 
                     <!-- 12. Settings (الإعدادات) -->

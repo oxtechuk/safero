@@ -32,10 +32,14 @@
     <!-- Top Action & Navigation Bar (Odoo Style) -->
     <div class="bg-white rounded-xl border border-slate-200 p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-[#E6F2FF] text-[#0E4DA4] flex items-center justify-center shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $activeMeta['icon'] }}"/>
-                </svg>
+            <div class="w-10 h-10 rounded-lg bg-[#E6F2FF] text-[#0E4DA4] flex items-center justify-center shrink-0 p-1.5 border border-blue-100">
+                @if($type === 'crane')
+                    <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-7 h-7 object-contain" alt="Cranes">
+                @elseif($type === 'accessory')
+                    <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-7 h-7 object-contain" alt="Accessories">
+                @else
+                    <img src="{{ asset('branding/odoo-icons/repair.svg') }}" class="w-7 h-7 object-contain" alt="General">
+                @endif
             </div>
             <div>
                 <div class="flex items-center gap-2">
@@ -48,26 +52,26 @@
             </div>
         </div>
 
-        <!-- Quick Switcher Tabs (No emojis, crisp SVG icons) -->
+        <!-- Quick Switcher Tabs (Odoo Icons, Clean) -->
         <div class="flex items-center gap-1.5 self-end sm:self-center">
             <a href="{{ route('certificates.create', ['type' => 'crane']) }}" 
                class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ $type === 'crane' ? 'bg-[#0E4DA4] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}"
                title="أوناش وروافع">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-3.5 h-3.5 object-contain">
                 <span>أوناش</span>
             </a>
 
             <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" 
                class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ $type === 'accessory' ? 'bg-[#0E4DA4] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}"
                title="مهمات رفع وحبال">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-3.5 h-3.5 object-contain">
                 <span>مهمات رفع</span>
             </a>
 
             <a href="{{ route('certificates.create', ['type' => 'general']) }}" 
                class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ $type === 'general' ? 'bg-[#0E4DA4] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}"
                title="معدات عامة وباليتات">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                <img src="{{ asset('branding/odoo-icons/repair.svg') }}" class="w-3.5 h-3.5 object-contain">
                 <span>معدات عامة</span>
             </a>
 
