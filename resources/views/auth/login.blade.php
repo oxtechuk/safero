@@ -280,16 +280,7 @@
         <!-- Left Column: Login Form -->
         <div class="login-side">
 
-            <!-- Top Header Status -->
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #8c8f94;">
-                <span style="display: flex; align-items: center; gap: 6px;">
-                    <span style="width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%; display: inline-block;"></span>
-                    Safero ERP Portal
-                </span>
-                <a href="{{ route('certificates.verify.lookup') }}" style="color: #2271b1; text-decoration: none; font-weight: 600;">
-                    Certificate Verification &rarr;
-                </a>
-            </div>
+   
 
             <!-- Form Centered Container -->
             <div class="form-box">
@@ -364,9 +355,7 @@
                 <!-- Footer Links -->
                 <div class="footer-links">
                     <div>
-                        <a href="javascript:void(0)" onclick="alert('Please contact admin@safero-eg.com to reset credentials.');">
-                            Lost your password?
-                        </a>
+                     
                     </div>
                     <div>
                         <a href="https://safero-eg.com" target="_blank">
@@ -375,15 +364,7 @@
                     </div>
                 </div>
 
-                <!-- Quick Demo Accounts -->
-                <div class="demo-bar">
-                    <span>Quick Demo Accounts</span>
-                    <div>
-                        <button type="button" class="demo-pill" onclick="fillCreds('admin@safero-eg.com', 'password')">Admin</button>
-                        <button type="button" class="demo-pill" onclick="fillCreds('eng.fathy@safero-eg.com', 'password')">Engineer</button>
-                        <button type="button" class="demo-pill" onclick="fillCreds('dr.hany@safero-eg.com', 'password')">Director</button>
-                    </div>
-                </div>
+             
 
             </div>
 
