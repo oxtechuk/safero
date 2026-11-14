@@ -15,7 +15,6 @@
         search-value="{{ request('search') }}"
         search-placeholder="البحث برقم الشهادة، أمر الشغل، العميل، المعدة..."
         :paginator="$certificates"
-        :badge="['label' => 'LOLER / ISO', 'class' => 'bg-blue-50 text-[#0E4DA4] border border-blue-200']"
     >
         <!-- Filter Popover Content -->
         <div class="space-y-3">

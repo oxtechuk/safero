@@ -15,7 +15,6 @@
         search-value="{{ request('search') }}"
         search-placeholder="البحث بالاسم، الشركة، الرقم القومي، الهاتف..."
         :paginator="$trainees"
-        :badge="['label' => 'Trainees CRM', 'class' => 'bg-emerald-50 text-[#006837] border border-emerald-200']"
     >
         <div class="space-y-2 text-xs">
             <span class="block text-[11px] font-bold text-slate-500 uppercase">تجميع وتصفية سريعة</span>

@@ -100,13 +100,7 @@
                 <!-- Right Utilities: Company Switcher + Clock + Avatar + Logout -->
                 <div class="flex items-center gap-2 sm:gap-4">
                     
-                    <!-- Company Switcher Badge -->
-                    <div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200">
-                        <svg class="w-3.5 h-3.5 text-[#006837]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                        </svg>
-                        <span>Safero Services &amp; Consultations</span>
-                    </div>
+                 
 
                     <!-- User Avatar & Quick Actions -->
                     <div class="flex items-center gap-2">

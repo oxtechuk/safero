@@ -15,7 +15,6 @@
         search-value="{{ request('search') }}"
         search-placeholder="البحث بالمتدرب، الرقم التسلسلي، الدورة..."
         :paginator="$certificates"
-        :badge="['label' => 'Academy', 'class' => 'bg-emerald-50 text-[#006837] border border-emerald-200']"
     >
         <!-- Filter Popover Content -->
         <div class="space-y-3">

@@ -15,7 +15,6 @@
         search-value="{{ request('search') }}"
         search-placeholder="البحث بالاسم، جهة الاتصال، الهاتف، البريد، السجل الضريبي..."
         :paginator="$customers"
-        :badge="['label' => 'Customers CRM', 'class' => 'bg-blue-50 text-[#0E4DA4] border border-blue-200']"
     >
         <div class="space-y-2 text-xs">
             <span class="block text-[11px] font-bold text-slate-500 uppercase">تجميع وتصفية سريعة</span>

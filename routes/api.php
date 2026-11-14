@@ -9,6 +9,11 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// Public unified verification API (Supports both Inspection and Training Certificates)
+Route::get('/v1/verify/{identifier}', [CertificateApiController::class, 'verify'])
+    ->where('identifier', '.*')
+    ->name('api.verify');
+
 // Public verification API for WordPress plugin / external validation (Inspection Certificates)
 Route::get('/v1/certificates/verify/{identifier}', [CertificateApiController::class, 'verify'])
     ->where('identifier', '.*')
