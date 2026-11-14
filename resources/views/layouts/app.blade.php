@@ -70,7 +70,17 @@
                     <nav class="hidden lg:flex items-center gap-0.5">
                         
                         <!-- 1. Inspection Certificates Dropdown (Odoo Style Tree Menu) -->
-                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
+                        <div class="relative py-2 -my-2" 
+                             x-data="{ 
+                                 open: false, 
+                                 timer: null,
+                                 enter() { clearTimeout(this.timer); this.open = true; },
+                                 leave() { this.timer = setTimeout(() => this.open = false, 250); }
+                             }" 
+                             @mouseenter="enter()" 
+                             @mouseleave="leave()" 
+                             @click.away="open = false">
+                            
                             <button type="button" 
                                     @click="open = !open"
                                     class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('certificates.*') && !request()->routeIs('certificates.verify.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -79,61 +89,86 @@
                                 <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
                             
-                            <!-- Odoo Tree Menu Dropdown (Text-only, No Icons, Opens on hover or click directly under module) -->
+                            <!-- Odoo Tree Menu Dropdown (Zero-gap, 250ms hover buffer, Direct type links) -->
                             <div x-show="open" 
                                  x-cloak
                                  x-transition:enter="transition ease-out duration-100"
-                                 x-transition:enter-start="opacity-0 scale-95"
-                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
                                  x-transition:leave="transition ease-in duration-75"
-                                 x-transition:leave-start="opacity-100 scale-100"
-                                 x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 top-full mt-0.5 w-68 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute right-0 top-full pt-1 z-50 text-xs"
                                  style="display: none;">
                                 
-                                <!-- Tree Branch 1: نماذج الفحص المعتمدة -->
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    نماذج الفحص المعتمدة
-                                </div>
-                                <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ (request()->routeIs('certificates.create') && request('type', 'crane') === 'crane') ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                    <span class="font-bold block text-xs">فحص الأوناش والروافع</span>
-                                    <span class="text-[10px] text-slate-400 font-en">Lifting Appliances (Cranes - LOLER)</span>
-                                </a>
-                                <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ (request()->routeIs('certificates.create') && request('type') === 'accessory') ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                    <span class="font-bold block text-xs">مهمات الرفع والحبال</span>
-                                    <span class="text-[10px] text-slate-400 font-en">Lifting Accessories (Slings / Shackles)</span>
-                                </a>
-                                <a href="{{ route('certificates.create', ['type' => 'general']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ (request()->routeIs('certificates.create') && request('type') === 'general') ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                    <span class="font-bold block text-xs">معدات عامة وباليتات</span>
-                                    <span class="text-[10px] text-slate-400 font-en">General Cargo Units</span>
-                                </a>
+                                <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100">
+                                    <!-- Tree Branch 1: نماذج الفحص المعتمدة -->
+                                    <div class="py-1">
+                                        <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                            نماذج الفحص المعتمدة
+                                        </div>
+                                        <a href="{{ route('certificates.create', ['type' => 'crane']) }}" 
+                                           class="flex flex-col px-3.5 py-2 hover:bg-[#E6F2FF] hover:text-[#0E4DA4] text-slate-700 transition group {{ (request()->routeIs('certificates.create') && request('type', 'crane') === 'crane') ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
+                                            <span class="font-bold text-xs group-hover:text-[#0E4DA4]">فحص الأوناش والروافع</span>
+                                            <span class="text-[10px] text-slate-400 font-en">Lifting Appliances (Cranes - LOLER)</span>
+                                        </a>
+                                        <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" 
+                                           class="flex flex-col px-3.5 py-2 hover:bg-[#E6F2FF] hover:text-[#0E4DA4] text-slate-700 transition group {{ (request()->routeIs('certificates.create') && request('type') === 'accessory') ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
+                                            <span class="font-bold text-xs group-hover:text-[#0E4DA4]">مهمات الرفع والحبال</span>
+                                            <span class="text-[10px] text-slate-400 font-en">Lifting Accessories (Slings / Shackles)</span>
+                                        </a>
+                                        <a href="{{ route('certificates.create', ['type' => 'general']) }}" 
+                                           class="flex flex-col px-3.5 py-2 hover:bg-[#E6F2FF] hover:text-[#0E4DA4] text-slate-700 transition group {{ (request()->routeIs('certificates.create') && request('type') === 'general') ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
+                                            <span class="font-bold text-xs group-hover:text-[#0E4DA4]">معدات عامة وباليتات</span>
+                                            <span class="text-[10px] text-slate-400 font-en">General Cargo Units &amp; Pallets</span>
+                                        </a>
+                                    </div>
 
-                                <!-- Tree Branch 2: سجل الشهادات والعمليات -->
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-t border-slate-100 mt-1">
-                                    سجل الشهادات والعمليات
-                                </div>
-                                <a href="{{ route('certificates.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ (request()->routeIs('certificates.index') && !request('status')) ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                    سجل الشهادات (جميع الشهادات)
-                                </a>
-                                <a href="{{ route('certificates.index', ['status' => 'issued']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request('status') === 'issued' ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                    الشهادات السارية المعتمدة
-                                </a>
-                                <a href="{{ route('certificates.index', ['status' => 'draft']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request('status') === 'draft' ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                    المسودات قيد المراجعة
-                                </a>
+                                    <!-- Tree Branch 2: سجل الشهادات والعمليات -->
+                                    <div class="py-1">
+                                        <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                            سجل الشهادات والعمليات
+                                        </div>
+                                        <a href="{{ route('certificates.index') }}" 
+                                           class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition font-bold {{ (request()->routeIs('certificates.index') && !request('status')) ? 'bg-blue-50/70 text-[#0E4DA4]' : '' }}">
+                                            سجل الشهادات (جميع الشهادات)
+                                        </a>
+                                        <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
+                                           class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request('status') === 'issued' ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
+                                            الشهادات السارية المعتمدة
+                                        </a>
+                                        <a href="{{ route('certificates.index', ['status' => 'draft']) }}" 
+                                           class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request('status') === 'draft' ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
+                                            المسودات قيد المراجعة
+                                        </a>
+                                    </div>
 
-                                <!-- Tree Branch 3: التحقق والامتثال -->
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-t border-slate-100 mt-1">
-                                    التحقق والامتثال
+                                    <!-- Tree Branch 3: التحقق والامتثال -->
+                                    <div class="py-1">
+                                        <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                            التحقق والامتثال
+                                        </div>
+                                        <a href="{{ route('certificates.verify.lookup') }}" 
+                                           class="block px-3.5 py-1.5 hover:bg-purple-50 text-slate-700 hover:text-purple-700 transition {{ request()->routeIs('certificates.verify.*') ? 'bg-purple-50/70 font-bold text-purple-700' : '' }}">
+                                            فحص رمز الاستجابة QR Code
+                                        </a>
+                                    </div>
                                 </div>
-                                <a href="{{ route('certificates.verify.lookup') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-purple-700 transition {{ request()->routeIs('certificates.verify.*') ? 'bg-purple-50/60 font-bold text-purple-700' : '' }}">
-                                    فحص رمز الاستجابة QR Code
-                                </a>
                             </div>
                         </div>
 
                         <!-- 2. Training Certificates Dropdown (Odoo Style Tree Menu) -->
-                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
+                        <div class="relative py-2 -my-2" 
+                             x-data="{ 
+                                 open: false, 
+                                 timer: null,
+                                 enter() { clearTimeout(this.timer); this.open = true; },
+                                 leave() { this.timer = setTimeout(() => this.open = false, 250); }
+                             }" 
+                             @mouseenter="enter()" 
+                             @mouseleave="leave()" 
+                             @click.away="open = false">
+                            
                             <button type="button" 
                                     @click="open = !open"
                                     class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('training-certificates.*') || request()->routeIs('trainees.*') ? 'bg-slate-100 text-[#006837]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -145,40 +180,57 @@
                             <div x-show="open" 
                                  x-cloak
                                  x-transition:enter="transition ease-out duration-100"
-                                 x-transition:enter-start="opacity-0 scale-95"
-                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
                                  x-transition:leave="transition ease-in duration-75"
-                                 x-transition:leave-start="opacity-100 scale-100"
-                                 x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 top-full mt-0.5 w-60 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute right-0 top-full pt-1 z-50 text-xs"
                                  style="display: none;">
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    شهادات المتدربين
-                                </div>
-                                <a href="{{ route('training-certificates.create') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('training-certificates.create') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                    إصدار شهادة تدريب جديدة
-                                </a>
-                                <a href="{{ route('training-certificates.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ (request()->routeIs('training-certificates.index') && !request('status')) ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                    سجل شهادات التدريب المعتمدة
-                                </a>
-                                <a href="{{ route('training-certificates.index', ['status' => 'issued']) }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request('status') === 'issued' ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                    الشهادات السارية المعتمدة
-                                </a>
+                                
+                                <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100">
+                                    <div class="py-1">
+                                        <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                            شهادات المتدربين
+                                        </div>
+                                        <a href="{{ route('training-certificates.create') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('training-certificates.create') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
+                                            إصدار شهادة تدريب جديدة
+                                        </a>
+                                        <a href="{{ route('training-certificates.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ (request()->routeIs('training-certificates.index') && !request('status')) ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
+                                            سجل شهادات التدريب المعتمدة
+                                        </a>
+                                        <a href="{{ route('training-certificates.index', ['status' => 'issued']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request('status') === 'issued' ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
+                                            الشهادات السارية المعتمدة
+                                        </a>
+                                    </div>
 
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-t border-slate-100 mt-1">
-                                    إدارة المتدربين
+                                    <div class="py-1">
+                                        <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                            إدارة المتدربين
+                                        </div>
+                                        <a href="{{ route('trainees.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('trainees.index') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
+                                            قاعدة بيانات المتدربين
+                                        </a>
+                                        <a href="{{ route('trainees.create') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('trainees.create') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
+                                            تسجيل متدرب جديد
+                                        </a>
+                                    </div>
                                 </div>
-                                <a href="{{ route('trainees.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('trainees.index') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                    قاعدة بيانات المتدربين
-                                </a>
-                                <a href="{{ route('trainees.create') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('trainees.create') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                    تسجيل متدرب جديد
-                                </a>
                             </div>
                         </div>
 
                         <!-- 3. Customers Dropdown (Odoo Style Tree Menu) -->
-                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
+                        <div class="relative py-2 -my-2" 
+                             x-data="{ 
+                                 open: false, 
+                                 timer: null,
+                                 enter() { clearTimeout(this.timer); this.open = true; },
+                                 leave() { this.timer = setTimeout(() => this.open = false, 250); }
+                             }" 
+                             @mouseenter="enter()" 
+                             @mouseleave="leave()" 
+                             @click.away="open = false">
+                            
                             <button type="button" 
                                     @click="open = !open"
                                     class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('customers.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -190,27 +242,40 @@
                             <div x-show="open" 
                                  x-cloak
                                  x-transition:enter="transition ease-out duration-100"
-                                 x-transition:enter-start="opacity-0 scale-95"
-                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
                                  x-transition:leave="transition ease-in duration-75"
-                                 x-transition:leave-start="opacity-100 scale-100"
-                                 x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 top-full mt-0.5 w-56 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute right-0 top-full pt-1 z-50 text-xs"
                                  style="display: none;">
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    إدارة العملاء
+                                
+                                <div class="w-60 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5">
+                                    <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                        إدارة العملاء
+                                    </div>
+                                    <a href="{{ route('customers.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request()->routeIs('customers.index') ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
+                                        دليل الشركات والمصانع
+                                    </a>
+                                    <a href="{{ route('customers.create') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request()->routeIs('customers.create') ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
+                                        إضافة عميل أو شركة جديدة
+                                    </a>
                                 </div>
-                                <a href="{{ route('customers.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request()->routeIs('customers.index') ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                    دليل الشركات والمصانع
-                                </a>
-                                <a href="{{ route('customers.create') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request()->routeIs('customers.create') ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                    إضافة عميل أو شركة جديدة
-                                </a>
                             </div>
                         </div>
 
                         <!-- 4. Reporting (Odoo Style Tree Menu) -->
-                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
+                        <div class="relative py-2 -my-2" 
+                             x-data="{ 
+                                 open: false, 
+                                 timer: null,
+                                 enter() { clearTimeout(this.timer); this.open = true; },
+                                 leave() { this.timer = setTimeout(() => this.open = false, 250); }
+                             }" 
+                             @mouseenter="enter()" 
+                             @mouseleave="leave()" 
+                             @click.away="open = false">
+                            
                             <button type="button" 
                                     @click="open = !open"
                                     class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('dashboard') ? 'bg-slate-100 text-amber-600' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -222,30 +287,43 @@
                             <div x-show="open" 
                                  x-cloak
                                  x-transition:enter="transition ease-out duration-100"
-                                 x-transition:enter-start="opacity-0 scale-95"
-                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
                                  x-transition:leave="transition ease-in duration-75"
-                                 x-transition:leave-start="opacity-100 scale-100"
-                                 x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 top-full mt-0.5 w-56 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute right-0 top-full pt-1 z-50 text-xs"
                                  style="display: none;">
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    التحليلات والمؤشرات
+                                
+                                <div class="w-60 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5">
+                                    <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                        التحليلات والمؤشرات
+                                    </div>
+                                    <a href="{{ route('dashboard') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition {{ request()->routeIs('dashboard') ? 'bg-amber-50/60 font-bold text-amber-600' : '' }}">
+                                        لوحة المؤشرات الشاملة
+                                    </a>
+                                    <a href="{{ route('certificates.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition">
+                                        تقرير فحص الأوناش والمعدات
+                                    </a>
+                                    <a href="{{ route('training-certificates.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition">
+                                        تقرير شهادات التدريب
+                                    </a>
                                 </div>
-                                <a href="{{ route('dashboard') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition {{ request()->routeIs('dashboard') ? 'bg-amber-50/60 font-bold text-amber-600' : '' }}">
-                                    لوحة المؤشرات الشاملة
-                                </a>
-                                <a href="{{ route('certificates.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition">
-                                    تقرير فحص الأوناش والمعدات
-                                </a>
-                                <a href="{{ route('training-certificates.index') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition">
-                                    تقرير شهادات التدريب
-                                </a>
                             </div>
                         </div>
 
                         <!-- 5. Configuration / Technical (Odoo Style Tree Menu) -->
-                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.away="open = false">
+                        <div class="relative py-2 -my-2" 
+                             x-data="{ 
+                                 open: false, 
+                                 timer: null,
+                                 enter() { clearTimeout(this.timer); this.open = true; },
+                                 leave() { this.timer = setTimeout(() => this.open = false, 250); }
+                             }" 
+                             @mouseenter="enter()" 
+                             @mouseleave="leave()" 
+                             @click.away="open = false">
+                            
                             <button type="button" 
                                     @click="open = !open"
                                     class="px-2.5 py-1.5 rounded text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition flex items-center gap-1.5">
@@ -257,32 +335,39 @@
                             <div x-show="open" 
                                  x-cloak
                                  x-transition:enter="transition ease-out duration-100"
-                                 x-transition:enter-start="opacity-0 scale-95"
-                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
                                  x-transition:leave="transition ease-in duration-75"
-                                 x-transition:leave-start="opacity-100 scale-100"
-                                 x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 top-full mt-0.5 w-60 bg-white border border-slate-200 rounded-md shadow-2xl py-1.5 z-50 text-xs"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute right-0 top-full pt-1 z-50 text-xs"
                                  style="display: none;">
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                    إعدادات النظام
-                                </div>
-                                <a href="{{ route('apps') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                    شاشة التطبيقات (Apps Launcher)
-                                </a>
-                                <a href="{{ route('certificates.verify.lookup') }}" class="block px-3 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                    أداة التحقق من الشهادات
-                                </a>
-                                <div class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-t border-slate-100 mt-1">
-                                    المعايير الهندسية
-                                </div>
-                                <div class="px-3 py-1 text-[11px] text-slate-500 flex items-center justify-between">
-                                    <span>ISO/IEC 17020</span>
-                                    <span class="text-[9px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-mono font-bold">Standard</span>
-                                </div>
-                                <div class="px-3 py-1 text-[11px] text-slate-500 flex items-center justify-between">
-                                    <span>LOLER 1998 / PUWER</span>
-                                    <span class="text-[9px] bg-blue-50 text-[#0E4DA4] px-1.5 py-0.5 rounded font-mono font-bold">Lifting</span>
+                                
+                                <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100">
+                                    <div class="py-1">
+                                        <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                            إعدادات النظام
+                                        </div>
+                                        <a href="{{ route('apps') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
+                                            شاشة التطبيقات (Apps Launcher)
+                                        </a>
+                                        <a href="{{ route('certificates.verify.lookup') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
+                                            أداة التحقق من الشهادات
+                                        </a>
+                                    </div>
+                                    <div class="py-1">
+                                        <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                            المعايير الهندسية
+                                        </div>
+                                        <div class="px-3.5 py-1 text-[11px] text-slate-500 flex items-center justify-between">
+                                            <span>ISO/IEC 17020</span>
+                                            <span class="text-[9px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-mono font-bold">Standard</span>
+                                        </div>
+                                        <div class="px-3.5 py-1 text-[11px] text-slate-500 flex items-center justify-between">
+                                            <span>LOLER 1998 / PUWER</span>
+                                            <span class="text-[9px] bg-blue-50 text-[#0E4DA4] px-1.5 py-0.5 rounded font-mono font-bold">Lifting</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
