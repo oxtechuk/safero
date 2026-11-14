@@ -3,8 +3,37 @@
 @section('title', 'عرض شهادة الفحص - ' . $certificate->certificate_number)
 
 @section('content')
-<!-- Print Stylesheet -->
+<!-- Print & Certificate Sheet Stylesheet -->
 <style>
+    .cert-paper-sheet {
+        position: relative;
+        width: 100%;
+        max-width: 860px;
+        margin: 0 auto 30px auto;
+        background-color: #ffffff;
+        background-image: url('{{ asset("branding/cert_inspect_bg.jpg") }}');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-position: top center;
+        border-radius: 12px;
+        box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #cbd5e1;
+        padding-top: 135px;
+        padding-bottom: 90px;
+        padding-left: 36px;
+        padding-right: 36px;
+        min-height: 1216px;
+        box-sizing: border-box;
+    }
+    @media (max-width: 640px) {
+        .cert-paper-sheet {
+            padding-top: 95px;
+            padding-bottom: 65px;
+            padding-left: 12px;
+            padding-right: 12px;
+            min-height: auto;
+        }
+    }
     @media print {
         header, nav, aside, footer, .no-print {
             display: none !important;
@@ -14,14 +43,23 @@
             padding: 0 !important;
             margin: 0 !important;
         }
-        .printable-sheet {
+        .cert-paper-sheet {
             box-shadow: none !important;
             border: none !important;
-            padding: 0 !important;
-            margin: 0 !important;
+            border-radius: 0 !important;
+            padding-top: 135px !important;
+            padding-bottom: 90px !important;
+            padding-left: 32px !important;
+            padding-right: 32px !important;
             width: 100% !important;
             max-width: 100% !important;
+            min-height: 100vh !important;
             page-break-after: always;
+            background-image: url('{{ asset("branding/cert_inspect_bg.jpg") }}') !important;
+            background-size: 100% 100% !important;
+            background-repeat: no-repeat !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
         .page-break {
             page-break-before: always;
@@ -101,28 +139,24 @@
     </div>
 
     <!-- ================= PAGE 1: Thorough Examination Report ================= -->
-    <div class="printable-sheet bg-white rounded-2xl shadow-xl border border-slate-200/90 p-8 sm:p-12 print:p-0 print:shadow-none print:border-none print:rounded-none" dir="ltr">
+    <div class="cert-paper-sheet printable-sheet" dir="ltr">
         
-        <!-- Document Header -->
-        <div class="flex items-center justify-between pb-4 border-b-2 border-[#0E4DA4]">
-            <div class="flex items-center gap-3">
-                <img src="{{ asset('branding/safero_logo.jpg') }}" alt="Safero Logo" class="h-16 w-auto object-contain">
-                <div>
-                    <h2 class="text-xl font-black text-[#0E4DA4] font-en tracking-wider leading-none">SAFERO</h2>
-                    <p class="text-xs font-semibold text-[#22A447] font-en">Services &amp; Consultations</p>
-                    <p class="text-[10px] text-slate-500 font-en mt-0.5">Accredited Inspection Body (ISO/IEC 17020) &bull; EGAC CAB # 0326001</p>
-                </div>
+        <!-- Header Strip: QR Code & Certificate Badge -->
+        <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-300/80">
+            <div>
+                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">OFFICIAL CERTIFICATE</span>
+                <span class="text-sm sm:text-base font-black text-[#0E4DA4] font-mono tracking-wider">{{ $certificate->certificate_number }}</span>
+                <span class="block text-[10px] text-slate-500 font-medium">Standard: {{ $certificate->reference_standard }}</span>
             </div>
 
             <!-- Dynamic QR Code -->
             <div class="text-center">
-                <div class="p-1.5 bg-white border border-slate-300 rounded-lg inline-block shadow-sm">
-                    <img src="data:image/svg+xml;base64,{{ $qrCodeSvg }}" alt="QR Code" class="w-24 h-24">
+                <div class="p-1 bg-white border border-slate-300 rounded shadow-xs inline-block">
+                    <img src="data:image/svg+xml;base64,{{ $qrCodeSvg }}" alt="QR Code" class="w-16 h-16 sm:w-20 sm:h-20">
                 </div>
-                <span class="block text-[9px] font-bold text-slate-500 font-en tracking-wider mt-0.5">SCAN TO VERIFY</span>
+                <span class="block text-[8px] font-bold text-slate-500 font-en tracking-wider mt-0.5">SCAN TO VERIFY</span>
             </div>
         </div>
-
         <!-- Official Report Title -->
         <div class="text-center my-4">
             <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-wide uppercase font-en underline decoration-[#0E4DA4] decoration-2">
@@ -376,26 +410,18 @@
 
     <!-- ================= PAGE 2: Crane Inspection Checklist (When Applicable) ================= -->
     @if($certificate->equipment_type === 'crane' || !empty($certificate->checklist_items))
-        <div class="printable-sheet bg-white rounded-2xl shadow-xl border border-slate-200/90 p-8 sm:p-12 print:p-0 print:shadow-none print:border-none print:rounded-none page-break" dir="ltr">
+        <div class="cert-paper-sheet printable-sheet page-break" dir="ltr">
             
-            <!-- Document Header Page 2 -->
-            <div class="flex items-center justify-between pb-4 border-b-2 border-[#0E4DA4]">
-                <div class="flex items-center gap-3">
-                    <img src="{{ asset('branding/safero_logo.jpg') }}" alt="Safero Logo" class="h-16 w-auto object-contain">
-                    <div>
-                        <h2 class="text-xl font-black text-[#0E4DA4] font-en tracking-wider leading-none">SAFERO</h2>
-                        <p class="text-xs font-semibold text-[#22A447] font-en">Services &amp; Consultations</p>
-                        <p class="text-[10px] text-slate-500 font-en mt-0.5">Accredited Inspection Body (ISO/IEC 17020) &bull; EGAC CAB # 0326001</p>
-                    </div>
+            <!-- Header Strip Page 2 -->
+            <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-300/80">
+                <div>
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">ATTACHMENT TO CERTIFICATE</span>
+                    <span class="text-sm sm:text-base font-black text-[#0E4DA4] font-mono">{{ $certificate->certificate_number }}</span>
                 </div>
-
-                <div class="text-right font-en">
-                    <span class="text-xs text-slate-400 block font-bold">CERTIFICATE NUMBER</span>
-                    <span class="text-base font-black text-[#0E4DA4]">{{ $certificate->certificate_number }}</span>
-                    <span class="block text-[10px] text-slate-500 mt-0.5">Page 2 of 2</span>
+                <div class="text-right text-xs font-en font-bold text-slate-600">
+                    <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-bold">Page 2 of 2</span>
                 </div>
             </div>
-
             <!-- Page 2 Title -->
             <div class="text-center my-4">
                 <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-wide uppercase font-en underline decoration-[#0E4DA4] decoration-2">

@@ -171,8 +171,8 @@
 
                     <!-- 1. Training Certificates (شهادات التدريب) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="training certificates شهادات التدريب دورات">
-                        <a href="{{ route('training-certificates.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/industry_certification.svg') }}" class="w-16 h-16 object-contain" alt="Training Certificates">
+                        <a href="{{ route('training-certificates.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/industry_certification.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Training Certificates">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-[#22A447] text-white shadow-sm font-en">
                                 {{ $stats['total_training_certificates'] }}
                             </span>
@@ -185,8 +185,8 @@
 
                     <!-- 2. Trainees CRM (سجل المتدربين) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="trainees متدربين متدرب crm">
-                        <a href="{{ route('trainees.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/contacts.svg') }}" class="w-16 h-16 object-contain" alt="Trainees CRM">
+                        <a href="{{ route('trainees.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/contacts.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Trainees CRM">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-[#0E4DA4] text-white shadow-sm font-en">
                                 {{ $stats['total_trainees'] }}
                             </span>
@@ -199,8 +199,8 @@
 
                     <!-- 3. Inspection Certificates (شهادات الفحص) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="inspection certificates فحص معايرة معدات">
-                        <a href="{{ route('certificates.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/quality_control.svg') }}" class="w-16 h-16 object-contain" alt="Inspection Certificates">
+                        <a href="{{ route('certificates.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/quality_control.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Inspection Certificates">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-600 text-white shadow-sm font-en">
                                 {{ $stats['total_certificates'] }}
                             </span>
@@ -213,8 +213,8 @@
 
                     <!-- 4. Customers CRM (إدارة العملاء) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="customers crm عملاء شركات مصانع">
-                        <a href="{{ route('customers.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/crm.svg') }}" class="w-16 h-16 object-contain" alt="Customers CRM">
+                        <a href="{{ route('customers.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/crm.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Customers CRM">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500 text-white shadow-sm font-en">
                                 {{ $stats['total_customers'] }}
                             </span>
@@ -227,8 +227,8 @@
 
                     <!-- 5. Issue Crane Inspection (فحص الأوناش والروافع) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="crane inspection أوناش روافع فحص">
-                        <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/fleet.svg') }}" class="w-16 h-16 object-contain" alt="Cranes Inspection">
+                        <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Cranes Inspection">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#0E4DA4] transition">
                             فحص الأوناش
@@ -238,8 +238,8 @@
 
                     <!-- 6. Issue Accessories Inspection (مهمات الرفع والحبال) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="slings accessories مهمات رفع حبال سلاسل">
-                        <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/maintenance.svg') }}" class="w-16 h-16 object-contain" alt="Lifting Accessories">
+                        <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Lifting Accessories">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#0E4DA4] transition">
                             مهمات الرفع
@@ -249,8 +249,8 @@
 
                     <!-- 7. Verify Tool (أداة التحقق) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="verify check qr كود تحقق شهادة">
-                        <a href="{{ route('certificates.verify.lookup') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/approvals.svg') }}" class="w-16 h-16 object-contain" alt="Verification Tool">
+                        <a href="{{ route('certificates.verify.lookup') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/approvals.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Verification Tool">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-purple-600 transition">
                             أداة التحقق
@@ -260,8 +260,8 @@
 
                     <!-- 8. Dashboard Analytics (لوحة التقارير) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="dashboard analytics احصائيات تقارير لوحة">
-                        <a href="{{ route('dashboard') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/board.svg') }}" class="w-16 h-16 object-contain" alt="Dashboard">
+                        <a href="{{ route('dashboard') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/board.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Dashboard">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-amber-600 transition">
                             لوحة الإحصائيات
@@ -271,8 +271,8 @@
 
                     <!-- 9. Issue Training Cert (إصدار تدريب جديد) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="new training cert اصدار شهادة تدريب جديدة">
-                        <a href="{{ route('training-certificates.create') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/industry_driving_school.svg') }}" class="w-16 h-16 object-contain" alt="New Training">
+                        <a href="{{ route('training-certificates.create') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/industry_driving_school.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="New Training">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-emerald-600 transition">
                             إصدار تدريب
@@ -282,8 +282,8 @@
 
                     <!-- 10. Technical Consultations (الاستشارات الفنية والمعايير) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="consultations استشارات سلامة ايزو standard iso">
-                        <a href="javascript:void(0)" onclick="alert('قسم المعايير الهندسية (ISO 17020 / LOLER 1998) مدمج تلقائياً في فحص ومراجعة الشهادات.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/industry_surveyor.svg') }}" class="w-16 h-16 object-contain" alt="Engineering Standards">
+                        <a href="javascript:void(0)" onclick="alert('قسم المعايير الهندسية (ISO 17020 / LOLER 1998) مدمج تلقائياً في فحص ومراجعة الشهادات.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/industry_surveyor.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Engineering Standards">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight">
                             معايير الفحص
@@ -293,8 +293,8 @@
 
                     <!-- 11. Environmental Studies (الدراسات البيئية) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32 opacity-85" data-name="environmental بصمة كربونية بيئة دراسات">
-                        <a href="javascript:void(0)" onclick="alert('موديول الدراسات البيئية وحساب البصمة الكربونية قيد التجهيز وسيتم تفعيله قريباً.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/industry_environmental_agency.svg') }}" class="w-16 h-16 object-contain" alt="Environmental">
+                        <a href="javascript:void(0)" onclick="alert('موديول الدراسات البيئية وحساب البصمة الكربونية قيد التجهيز وسيتم تفعيله قريباً.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/industry_environmental_agency.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Environmental">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight">
                             دراسات بيئية
@@ -304,25 +304,8 @@
 
                     <!-- 12. Settings & System (إعدادات النظام) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="settings إعدادات النظام تهيئة">
-                        <a href="{{ route('dashboard') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2">
-                            <img src="{{ asset('branding/odoo-icons/tiles/settings.svg') }}" class="w-16 h-16 object-contain" alt="Settings">
-                        </a>
-                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight">
-                            الإعدادات
-                        </span>
-                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Settings</span>
-                    </div>
-
-                    <!-- 12. Settings (الإعدادات) -->
-                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32 opacity-85" data-name="settings اعدادات نظام ترخيص">
-                        <a href="javascript:void(0)" onclick="alert('إعدادات النظام والسيرفر والربط بموقع الشركة.');" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center">
-                            <!-- Custom Colorful Odoo-Style Icon: Settings Cog & Wrench -->
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-slate-700 to-slate-500 text-white flex items-center justify-center shadow-md shadow-slate-600/20">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
-                            </div>
+                        <a href="{{ route('dashboard') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Settings">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight">
                             الإعدادات
