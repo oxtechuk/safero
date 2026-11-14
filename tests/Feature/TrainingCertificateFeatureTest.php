@@ -88,4 +88,47 @@ class TrainingCertificateFeatureTest extends TestCase
                 ],
             ]);
     }
+
+    public function test_api_certificates_verify_falls_back_to_training_certificate(): void
+    {
+        $cert = TrainingCertificate::factory()->create();
+
+        $response = $this->getJson(route('api.certificates.verify', ['identifier' => $cert->certificate_serial]));
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'valid' => true,
+                'certificate_type' => 'training',
+                'data' => [
+                    'certificate_serial' => $cert->certificate_serial,
+                    'trainee_name' => $cert->trainee_name,
+                ],
+            ]);
+    }
+
+    public function test_unified_api_verify_endpoint_works_for_training_certificate(): void
+    {
+        $cert = TrainingCertificate::factory()->create();
+
+        $response = $this->getJson(route('api.verify', ['identifier' => $cert->certificate_serial]));
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'valid' => true,
+                'certificate_type' => 'training',
+            ]);
+    }
+
+    public function test_serial_generator_increments_uniquely(): void
+    {
+        $serial1 = TrainingCertificate::generateNextSerial('2026-11-14');
+        $this->assertEquals('2026111401', $serial1);
+
+        TrainingCertificate::factory()->create(['certificate_serial' => $serial1]);
+
+        $serial2 = TrainingCertificate::generateNextSerial('2026-11-14');
+        $this->assertEquals('2026111402', $serial2);
+    }
 }

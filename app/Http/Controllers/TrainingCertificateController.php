@@ -46,8 +46,7 @@ class TrainingCertificateController extends Controller
         $today = Carbon::today();
         $expiryDate = Carbon::today()->addYears(2)->subDay();
 
-        $countToday = TrainingCertificate::whereDate('created_at', $today)->count() + 1;
-        $defaultSerial = $today->format('Ymd').sprintf('%02d', $countToday);
+        $defaultSerial = TrainingCertificate::generateNextSerial($today->toDateString());
 
         return view('training-certificates.create', compact('trainees', 'selectedTraineeId', 'today', 'expiryDate', 'defaultSerial'));
     }

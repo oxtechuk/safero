@@ -5,11 +5,39 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class TrainingCertificate extends Model
 {
     use HasFactory;
+
+    public static function generateNextSerial(?string $date = null): string
+    {
+        $baseDate = $date ? Carbon::parse($date) : now();
+        $datePrefix = $baseDate->format('Ymd');
+
+        $serials = static::where('certificate_serial', 'like', $datePrefix.'%')
+            ->pluck('certificate_serial')
+            ->map(function ($serial) use ($datePrefix) {
+                $suffix = substr($serial, strlen($datePrefix));
+
+                return is_numeric($suffix) ? (int) $suffix : 0;
+            })
+            ->filter();
+
+        $maxSuffix = $serials->isNotEmpty() ? $serials->max() : 0;
+        $nextSuffix = $maxSuffix + 1;
+
+        $candidate = sprintf('%s%02d', $datePrefix, $nextSuffix);
+
+        while (static::where('certificate_serial', $candidate)->exists()) {
+            $nextSuffix++;
+            $candidate = sprintf('%s%02d', $datePrefix, $nextSuffix);
+        }
+
+        return $candidate;
+    }
 
     protected $fillable = [
         'uuid',
@@ -48,9 +76,7 @@ class TrainingCertificate extends Model
             }
 
             if (empty($cert->certificate_serial)) {
-                $today = now()->format('Ymd');
-                $countToday = static::whereDate('created_at', now()->toDateString())->count() + 1;
-                $cert->certificate_serial = sprintf('%s%02d', $today, $countToday);
+                $cert->certificate_serial = static::generateNextSerial($cert->issue_date ? $cert->issue_date->toDateString() : null);
             }
 
             if (empty($cert->accreditation_text)) {

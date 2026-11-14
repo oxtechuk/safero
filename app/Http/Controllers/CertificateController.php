@@ -49,7 +49,7 @@ class CertificateController extends Controller
         $today = Carbon::today();
         $nextDue = Carbon::today()->addMonths(6)->subDay();
 
-        $defaultCertNo = 'SAF/'.$today->format('Ymd').sprintf('%02d', Certificate::whereDate('created_at', $today)->count() + 1);
+        $defaultCertNo = Certificate::generateNextNumber($today->toDateString());
 
         return view('certificates.create', compact('customers', 'selectedCustomerId', 'today', 'nextDue', 'defaultCertNo'));
     }

@@ -6,6 +6,7 @@ use Database\Factories\CertificateFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class Certificate extends Model
@@ -65,6 +66,33 @@ class Certificate extends Model
         ];
     }
 
+    public static function generateNextNumber(?string $date = null): string
+    {
+        $baseDate = $date ? Carbon::parse($date) : now();
+        $datePrefix = $baseDate->format('Ymd');
+
+        $existing = static::where('certificate_number', 'like', 'SAF/'.$datePrefix.'%')
+            ->pluck('certificate_number')
+            ->map(function ($num) use ($datePrefix) {
+                $suffix = substr($num, strlen('SAF/'.$datePrefix));
+
+                return is_numeric($suffix) ? (int) $suffix : 0;
+            })
+            ->filter();
+
+        $maxSuffix = $existing->isNotEmpty() ? $existing->max() : 0;
+        $nextSuffix = $maxSuffix + 1;
+
+        $candidate = sprintf('SAF/%s%02d', $datePrefix, $nextSuffix);
+
+        while (static::where('certificate_number', $candidate)->exists()) {
+            $nextSuffix++;
+            $candidate = sprintf('SAF/%s%02d', $datePrefix, $nextSuffix);
+        }
+
+        return $candidate;
+    }
+
     protected static function booted(): void
     {
         static::creating(function (Certificate $certificate): void {
@@ -73,9 +101,7 @@ class Certificate extends Model
             }
 
             if (empty($certificate->certificate_number)) {
-                $today = now()->format('Ymd');
-                $countToday = static::whereDate('created_at', now()->toDateString())->count() + 1;
-                $certificate->certificate_number = sprintf('SAF/%s%02d', $today, $countToday);
+                $certificate->certificate_number = static::generateNextNumber($certificate->thorough_examination_date ? $certificate->thorough_examination_date->toDateString() : null);
             }
         });
     }
