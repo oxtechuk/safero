@@ -29,7 +29,7 @@ class GoogleSheetsSyncService
      */
     public static function isConfigured(): bool
     {
-        return !empty(self::getWebhookUrl()) || !empty(self::getSpreadsheetId());
+        return ! empty(self::getWebhookUrl()) || ! empty(self::getSpreadsheetId());
     }
 
     /**
@@ -68,7 +68,7 @@ class GoogleSheetsSyncService
 
         $webhookUrl = self::getWebhookUrl();
 
-        if (!empty($webhookUrl)) {
+        if (! empty($webhookUrl)) {
             try {
                 $response = Http::timeout(8)
                     ->asJson()
@@ -127,7 +127,7 @@ class GoogleSheetsSyncService
     {
         $query = InspectionTask::with(['customer', 'inspector', 'certificate']);
 
-        if (!$forceAll) {
+        if (! $forceAll) {
             $query->where(function ($q) {
                 $q->whereNull('synced_to_sheets_at')
                     ->orWhereColumn('updated_at', '>', 'synced_to_sheets_at');

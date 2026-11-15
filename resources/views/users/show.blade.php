@@ -60,9 +60,7 @@
                 @foreach($matrix as $moduleKey => $module)
                     <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
                         <div class="p-3 bg-white border-b border-slate-200 flex items-center gap-3">
-                            <div class="w-6 h-6 rounded bg-slate-100 p-0.5 flex items-center justify-center border border-slate-200">
-                                <img src="{{ asset($module['icon']) }}" class="w-3.5 h-3.5 object-contain">
-                            </div>
+                           
                             <div>
                                 <span class="text-xs font-bold text-slate-900">{{ $module['name_ar'] }}</span>
                                 <span class="text-[10px] text-slate-400 font-en">({{ $module['name_en'] }})</span>

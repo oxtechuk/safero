@@ -52,7 +52,6 @@
                     <a href="{{ route('apps') }}" 
                        class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-slate-100 text-slate-600 hover:text-black transition-all duration-150 relative group" 
                        title="الرجوع إلى شاشة التطبيقات والمديولات (Apps Launcher)">
-                        <img src="{{ asset('branding/odoo-icons/apps.svg') }}" class="w-5 h-5 object-contain" alt="Apps">
                         <span class="sr-only">Apps Launcher</span>
                     </a>
 
@@ -83,6 +82,11 @@
                                 <img src="{{ asset('branding/odoo-icons/hr.svg') }}" class="w-4 h-4 object-contain" alt="Users">
                             </div>
                             <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">المستخدمون والصلاحيات</span>
+                        @elseif(request()->routeIs('tasks.*'))
+                            <div class="w-6 h-6 rounded bg-blue-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-blue-200">
+                                <img src="{{ asset('branding/odoo-icons/timer.svg') }}" class="w-4 h-4 object-contain" alt="Tasks">
+                            </div>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">مهام الفحص وأوامر الشغل</span>
                         @else
                             <img src="{{ asset(setting('logo_path', '/branding/safero_logo.jpg')) }}" alt="{{ setting('company_name_en', 'Safero') }}" class="h-5 w-auto object-contain">
                             <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ setting('company_name_en', 'Safero ERP') }}</span>
@@ -110,20 +114,17 @@
                             <!-- IsoOx Enterprise Settings Sub-navigation Bar (Image 1 Exact Match) -->
                             <a href="{{ route('settings.index', ['tab' => 'general']) }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request('tab', 'general') === 'general' ? 'bg-purple-100 text-[#714B67]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-3.5 h-3.5 object-contain" alt="General Settings">
-                                <span>الإعدادات العامة (General Settings)</span>
+                                <span>الإعدادات العام</span>
                             </a>
 
                             <a href="{{ route('settings.index', ['tab' => 'users']) }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request('tab') === 'users' ? 'bg-purple-100 text-[#714B67]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                <img src="{{ asset('branding/odoo-icons/contacts.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Users">
-                                <span>المستخدمون والشركات (Users &amp; Companies)</span>
+                                <span>المستخدمون</span>
                             </a>
 
                             <a href="{{ route('settings.index', ['tab' => 'localization']) }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request('tab') === 'localization' ? 'bg-purple-100 text-[#714B67]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                <img src="{{ asset('branding/odoo-icons/website.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Translations">
-                                <span>اللغات والترجمة (Translations)</span>
+                                <span>اللغات واترجمة </span>
                             </a>
 
                             <!-- Technical Dropdown (Image 1 Highlight: Menu Items, Database, Automation) -->
@@ -134,7 +135,6 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'technical' ? null : 'technical')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ in_array(request('tab'), ['technical', 'saas']) ? 'bg-purple-100 text-[#714B67]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <img src="{{ asset('branding/odoo-icons/board.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Technical">
                                     <span>الخيارات التقنية (Technical)</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'technical' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
@@ -195,7 +195,6 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'inspection' ? null : 'inspection')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('certificates.*') && !request()->routeIs('certificates.verify.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <img src="{{ asset('branding/odoo-icons/quality_control.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Inspection">
                                     <span>شهادات الفحص</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'inspection' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
@@ -275,7 +274,6 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'training' ? null : 'training')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('training-certificates.*') || request()->routeIs('trainees.*') ? 'bg-slate-100 text-[#006837]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <img src="{{ asset('branding/odoo-icons/industry_certification.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Training">
                                     <span>شهادات التدريب</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'training' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
@@ -329,8 +327,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'customers' ? null : 'customers')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('customers.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <img src="{{ asset('branding/odoo-icons/crm.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Customers">
-                                    <span>العملاء والشركات</span>
+                                    <span>العملاء </span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'customers' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
 
@@ -366,8 +363,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'reporting' ? null : 'reporting')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('dashboard') ? 'bg-slate-100 text-amber-600' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <img src="{{ asset('branding/odoo-icons/board.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Reporting">
-                                    <span>التقارير والمؤشرات</span>
+                                    <span>التقارير </span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'reporting' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
 
@@ -406,8 +402,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'settings' ? null : 'settings')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition flex items-center gap-1.5">
-                                    <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Settings">
-                                    <span>التهيئة والإعدادات</span>
+                                    <span> والإعدادات</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'settings' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
 
@@ -564,7 +559,6 @@
         </div>
     </header>
 
-    <!-- Secondary Module Sub-Navbar (Odoo Tree Menu Bar - Image 1 Exact Match) -->
     @if(request()->routeIs('certificates.*') && !request()->routeIs('certificates.verify.*'))
         <div class="bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

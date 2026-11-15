@@ -247,7 +247,18 @@
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Accessories</span>
                     </div>
 
-                    <!-- 7. Verify Tool (أداة التحقق) -->
+                    <!-- 7. Inspection Tasks & Google Sheets (مهام الفحص الميداني) -->
+                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="tasks inspection work order google sheets مهام شيك ليست اوامر شغل فحص">
+                        <a href="{{ route('tasks.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/timer.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Inspection Tasks">
+                        </a>
+                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#0E4DA4] transition">
+                            مهام الفحص
+                        </span>
+                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Work Orders</span>
+                    </div>
+
+                    <!-- 8. Verify Tool (أداة التحقق) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="verify check qr كود تحقق شهادة">
                         <a href="{{ route('certificates.verify.lookup') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
                             <img src="{{ asset('branding/odoo-icons/approvals.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Verification Tool">

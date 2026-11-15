@@ -852,6 +852,55 @@
                         </table>
                     </div>
 
+                    <!-- Google Sheets & Task Sync Integration Box -->
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
+                        <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200">
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-extrabold text-slate-900">ربط وتزامن Google Sheets (Google Sheets Sync)</h3>
+                                    <p class="text-xs text-slate-500">تحديث أوامر الشغل وجداول الفحص اليومية تلقائياً في جداول بيانات جوجل.</p>
+                                </div>
+                            </div>
+                            <a href="{{ route('tasks.index') }}" class="text-xs font-bold text-[#0E4DA4] hover:underline flex items-center gap-1">
+                                <span>شاشة المهام</span>
+                                <span>&rarr;</span>
+                            </a>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="google_sheets_webhook_url" class="block text-xs font-bold text-slate-700 mb-1">
+                                    رابط Google Apps Script Webhook URL
+                                </label>
+                                <input type="url" 
+                                       name="google_sheets_webhook_url" 
+                                       id="google_sheets_webhook_url" 
+                                       value="{{ setting('google_sheets_webhook_url') }}" 
+                                       dir="ltr"
+                                       placeholder="https://script.google.com/macros/s/.../exec" 
+                                       class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono focus:border-[#714B67] outline-hidden text-left bg-white">
+                                <span class="text-[10px] text-slate-400 mt-1 block">رابط Webhook لتحديث الصفوف في Google Sheet فورياً وبشكل مجدول يومياً.</span>
+                            </div>
+
+                            <div>
+                                <label for="google_sheet_id" class="block text-xs font-bold text-slate-700 mb-1">
+                                    معرف ملف الشيت (Google Spreadsheet ID)
+                                </label>
+                                <input type="text" 
+                                       name="google_sheet_id" 
+                                       id="google_sheet_id" 
+                                       value="{{ setting('google_sheet_id') }}" 
+                                       dir="ltr"
+                                       placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms" 
+                                       class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono focus:border-[#714B67] outline-hidden text-left bg-white">
+                                <span class="text-[10px] text-slate-400 mt-1 block">معرف جدول البيانات المستخرج من الرابط العام.</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Technical Meta Card -->
                     <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70 text-xs text-slate-600 space-y-1 font-mono">
                         <div class="flex items-center justify-between">

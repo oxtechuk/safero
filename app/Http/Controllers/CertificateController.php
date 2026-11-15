@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificate;
 use App\Models\Customer;
+use App\Models\InspectionTask;
+use App\Services\GoogleSheetsSyncService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -117,6 +119,17 @@ class CertificateController extends Controller
         }
 
         $certificate = Certificate::create($validated);
+
+        if ($request->filled('task_id')) {
+            $task = InspectionTask::find($request->input('task_id'));
+            if ($task) {
+                $task->update([
+                    'certificate_id' => $certificate->id,
+                    'status' => 'completed',
+                ]);
+                GoogleSheetsSyncService::syncTask($task);
+            }
+        }
 
         return redirect()->route('certificates.show', $certificate)
             ->with('success', 'تم إنشاء شهادة الفحص بنجاح برقم: '.$certificate->certificate_number);

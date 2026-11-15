@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InspectionTaskController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TraineeController;
@@ -52,6 +53,12 @@ Route::middleware('auth')->group(function () {
 
     // Training Certificates Module
     Route::resource('training-certificates', TrainingCertificateController::class);
+
+    // Field Inspection Tasks & Google Sheets Work Orders (/tasks)
+    Route::resource('tasks', InspectionTaskController::class);
+    Route::post('/tasks/{task}/sync', [InspectionTaskController::class, 'syncNow'])->name('tasks.sync_now');
+    Route::post('/tasks/sync-all', [InspectionTaskController::class, 'syncAll'])->name('tasks.sync_all');
+    Route::get('/tasks/{task}/convert', [InspectionTaskController::class, 'convertToCertificate'])->name('tasks.convert');
 
     // User & Permission Management (Odoo Enterprise RBAC)
     Route::resource('users', UserController::class);
