@@ -90,17 +90,17 @@
                             <div class="w-6 h-6 rounded bg-amber-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-amber-200">
                                 <img src="{{ asset('branding/odoo-icons/crm.svg') }}" class="w-4 h-4 object-contain" alt="Customers">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">العملاء والشركات</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">العملاء </span>
                         @elseif(request()->routeIs('users.*') || request()->routeIs('roles.*'))
                             <div class="w-6 h-6 rounded bg-purple-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-purple-200">
                                 <img src="{{ asset('branding/odoo-icons/hr.svg') }}" class="w-4 h-4 object-contain" alt="Users">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">المستخدمون والصلاحيات</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">المستخدمون</span>
                         @elseif(request()->routeIs('tasks.*'))
                             <div class="w-6 h-6 rounded bg-blue-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-blue-200">
                                 <img src="{{ asset('branding/odoo-icons/timer.svg') }}" class="w-4 h-4 object-contain" alt="Tasks">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">مهام الفحص وأوامر الشغل</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">مهام الفحص </span>
                         @else
                             <img src="{{ asset(setting('logo_path', '/branding/safero_logo.jpg')) }}" alt="{{ setting('company_name_en', 'Safero') }}" class="h-5 w-auto object-contain">
                             <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ setting('company_name_en', 'Safero ERP') }}</span>
@@ -207,70 +207,6 @@
 
                         @else
                             <!-- Standard App Modules Navigation -->
-
-                            <!-- 0. Field Inspection Tasks & Work Orders (Google Sheets Sync) -->
-                            <div class="relative py-2 -my-2 menu-item-group" 
-                                 @mouseenter="enter('tasks')" 
-                                 @mouseleave="leave()">
-                                
-                                <button type="button" 
-                                        @click="activeMenu = (activeMenu === 'tasks' ? null : 'tasks')"
-                                        class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('tasks.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <span>مهام الفحص الميداني</span>
-                                    <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'tasks' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                                </button>
-                                
-                                <div x-show="activeMenu === 'tasks'" 
-                                     x-cloak
-                                     x-transition:enter="transition ease-out duration-100"
-                                     x-transition:enter-start="opacity-0 translate-y-1"
-                                     x-transition:enter-end="opacity-100 translate-y-0"
-                                     x-transition:leave="transition ease-in duration-75"
-                                     x-transition:leave-start="opacity-100 translate-y-0"
-                                     x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs"
-                                     style="min-width: 288px; width: 288px;">
-                                    
-                                    <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100" style="min-width: 288px; width: 288px;">
-                                        <div class="py-1">
-                                            <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                أوامر الشغل والفحص
-                                            </div>
-                                            <a href="{{ route('tasks.index') }}" 
-                                               class="flex flex-col px-3.5 py-2 hover:bg-[#E6F2FF] hover:text-[#0E4DA4] text-slate-700 transition group {{ request()->routeIs('tasks.index') ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
-                                                <span class="font-bold text-xs group-hover:text-[#0E4DA4]">أوامر الشغل ومهام الفحص</span>
-                                                <span class="text-[10px] text-slate-400 font-en">Kanban &amp; List Matrix</span>
-                                            </a>
-                                            <a href="{{ route('tasks.create') }}" 
-                                               class="flex items-center justify-between px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request()->routeIs('tasks.create') ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
-                                                <span>إضافة أمر شغل / فحص جديد</span>
-                                                <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded font-mono">+ New</span>
-                                            </a>
-                                        </div>
-
-                                        <div class="py-1">
-                                            <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                التزامن و Google Sheets
-                                            </div>
-                                            <div class="px-3.5 py-1.5">
-                                                <form method="POST" action="{{ route('tasks.sync_all') }}">
-                                                    @csrf
-                                                    <button type="submit" class="w-full flex items-center justify-between p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition border border-emerald-200">
-                                                        <div class="flex items-center gap-1.5">
-                                                            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                                                            <span>مزامنة فورية الآن</span>
-                                                        </div>
-                                                        <span class="text-[9px] bg-emerald-200 text-emerald-900 px-1 rounded font-mono">Sync</span>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                            <a href="{{ route('settings.index', ['tab' => 'google_sheets']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-emerald-700 transition">
-                                                إعدادات وربط Google Sheet
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <!-- 1. Inspection Certificates Dropdown (Odoo Style Tree Menu) -->
                             <div class="relative py-2 -my-2 menu-item-group" 
