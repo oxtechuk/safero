@@ -49,7 +49,7 @@
         <div class="flex flex-wrap items-center justify-between lg:justify-end gap-2 sm:gap-3">
             
             <!-- Search Input with Integrated Dropdown Caret (IsoOx 17 Searchbox) -->
-            <div class="relative flex-1 sm:w-80 max-w-md">
+            <div class="relative flex-1 min-w-[220px] sm:w-80 max-w-md">
                 <form method="GET" action="{{ $searchAction }}" class="relative m-0" id="IsoOxSearchForm">
                     <!-- Keep existing query params except search & page -->
                     @foreach(request()->except(['search', 'page']) as $k => $v)

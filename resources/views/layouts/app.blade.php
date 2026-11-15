@@ -58,14 +58,15 @@
                 <!-- Left: 9-Dots Apps Drawer Button + Active Module Brand + Dropdown Sub-menus -->
                 <div class="flex items-center gap-2 sm:gap-4">
                     
-                    <!-- 9-Dots Button to return to Apps (/apps) -->
+                    <!-- Back to Apps Launcher Button (IsoOx Return Pattern) -->
                     <a href="{{ route('apps') }}" 
-                       class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-slate-100 text-slate-600 hover:text-black transition-all duration-150 relative group" 
-                       title="الرجوع إلى شاشة التطبيقات والمديولات (Apps Launcher)">
-                        <svg class="w-4 h-4 text-slate-700" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M5 3a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zM5 8a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zM5 13a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4z"/>
+                       class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100/90 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 transition-all duration-150 shadow-2xs group" 
+                       title="الرجوع إلى شاشة التطبيقات الرئيسية (Apps Launcher)">
+                        <svg class="w-4 h-4 text-slate-500 group-hover:text-slate-800 transition transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
-                        <span class="sr-only">Apps Launcher</span>
+                        <img src="{{ asset('branding/odoo-icons/apps.svg') }}" class="w-4 h-4 object-contain shrink-0" alt="Apps">
+                        <span class="text-xs font-bold text-slate-700 group-hover:text-slate-900 hidden md:inline">الرئيسية</span>
                     </a>
 
                     <!-- Current Active Module Brand / Icon -->
@@ -371,9 +372,10 @@
                                      x-transition:leave="transition ease-in duration-75"
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs">
+                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs"
+                                     style="min-width: 288px; width: 288px;">
                                     
-                                    <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100">
+                                    <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100" style="min-width: 288px; width: 288px;">
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                                                 شهادات المتدربين
@@ -424,9 +426,10 @@
                                      x-transition:leave="transition ease-in duration-75"
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs">
+                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs"
+                                     style="min-width: 260px; width: 260px;">
                                     
-                                    <div class="w-60 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5">
+                                    <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5" style="min-width: 260px; width: 260px;">
                                         <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                                             إدارة العملاء
                                         </div>
@@ -460,9 +463,10 @@
                                      x-transition:leave="transition ease-in duration-75"
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs">
+                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs"
+                                     style="min-width: 260px; width: 260px;">
                                     
-                                    <div class="w-60 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5">
+                                    <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5" style="min-width: 260px; width: 260px;">
                                         <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                                             التحليلات والمؤشرات
                                         </div>
@@ -499,9 +503,10 @@
                                      x-transition:leave="transition ease-in duration-75"
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs">
+                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs"
+                                     style="min-width: 288px; width: 288px;">
                                     
-                                    <div class="w-68 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100">
+                                    <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100" style="min-width: 288px; width: 288px;">
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                                                 إعدادات النظام والشركة

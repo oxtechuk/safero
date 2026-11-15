@@ -50,13 +50,13 @@
                         <th class="w-10 px-3 py-2.5 text-center">
                             <input type="checkbox" class="rounded border-slate-300 text-[#006837] focus:ring-[#006837] w-3.5 h-3.5 cursor-pointer">
                         </th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Name</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Company / Organization</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Job Title</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">National ID / Passport</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Phone</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Certificates</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Actions</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">الاسم والبريد</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">الشركة / جهة العمل</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">المسمى الوظيفي</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">الرقم القومي / جواز السفر</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">رقم الهاتف</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">الشهادات</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
