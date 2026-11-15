@@ -4,9 +4,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TraineeController;
 use App\Http\Controllers\TrainingCertificateController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Redirect root to /app (Apps Launcher) or login
@@ -50,6 +52,11 @@ Route::middleware('auth')->group(function () {
 
     // Training Certificates Module
     Route::resource('training-certificates', TrainingCertificateController::class);
+
+    // User & Permission Management (Odoo Enterprise RBAC)
+    Route::resource('users', UserController::class);
+    Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle_status');
+    Route::resource('roles', RoleController::class)->only(['index', 'edit', 'update']);
 
     // Enterprise Platform Settings & Company Configuration (/settings)
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');

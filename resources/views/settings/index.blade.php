@@ -176,14 +176,17 @@
                                     </div>
                                 </div>
 
-                                <!-- Current Users List Pills -->
-                                <div class="space-y-1.5 pt-2 border-t border-slate-200/60">
-                                    @foreach($users ?? [] as $u)
-                                        <div class="flex items-center justify-between text-xs py-1 px-2 rounded bg-white border border-slate-200">
-                                            <span class="font-bold text-slate-800">{{ $u->name }}</span>
-                                            <span class="text-slate-400 font-mono text-[10px]">{{ $u->email }}</span>
-                                        </div>
-                                    @endforeach
+                                <!-- Manage Users & Roles Action Buttons -->
+                                <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between gap-2">
+                                    <a href="{{ route('users.index') }}" 
+                                       class="text-xs font-bold text-[#714B67] hover:underline flex items-center gap-1">
+                                        <span>إدارة المستخدمين (Manage Users)</span>
+                                        <span>&rarr;</span>
+                                    </a>
+                                    <a href="{{ route('users.create') }}" 
+                                       class="px-2.5 py-1 rounded-md bg-[#714B67] text-white font-bold text-[11px] hover:bg-[#5b3c53] transition">
+                                        + مستخدم جديد
+                                    </a>
                                 </div>
                             </div>
 

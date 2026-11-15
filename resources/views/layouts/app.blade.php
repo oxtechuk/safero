@@ -78,6 +78,11 @@
                                 <img src="{{ asset('branding/odoo-icons/crm.svg') }}" class="w-4 h-4 object-contain" alt="Customers">
                             </div>
                             <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">العملاء والشركات</span>
+                        @elseif(request()->routeIs('users.*') || request()->routeIs('roles.*'))
+                            <div class="w-6 h-6 rounded bg-purple-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-purple-200">
+                                <img src="{{ asset('branding/odoo-icons/hr.svg') }}" class="w-4 h-4 object-contain" alt="Users">
+                            </div>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">المستخدمون والصلاحيات</span>
                         @else
                             <img src="{{ asset(setting('logo_path', '/branding/safero_logo.jpg')) }}" alt="{{ setting('company_name_en', 'Safero') }}" class="h-5 w-auto object-contain">
                             <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ setting('company_name_en', 'Safero ERP') }}</span>
@@ -651,6 +656,37 @@
                            class="hover:text-emerald-700 transition flex items-center gap-1 px-2 py-0.5 rounded {{ request('status') === 'issued' ? 'bg-emerald-50 text-emerald-800 font-bold' : '' }}">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#22A447]"></span>
                             <span>الشهادات السارية المعتمدة</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @elseif(request()->routeIs('users.*') || request()->routeIs('roles.*'))
+        <div class="bg-white border-b border-slate-200 shadow-2xs">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-10 gap-3 text-xs">
+                    <div class="flex items-center gap-1.5 overflow-x-auto py-1">
+                        <a href="{{ route('users.index') }}" 
+                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ request()->routeIs('users.index') ? 'bg-purple-100 text-[#714B67] border border-purple-200 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                            <svg class="w-3.5 h-3.5 text-[#714B67]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                            <span>سجل المستخدمين</span>
+                        </a>
+
+                        <span class="text-slate-300">|</span>
+
+                        <a href="{{ route('users.create') }}" 
+                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('users.create') ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
+                            <span>إضافة مستخدم جديد</span>
+                        </a>
+
+                        <a href="{{ route('roles.index') }}" 
+                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('roles.*') ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
+                            <span>أدوار النظام ومصفوفة الصلاحيات</span>
+                        </a>
+
+                        <a href="{{ route('settings.index', ['tab' => 'users']) }}" 
+                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium text-slate-700 hover:text-[#714B67] hover:bg-purple-50">
+                            <span>إعدادات الشركات والولوج</span>
                         </a>
                     </div>
                 </div>

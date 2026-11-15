@@ -1,0 +1,48 @@
+{
+    "key": "environmental",
+    "name_ar": "الدراسات والتفتيش البيئي",
+    "name_en": "Environmental Studies & Inspection",
+    "icon": "branding/odoo-icons/industry_environmental_agency.svg",
+    "badge_color": "emerald",
+    "description_ar": "مراقبة الانبعاثات، تقييم الأثر البيئي، وقياس البصمة الكربونية للمصانع والمنشآت الصناعية.",
+    "description_en": "Industrial emission monitoring, Environmental Impact Assessment (EIA), and carbon footprint calculation.",
+    "route": "apps",
+    "permissions": [
+        {
+            "name": "environmental.view",
+            "action": "view",
+            "label_ar": "عرض السجلات والتقارير البيئية",
+            "label_en": "View Environmental Reports & Records"
+        },
+        {
+            "name": "environmental.create",
+            "action": "create",
+            "label_ar": "إجراء فحص بيئي وقياس انبعاثات جديد",
+            "label_en": "Conduct Environmental Examination"
+        },
+        {
+            "name": "environmental.approve",
+            "action": "approve",
+            "label_ar": "اعتماد شهادات وتقارير المطابقة البيئية",
+            "label_en": "Approve Environmental Compliance Reports"
+        },
+        {
+            "name": "environmental.delete",
+            "action": "delete",
+            "label_ar": "حذف وإلغاء التقارير البيئية",
+            "label_en": "Delete Environmental Records"
+        }
+    ],
+    "submenus": [
+        {
+            "label_ar": "سجل الفحوصات البيئية",
+            "label_en": "Environmental Registry",
+            "route": "apps"
+        },
+        {
+            "label_ar": "قياس انبعاثات جديد",
+            "label_en": "New Emissions Inspection",
+            "route": "apps"
+        }
+    ]
+}

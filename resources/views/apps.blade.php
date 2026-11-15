@@ -302,7 +302,18 @@
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Environmental</span>
                     </div>
 
-                    <!-- 12. Settings & System (إعدادات النظام) -->
+                    <!-- 12. Users & Roles (المستخدمون والصلاحيات) -->
+                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="users roles permissions مستخدمين صلاحيات أدوار فريق">
+                        <a href="{{ route('users.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                            <img src="{{ asset('branding/odoo-icons/hr.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Users &amp; Roles">
+                        </a>
+                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#714B67] transition">
+                            المستخدمون
+                        </span>
+                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Users &amp; Roles</span>
+                    </div>
+
+                    <!-- 13. Settings & System (إعدادات النظام) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="settings إعدادات النظام تهيئة">
                         <a href="{{ route('settings.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
                             <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Settings">
