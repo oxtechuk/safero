@@ -166,9 +166,10 @@
                                      x-transition:leave="transition ease-in duration-75"
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs">
+                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs"
+                                     style="min-width: 288px; width: 288px;">
                                     
-                                    <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100">
+                                    <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100" style="min-width: 288px; width: 288px;">
                                         <!-- User Interface Section (Image 1 Highlight: Menu Items) -->
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
@@ -214,7 +215,6 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'tasks' ? null : 'tasks')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('tasks.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <img src="{{ asset('branding/odoo-icons/timer.svg') }}" class="w-3.5 h-3.5 object-contain" alt="Tasks">
                                     <span>مهام الفحص الميداني</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'tasks' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
@@ -227,9 +227,10 @@
                                      x-transition:leave="transition ease-in duration-75"
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs">
+                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs"
+                                     style="min-width: 288px; width: 288px;">
                                     
-                                    <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100">
+                                    <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100" style="min-width: 288px; width: 288px;">
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                                                 أوامر الشغل والفحص
@@ -291,9 +292,10 @@
                                      x-transition:leave="transition ease-in duration-75"
                                      x-transition:leave-start="opacity-100 translate-y-0"
                                      x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs">
+                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs"
+                                     style="min-width: 288px; width: 288px;">
                                     
-                                    <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100">
+                                    <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100" style="min-width: 288px; width: 288px;">
                                         <!-- Tree Branch 1: نماذج الفحص المعتمدة -->
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
