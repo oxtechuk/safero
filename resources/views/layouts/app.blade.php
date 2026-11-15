@@ -94,7 +94,7 @@
                     </div>
 
                     <!-- IsoOx Enterprise Submenu Navigation with Grouped Cascading Dropdowns -->
-                    <nav class="hidden lg:flex items-center gap-0.5" 
+                    <nav class="flex items-center gap-0.5 sm:gap-1 flex-wrap md:flex-nowrap" 
                          x-data="{ 
                              activeMenu: null, 
                              timer: null, 
@@ -577,7 +577,7 @@
                     <!-- Mobile Hamburger Toggle -->
                     <button type="button" 
                             @click="mobileMenuOpen = !mobileMenuOpen" 
-                            class="lg:hidden p-1.5 rounded-md text-slate-600 hover:bg-slate-100 transition">
+                            class="md:hidden p-1.5 rounded-md text-slate-600 hover:bg-slate-100 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
@@ -751,6 +751,11 @@
                             <span>اللغات والترجمة</span>
                         </a>
 
+                        <a href="{{ route('settings.index', ['tab' => 'google_sheets']) }}" 
+                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('tab') === 'google_sheets' ? 'bg-[#006837] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-emerald-800 hover:bg-emerald-50' }}">
+                            <span>ربط Google Sheets</span>
+                        </a>
+
                         <a href="{{ route('settings.index', ['tab' => 'branding']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('tab') === 'branding' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
                             <span>الشعار والأختام والقوالب</span>
@@ -764,6 +769,58 @@
                         <a href="{{ route('settings.index', ['tab' => 'saas']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('tab') === 'saas' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
                             <span>منصة SaaS والمديولات</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @elseif(request()->routeIs('tasks.*'))
+        <div class="bg-white border-b border-slate-200 shadow-2xs">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-10 gap-3 text-xs overflow-x-auto py-1">
+                    <div class="flex items-center gap-1.5 flex-nowrap">
+                        <a href="{{ route('tasks.index') }}" 
+                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('tasks.index') && !request('status')) ? 'bg-blue-50 text-[#0E4DA4] border border-blue-200 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                            <svg class="w-3.5 h-3.5 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                            <span>أوامر الشغل ومهام الفحص</span>
+                        </a>
+
+                        <span class="text-slate-300">|</span>
+
+                        <a href="{{ route('tasks.create') }}" 
+                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('tasks.create') ? 'bg-[#0E4DA4] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#0E4DA4] hover:bg-blue-50/70' }}">
+                            <span>+ إضافة أمر شغل جديد</span>
+                        </a>
+
+                        <span class="text-slate-300">|</span>
+
+                        <a href="{{ route('tasks.index', ['status' => 'in_progress']) }}" 
+                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('status') === 'in_progress' ? 'bg-amber-50 text-amber-800 font-bold border border-amber-200' : 'text-slate-700 hover:text-amber-800 hover:bg-amber-50/70' }}">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span>قيد الفحص الميداني</span>
+                        </a>
+
+                        <a href="{{ route('tasks.index', ['status' => 'completed']) }}" 
+                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('status') === 'completed' ? 'bg-emerald-50 text-emerald-800 font-bold border border-emerald-200' : 'text-slate-700 hover:text-emerald-800 hover:bg-emerald-50/70' }}">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#22A447]"></span>
+                            <span>مكتملة الفحص</span>
+                        </a>
+                    </div>
+
+                    <!-- Right: Quick Google Sheets Sync -->
+                    <div class="flex items-center gap-2 flex-nowrap">
+                        <form method="POST" action="{{ route('tasks.sync_all') }}" class="inline">
+                            @csrf
+                            <button type="submit" 
+                                    class="px-3 py-1 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95" 
+                                    title="مزامنة فورية مع Google Sheets">
+                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                <span>مزامنة Google Sheets</span>
+                            </button>
+                        </form>
+                        <a href="{{ route('settings.index', ['tab' => 'google_sheets']) }}" 
+                           class="text-slate-400 hover:text-slate-700 p-1" title="إعدادات الربط">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </a>
                     </div>
                 </div>
