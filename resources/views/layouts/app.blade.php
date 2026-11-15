@@ -36,6 +36,16 @@
             visibility: visible !important;
             pointer-events: auto !important;
         }
+
+        .menu-popup-box {
+            min-width: 288px !important;
+            box-sizing: border-box !important;
+        }
+
+        .menu-popup-box > div {
+            min-width: 288px !important;
+            box-sizing: border-box !important;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-[#006837] selection:text-white bg-[#F8FAFC]">
@@ -52,6 +62,9 @@
                     <a href="{{ route('apps') }}" 
                        class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-slate-100 text-slate-600 hover:text-black transition-all duration-150 relative group" 
                        title="الرجوع إلى شاشة التطبيقات والمديولات (Apps Launcher)">
+                        <svg class="w-4 h-4 text-slate-700" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M5 3a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zM5 8a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zM5 13a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4zm5 0a2 2 0 100 4 2 2 0 000-4z"/>
+                        </svg>
                         <span class="sr-only">Apps Launcher</span>
                     </a>
 
