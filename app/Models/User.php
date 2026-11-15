@@ -5,11 +5,11 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 #[Fillable([
     'name',
@@ -158,7 +158,7 @@ class User extends Authenticatable
             ->wherePivot('is_granted', true)
             ->get();
 
-        return $rolePermissions->merge($directPermissions)->unique('id');
+        return $rolePermissions->merge($directPermissions)->unique('id')->values();
     }
 
     public function givePermissionTo(Permission|string $permission, bool $isGranted = true): self

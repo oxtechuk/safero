@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Services\ModuleDiscoveryService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class UserManagementTest extends TestCase
@@ -162,5 +163,19 @@ class UserManagementTest extends TestCase
     {
         $response = $this->get(route('users.index'));
         $response->assertRedirect(route('login'));
+    }
+
+    public function test_all_permissions_returns_support_collection_for_admin_and_non_admin(): void
+    {
+        $adminPermissions = $this->adminUser->allPermissions();
+        $this->assertInstanceOf(Collection::class, $adminPermissions);
+
+        $inspectorRole = Role::where('name', 'inspector')->firstOrFail();
+        $nonAdmin = User::factory()->create(['role' => 'inspector']);
+        $nonAdmin->assignRole($inspectorRole);
+
+        $nonAdminPermissions = $nonAdmin->allPermissions();
+        $this->assertInstanceOf(Collection::class, $nonAdminPermissions);
+        $this->assertGreaterThan(0, $nonAdminPermissions->count());
     }
 }
