@@ -129,6 +129,20 @@
                 <span class="text-[9px] bg-red-100 text-red-700 px-1 py-0.5 rounded font-mono font-bold">Image 1</span>
             </button>
 
+            <!-- Tab 8: Google Sheets Integration -->
+            <button type="button" 
+                    @click="activeTab = 'google_sheets'"
+                    :class="activeTab === 'google_sheets' ? 'bg-[#006837] text-white font-bold shadow-xs ring-2 ring-emerald-400' : 'text-slate-700 hover:bg-slate-100 font-medium'"
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs text-right transition">
+                <div class="flex items-center gap-2.5">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>ربط Google Sheets</span>
+                </div>
+                <span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold {{ setting('google_sheets_webhook_url') ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600' }}">
+                    {{ setting('google_sheets_webhook_url') ? 'متصل' : 'تهيئة' }}
+                </span>
+            </button>
+
             <div class="pt-3 border-t border-slate-100 mt-2 px-3 text-[11px] text-slate-400 font-en">
                 <span class="font-bold text-slate-600 block">Safero ERP Core v2.4</span>
                 <span class="block text-[10px]">Open-Source &amp; Multi-Tenant SaaS</span>
@@ -350,6 +364,52 @@
                                         <option value="AED" {{ setting('app_currency') === 'AED' ? 'selected' : '' }}>AED - درهم إماراتي</option>
                                     </select>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Google Sheets Sync Integration Section (Quick Access) -->
+                    <div class="bg-gradient-to-r from-emerald-50/60 to-white rounded-xl border border-emerald-200/80 shadow-xs p-6 space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-emerald-100 flex-wrap gap-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold shadow-xs">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h2 class="text-base font-extrabold text-slate-900">ربط وتزامن Google Sheets (Google Sheets Integration)</h2>
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full {{ setting('google_sheets_webhook_url') ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }}">
+                                            {{ setting('google_sheets_webhook_url') ? 'متصل ومفعل' : 'بحاجة إلى تهيئة' }}
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-slate-500">مزامنة أوامر الشغل وجداول الفحص الميداني لحظياً وبشكل مجدول يومياً في تمام الساعة 06:00 صباحاً.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="button" 
+                                        @click="activeTab = 'google_sheets'"
+                                        class="px-3.5 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition flex items-center gap-1 shadow-xs">
+                                    <span>تهيئة وضبط الربط الكامل</span>
+                                    <span>&larr;</span>
+                                </button>
+                                <a href="{{ route('tasks.index') }}" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-white text-slate-700 font-bold text-xs transition">
+                                    لوحة أوامر الشغل
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                            <div class="p-3 bg-white rounded-lg border border-emerald-100 space-y-1">
+                                <span class="text-[11px] font-bold text-slate-500 block">رابط Webhook المفعل حالياً:</span>
+                                <span class="font-mono text-slate-700 break-all text-[11px] block dir-ltr text-left">
+                                    {{ setting('google_sheets_webhook_url') ?: 'لم يتم إدخال رابط Webhook بعد' }}
+                                </span>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-emerald-100 space-y-1">
+                                <span class="text-[11px] font-bold text-slate-500 block">معرف جدول البيانات (Spreadsheet ID):</span>
+                                <span class="font-mono text-slate-700 break-all text-[11px] block dir-ltr text-left">
+                                    {{ setting('google_sheet_id') ?: 'لم يتم إدخال ID الملف بعد' }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -911,7 +971,219 @@
                     </div>
                 </div>
 
+                <!-- ================= TAB 8: Google Sheets Dedicated Integration Hub ================= -->
+                <div x-show="activeTab === 'google_sheets'" 
+                     x-transition:enter="transition ease-out duration-150"
+                     x-transition:enter-start="opacity-0 translate-y-1"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="space-y-6">
+
+                    <!-- Top Overview Banner -->
+                    <div class="bg-gradient-to-l from-emerald-700 to-[#006837] text-white rounded-xl p-6 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded bg-white/20 text-white font-mono text-[10px] font-bold uppercase tracking-wider">Cloud Integration</span>
+                                <span class="text-xs text-emerald-100">Live 2-Way Task Sync</span>
+                            </div>
+                            <h2 class="text-xl font-black">ربط ومزامنة جداول بيانات Google Sheets</h2>
+                            <p class="text-xs text-emerald-100 leading-relaxed max-w-2xl">
+                                ربط مباشر بين أوامر شغل الفحص الميداني وشيتات جوجل. يتم تحديث أوامر الشغل والشيك ليست تلقائياً وفورياً عند الحفظ، بالإضافة إلى تشغيل مزامنة مجمعة مجدولة يومياً كل صباح.
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-2 flex-wrap md:flex-nowrap">
+                            <a href="https://script.google.com/home" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white font-black text-xs shadow-md transition flex items-center gap-1.5 whitespace-nowrap border border-emerald-400 active:scale-95">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                <span>صفحة استخراج لينك الربط (Apps Script) &rarr;</span>
+                            </a>
+                            <a href="https://sheets.new" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               class="px-3.5 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-white border border-white/30 font-bold text-xs transition flex items-center gap-1.5 whitespace-nowrap">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                <span>إنشاء شيت جديد</span>
+                            </a>
+                            @if(setting('google_sheet_id'))
+                                <a href="https://docs.google.com/spreadsheets/d/{{ setting('google_sheet_id') }}/edit" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer" 
+                                   class="px-3.5 py-2 rounded-lg bg-white text-emerald-900 font-bold text-xs shadow-xs hover:bg-emerald-50 transition flex items-center gap-1.5 whitespace-nowrap">
+                                    <svg class="w-4 h-4 text-emerald-700" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                                    <span>فتح الشيت الحالي</span>
+                                </a>
+                            @endif
+                            <a href="{{ route('tasks.index') }}" 
+                               class="px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs transition flex items-center gap-1 whitespace-nowrap">
+                                <span>أوامر الشغل</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Connection Credentials Box -->
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-5">
+                        <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-base font-extrabold text-slate-900">بيانات الاتصال بـ Google Apps Script</h3>
+                                <p class="text-xs text-slate-500">أدخل رابط الـ Webhook الصادر من نشر السكربت ورمز الـ Spreadsheet ID.</p>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                                {{ setting('google_sheets_webhook_url') ? 'حالة الربط: متصل ومفعل' : 'حالة الربط: في انتظار الإعداد' }}
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5 flex-wrap gap-1">
+                                    <label for="tab_webhook_url" class="block text-xs font-bold text-slate-800">
+                                        رابط الويب هوك (Google Apps Script Webhook URL) *
+                                    </label>
+                                    <a href="https://script.google.com/home" 
+                                       target="_blank" 
+                                       rel="noopener noreferrer" 
+                                       class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-[11px] transition shadow-2xs border border-emerald-300">
+                                        <svg class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                        <span>صفحة استخراج لينك الربط (اضغط هنا)</span>
+                                    </a>
+                                </div>
+                                <input type="url" 
+                                       name="google_sheets_webhook_url" 
+                                       id="tab_webhook_url" 
+                                       value="{{ setting('google_sheets_webhook_url') }}" 
+                                       dir="ltr"
+                                       placeholder="https://script.google.com/macros/s/AKfycb.../exec" 
+                                       class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-xs font-mono focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none text-left bg-slate-50/50">
+                                <span class="text-[11px] text-slate-400 mt-1.5 block">
+                                    الرابط الصادر من Google Apps Script بعد اختيار Deploy &rarr; Web app (Anyone).
+                                </span>
+                            </div>
+
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5 flex-wrap gap-1">
+                                    <label for="tab_sheet_id" class="block text-xs font-bold text-slate-800">
+                                        معرف جدول البيانات (Google Spreadsheet ID)
+                                    </label>
+                                    <a href="https://sheets.new" 
+                                       target="_blank" 
+                                       rel="noopener noreferrer" 
+                                       class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-blue-100 hover:bg-blue-200 text-blue-900 font-bold text-[11px] transition shadow-2xs border border-blue-300">
+                                        <svg class="w-3.5 h-3.5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                        <span>إنشاء شيت جديد (sheets.new)</span>
+                                    </a>
+                                </div>
+                                <input type="text" 
+                                       name="google_sheet_id" 
+                                       id="tab_sheet_id" 
+                                       value="{{ setting('google_sheet_id') }}" 
+                                       dir="ltr"
+                                       placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms" 
+                                       class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-xs font-mono focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none text-left bg-slate-50/50">
+                                <span class="text-[11px] text-slate-400 mt-1.5 block">
+                                    الرمز المقتطع من رابط ملف الشيت بين /d/ و /edit في المتصفح.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                            <div class="flex items-center gap-2">
+                                <button type="submit" 
+                                        class="px-5 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm shadow-xs transition flex items-center gap-2 active:scale-95">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    <span>حفظ بيانات الربط (Save Integration)</span>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-slate-500">مزامنة تلقائية يومية:</span>
+                                <span class="font-bold text-xs text-slate-800 font-mono bg-slate-100 px-2 py-0.5 rounded">06:00 AM Daily</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step-by-Step Instructions & Apps Script Code Box -->
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4" x-data="{ copied: false }">
+                        <div class="border-b border-slate-100 pb-3 flex items-center justify-between flex-wrap gap-2">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-slate-900">كود Google Apps Script الجاهز لملف الشيت</h3>
+                                <p class="text-xs text-slate-500">انسخ هذا الكود بالكامل وضعه في Google Sheets &rarr; Extensions &rarr; Apps Script ثم اضغط Deploy كـ Web app.</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <a href="https://script.google.com/home" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer" 
+                                   class="px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center gap-1 shadow-xs">
+                                    <span>فتح Google Apps Script</span>
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                </a>
+                                <button type="button" 
+                                        @click="
+                                            navigator.clipboard.writeText(document.getElementById('scriptCodeBlock').innerText);
+                                            copied = true;
+                                            setTimeout(() => copied = false, 2500);
+                                        "
+                                        class="px-3.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-xs">
+                                    <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                    <span x-text="copied ? 'تم نسخ الكود!' : 'نسخ الكود بالكامل (Copy)'"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="relative bg-slate-900 text-slate-100 rounded-lg p-4 font-mono text-xs overflow-x-auto text-left" dir="ltr">
+                            <pre><code id="scriptCodeBlock">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow([
+      "Task Number", "Customer", "Equipment", "Inspector", 
+      "Scheduled Date", "Status", "Score", "Certificate", "Synced At"
+    ]);
+  }
+  
+  sheet.appendRow([
+    data.task_id, data.customer_name, data.equipment_type, data.inspector, 
+    data.scheduled_date, data.status, data.checklist_score, data.certificate_number, new Date()
+  ]);
+  
+  return ContentService.createTextOutput(JSON.stringify({result: "success"}))
+    .setMimeType(ContentService.MimeType.JSON);
+}</code></pre>
+                        </div>
+                    </div>
+
+                </div>
+
             </form>
+
+            <!-- Test Sync and Sync All Actions Bar (Outside Global Form to prevent conflicts) -->
+            <div x-show="activeTab === 'google_sheets'" class="bg-slate-50 rounded-xl border border-slate-200/90 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <span class="text-xs font-extrabold text-slate-800 block">إجراءات المزامنة الفورية والاختبار:</span>
+                    <span class="text-[11px] text-slate-500">يمكنك اختبار الاتصال الآن أو دفع كافة أوامر الشغل الحالية لشيت جوجل.</span>
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap">
+                    <form method="POST" action="{{ route('settings.test_google_sheets') }}" class="inline">
+                        @csrf
+                        <button type="submit" 
+                                class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5 active:scale-95">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            <span>اختبار الاتصال والمزامنة الآن</span>
+                        </button>
+                    </form>
+
+                    <form method="POST" action="{{ route('tasks.sync_all') }}" class="inline">
+                        @csrf
+                        <button type="submit" 
+                                class="px-4 py-2 rounded-lg bg-[#0E4DA4] hover:bg-[#0a3a7d] text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5 active:scale-95">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            <span>مزامنة كافة أوامر الشغل الحالية</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
 
         </div>
 

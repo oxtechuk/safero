@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
+use App\Models\InspectionTask;
 use App\Models\Setting;
 use App\Models\User;
+use App\Services\GoogleSheetsSyncService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -187,6 +190,8 @@ class SettingController extends Controller
             'app_currency' => 'nullable|string|max:10',
             'saas_enabled' => 'nullable|boolean',
             'saas_allow_registration' => 'nullable|boolean',
+            'google_sheets_webhook_url' => 'nullable|url|max:500',
+            'google_sheet_id' => 'nullable|string|max:200',
             'logo_file' => 'nullable|file|mimes:jpeg,png,jpg,svg,webp|max:5120',
             'stamp_file' => 'nullable|file|mimes:jpeg,png,jpg,svg,webp|max:5120',
             'letterhead_bg_file' => 'nullable|file|mimes:jpeg,png,jpg,webp|max:10240',
@@ -200,6 +205,7 @@ class SettingController extends Controller
             'certificates' => ['accreditation_body', 'accreditation_number', 'certificate_prefix', 'certificate_validity_months', 'default_inspector_name', 'default_authenticator_name'],
             'localization' => ['app_locale', 'app_direction', 'app_timezone', 'app_currency'],
             'saas' => ['saas_enabled', 'saas_allow_registration'],
+            'integrations' => ['google_sheets_webhook_url', 'google_sheet_id'],
         ];
 
         foreach ($fields as $group => $keys) {
@@ -310,5 +316,45 @@ class SettingController extends Controller
 
         return redirect()->route('settings.index', ['tab' => 'users'])
             ->with('success', "تم إرسال دعوة الانضمام وإنشاء حساب للمستخدم ({$email}) بنجاح.");
+    }
+
+    /**
+     * Test active connection with Google Sheets.
+     */
+    public function testGoogleSheets(): RedirectResponse
+    {
+        $task = InspectionTask::latest()->first();
+
+        if (! $task) {
+            $customer = Customer::first();
+            if (! $customer) {
+                return redirect()->route('settings.index', ['tab' => 'google_sheets'])
+                    ->with('error', 'يرجى تسجيل عميل واحد على الأقل أولاً لإجراء اختبار المزامنة.');
+            }
+
+            $task = InspectionTask::create([
+                'task_number' => InspectionTask::generateNextTaskNumber(),
+                'title_ar' => 'اختبار مزامنة Google Sheets',
+                'title_en' => 'Google Sheets Sync Test',
+                'customer_id' => $customer->id,
+                'equipment_type' => 'crane',
+                'scheduled_date' => now(),
+                'due_date' => now()->addDays(2),
+                'status' => 'scheduled',
+                'priority' => 'normal',
+                'checklist_items' => InspectionTask::defaultChecklist('crane'),
+                'notes' => 'مهمة تجريبية لاختبار ربط وتزامن جداول بيانات Google Sheets',
+            ]);
+        }
+
+        $result = GoogleSheetsSyncService::syncTask($task);
+
+        if ($result['success']) {
+            return redirect()->route('settings.index', ['tab' => 'google_sheets'])
+                ->with('status', 'تم الاتصال واختبار المزامنة مع Google Sheets بنجاح: '.$result['message']);
+        }
+
+        return redirect()->route('settings.index', ['tab' => 'google_sheets'])
+            ->with('error', 'فشل اختبار المزامنة: '.$result['message']);
     }
 }

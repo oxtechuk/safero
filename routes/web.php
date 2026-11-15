@@ -69,4 +69,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
     Route::post('/settings/invite-user', [SettingController::class, 'inviteUser'])->name('settings.invite_user');
+    Route::post('/settings/test-google-sheets', [SettingController::class, 'testGoogleSheets'])->name('settings.test_google_sheets');
 });
