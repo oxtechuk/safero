@@ -57,3 +57,4 @@ class RoleController extends Controller
             ->with('success', 'تم تحديث صلاحيات الدور بنجاح: '.$role->label());
     }
 }
+

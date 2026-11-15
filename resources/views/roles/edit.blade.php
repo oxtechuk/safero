@@ -13,36 +13,7 @@
 
     <!-- Odoo Enterprise Control Panel -->
     <div class="bg-white border-b border-slate-200 sticky top-12 z-30 shadow-2xs">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-13">
-                
-                <div class="flex items-center gap-2">
-                    <a href="{{ route('roles.index') }}" class="text-xs font-bold text-slate-500 hover:text-slate-800 transition">
-                        الأدوار والصلاحيات
-                    </a>
-                    <span class="text-slate-300">/</span>
-                    <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">
-                        {{ $role->label() }}
-                    </span>
-                    <span class="text-[10px] font-mono text-slate-400 bg-slate-100 px-2 py-0.5 rounded uppercase">
-                        {{ $role->name }}
-                    </span>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <button type="submit" 
-                            class="px-4 py-1.5 rounded-lg bg-[#714B67] hover:bg-[#5b3c53] text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        <span>حفظ الصلاحيات (Save)</span>
-                    </button>
-                    <a href="{{ route('roles.index') }}" 
-                       class="px-3.5 py-1.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100 font-bold text-xs transition">
-                        إلغاء (Discard)
-                    </a>
-                </div>
-
-            </div>
-        </div>
+      
     </div>
 
     <!-- Form Sheet -->
@@ -130,3 +101,4 @@
     </div>
 </form>
 @endsection
+

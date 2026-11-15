@@ -178,4 +178,18 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(Collection::class, $nonAdminPermissions);
         $this->assertGreaterThan(0, $nonAdminPermissions->count());
     }
+
+    public function test_all_permissions_returns_support_collection_for_admin_and_non_admin(): void
+    {
+        $adminPermissions = $this->adminUser->allPermissions();
+        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $adminPermissions);
+
+        $inspectorRole = Role::where('name', 'inspector')->firstOrFail();
+        $nonAdmin = User::factory()->create(['role' => 'inspector']);
+        $nonAdmin->assignRole($inspectorRole);
+
+        $nonAdminPermissions = $nonAdmin->allPermissions();
+        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $nonAdminPermissions);
+        $this->assertGreaterThan(0, $nonAdminPermissions->count());
+    }
 }

@@ -1,0 +1,60 @@
+{
+    "key": "tasks",
+    "name_ar": "مهام الفحص الميداني وأوامر الشغل",
+    "name_en": "Inspection Tasks & Work Orders",
+    "icon": "branding/odoo-icons/timer.svg",
+    "badge_color": "purple",
+    "description_ar": "جدولة أوامر الشغل، تعيين الفاحصين، فحص المعدات الميداني عبر شيك ليست تفاعلي، والمزامنة اليومية مع Google Sheets.",
+    "description_en": "Work order scheduling, field equipment checklists, daily Google Sheets synchronization, and certificate generation.",
+    "route": "tasks.index",
+    "permissions": [
+        {
+            "name": "tasks.view",
+            "action": "view",
+            "label_ar": "عرض سجل مهام الفحص وأوامر الشغل",
+            "label_en": "View Inspection Tasks Registry"
+        },
+        {
+            "name": "tasks.create",
+            "action": "create",
+            "label_ar": "إنشاء وتكليف مهمة فحص جديدة",
+            "label_en": "Create & Dispatch Inspection Task"
+        },
+        {
+            "name": "tasks.edit",
+            "action": "edit",
+            "label_ar": "تعبئة شيك ليست الفحص وتحديث أمر الشغل",
+            "label_en": "Fill Site Checklist & Update Task"
+        },
+        {
+            "name": "tasks.sync",
+            "action": "sync",
+            "label_ar": "تشغيل المزامنة التلقائية مع Google Sheets",
+            "label_en": "Synchronize with Google Sheets"
+        },
+        {
+            "name": "tasks.delete",
+            "action": "delete",
+            "label_ar": "إلغاء وحذف مهام الفحص",
+            "label_en": "Delete & Cancel Inspection Tasks"
+        }
+    ],
+    "submenus": [
+        {
+            "label_ar": "سجل مهام الفحص",
+            "label_en": "All Tasks",
+            "route": "tasks.index"
+        },
+        {
+            "label_ar": "مهمة فحص جديدة",
+            "label_en": "New Task",
+            "route": "tasks.create"
+        },
+        {
+            "label_ar": "لوحة الكانبان",
+            "label_en": "Kanban Board",
+            "route": "tasks.index",
+            "params": { "view": "kanban" }
+        }
+    ]
+}

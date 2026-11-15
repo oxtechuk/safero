@@ -569,35 +569,7 @@
         <div class="bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-10 gap-3 text-xs">
-                    <!-- Left: Sub-Tabs Navigation (Image 1 Exact Match) -->
-                    <div class="flex items-center gap-1.5 overflow-x-auto py-1">
-                        <!-- 1. All Certificates / Records -->
-                        <a href="{{ route('certificates.index') }}" 
-                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.index') && !request('status')) ? 'bg-blue-50 text-[#0E4DA4] border border-blue-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
-                            <svg class="w-3.5 h-3.5 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                            <span>سجل الشهادات</span>
-                        </a>
-
-                        <span class="text-slate-300">|</span>
-
-                        <!-- 2. Type: Crane -->
-                        <a href="{{ route('certificates.create', ['type' => 'crane']) }}" 
-                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ (request()->routeIs('certificates.create') && request('type', 'crane') === 'crane') ? 'bg-[#0E4DA4] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#0E4DA4] hover:bg-blue-50/70' }}">
-                            <span>فحص الأوناش والروافع</span>
-                        </a>
-
-                        <!-- 3. Type: Accessory -->
-                        <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" 
-                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ (request()->routeIs('certificates.create') && request('type') === 'accessory') ? 'bg-[#0E4DA4] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#0E4DA4] hover:bg-blue-50/70' }}">
-                            <span>مهمات الرفع والحبال</span>
-                        </a>
-
-                        <!-- 4. Type: General -->
-                        <a href="{{ route('certificates.create', ['type' => 'general']) }}" 
-                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ (request()->routeIs('certificates.create') && request('type') === 'general') ? 'bg-[#0E4DA4] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#0E4DA4] hover:bg-blue-50/70' }}">
-                            <span>معدات عامة وباليتات</span>
-                        </a>
-                    </div>
+                   
 
                     <!-- Right: Quick Filters & Actions -->
                     <div class="hidden md:flex items-center gap-2.5 text-slate-500 text-[11px]">
