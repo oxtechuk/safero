@@ -81,7 +81,7 @@
             }
         }
 
-        /* Odoo App Card */
+        /* IsoOx App Card */
         .app-card-btn {
             transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
@@ -166,7 +166,7 @@
         <div class="curved-arch">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                <!-- The Apps Grid (6 columns on desktop, exactly like Odoo Enterprise) -->
+                <!-- The Apps Grid (6 columns on desktop, exactly like IsoOx Enterprise) -->
                 <div id="appsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 sm:gap-8 justify-items-center">
 
                     <!-- 1. Training Certificates (شهادات التدريب) -->
@@ -304,7 +304,7 @@
 
                     <!-- 12. Settings & System (إعدادات النظام) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-32" data-name="settings إعدادات النظام تهيئة">
-                        <a href="{{ route('dashboard') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
+                        <a href="{{ route('settings.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5">
                             <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Settings">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight">

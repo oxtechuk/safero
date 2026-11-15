@@ -5,7 +5,7 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- Odoo Form View Header & Action Bar -->
+    <!-- IsoOx Form View Header & Action Bar -->
     <div class="bg-white border-b border-slate-200 px-4 sm:px-6 py-2.5 -mx-4 sm:-mx-6 lg:-mx-8 -mt-6 mb-4 sticky top-14 z-40 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
         <!-- Left: Breadcrumbs & Action Buttons -->
         <div class="flex items-center gap-3">
@@ -45,7 +45,7 @@
                 <span>تعديل</span>
             </a>
 
-            <!-- Odoo Status Pipeline Arrow Badges -->
+            <!-- IsoOx Status Pipeline Arrow Badges -->
             <div class="inline-flex items-center rounded border border-slate-300 overflow-hidden text-[11px] font-bold select-none bg-white">
                 <span class="px-2.5 py-1 {{ $trainingCertificate->status === 'draft' ? 'bg-sky-50 text-sky-700 font-extrabold border-r border-slate-200' : 'text-slate-400 border-r border-slate-200' }}">
                     Draft

@@ -210,7 +210,9 @@ class CertificateController extends Controller
         $verifyUrl = $certificate->verification_url;
         $qrCodeSvg = base64_encode(QrCode::format('svg')->size(130)->margin(0)->generate($verifyUrl));
 
-        $bgPath = public_path('branding/cert_inspect_bg.jpg');
+        $bgPath = file_exists(public_path('build/assets/cert-inspect.pdf.jpg'))
+            ? public_path('build/assets/cert-inspect.pdf.jpg')
+            : public_path('branding/cert_inspect_bg.jpg');
         $bgBase64 = file_exists($bgPath) ? base64_encode(file_get_contents($bgPath)) : '';
 
         $logoPath = public_path('branding/safero_logo.jpg');

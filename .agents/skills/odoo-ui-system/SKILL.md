@@ -1,17 +1,17 @@
 ---
-name: odoo-ui-system
-description: "Guidelines and reference implementation for the Odoo 17/18 Enterprise UI design system in Safero ERP. Covers top navbar dropdown sub-menus, control panels, dual list/kanban views, compact form sheets, and the official Odoo vector icon library in public/branding/odoo-icons."
+name: IsoOx-ui-system
+description: "Guidelines and reference implementation for the IsoOx 17/18 Enterprise UI design system in Safero ERP. Covers top navbar dropdown sub-menus, control panels, dual list/kanban views, compact form sheets, and the official IsoOx vector icon library in public/branding/IsoOx-icons."
 ---
 
-# Odoo Enterprise UI Design System for Safero ERP
+# IsoOx Enterprise UI Design System for Safero ERP
 
-This skill provides comprehensive standards, architectural patterns, and reusable Blade components for implementing the **Odoo 17/18 Enterprise** visual theme across the Safero application.
+This skill provides comprehensive standards, architectural patterns, and reusable Blade components for implementing the **IsoOx 17/18 Enterprise** visual theme across the Safero application.
 
 ---
 
-## 1. Icon Library Guide (`public/branding/odoo-icons/`)
+## 1. Icon Library Guide (`public/branding/IsoOx-icons/`)
 
-The application includes the official Odoo SVG vector icon library extracted directly from Odoo 17/18 Enterprise located at `public/branding/odoo-icons/` (with tiled icon variants in `public/branding/odoo-icons/tiles/`).
+The application includes the official IsoOx SVG vector icon library extracted directly from IsoOx 17/18 Enterprise located at `public/branding/IsoOx-icons/` (with tiled icon variants in `public/branding/IsoOx-icons/tiles/`).
 
 ### Icon to Module / Model Mapping
 
@@ -34,19 +34,19 @@ The application includes the official Odoo SVG vector icon library extracted dir
 
 ```blade
 <!-- Standalone SVG Icon -->
-<img src="{{ asset('branding/odoo-icons/quality_control.svg') }}" class="w-5 h-5" alt="Inspection">
+<img src="{{ asset('branding/IsoOx-icons/quality_control.svg') }}" class="w-5 h-5" alt="Inspection">
 
 <!-- Tiled Icon (For Apps Launcher & Kanban Cards) -->
 <div class="w-12 h-12 rounded-xl bg-white p-2 shadow-xs border border-slate-200/80 flex items-center justify-center">
-    <img src="{{ asset('branding/odoo-icons/quality_control.svg') }}" class="w-8 h-8" alt="Inspection">
+    <img src="{{ asset('branding/IsoOx-icons/quality_control.svg') }}" class="w-8 h-8" alt="Inspection">
 </div>
 ```
 
 ---
 
-## 2. Top Navigation & Dropdown Sub-menus (Odoo Enterprise Pattern)
+## 2. Top Navigation & Dropdown Sub-menus (IsoOx Enterprise Pattern)
 
-As demonstrated in Odoo Enterprise settings and technical menus, the top header consists of:
+As demonstrated in IsoOx Enterprise settings and technical menus, the top header consists of:
 1. **App Drawer Launcher (9-Dots)**: Always navigates to `/apps`.
 2. **Current Active Module Brand**: Name and icon of the active module.
 3. **Primary Menu Tabs with Categorized Dropdowns**:
@@ -80,15 +80,15 @@ As demonstrated in Odoo Enterprise settings and technical menus, the top header 
         <div class="py-1">
             <span class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">إصدار نموذج فحص</span>
             <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="flex items-center gap-2 px-3 py-1.5 hover:bg-blue-50 text-slate-700 hover:text-[#0E4DA4] font-medium transition">
-                <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-4 h-4">
+                <img src="{{ asset('branding/IsoOx-icons/fleet.svg') }}" class="w-4 h-4">
                 <span>فحص الأوناش والروافع (Cranes)</span>
             </a>
             <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="flex items-center gap-2 px-3 py-1.5 hover:bg-blue-50 text-slate-700 hover:text-[#0E4DA4] font-medium transition">
-                <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-4 h-4">
+                <img src="{{ asset('branding/IsoOx-icons/maintenance.svg') }}" class="w-4 h-4">
                 <span>مهمات الرفع والحبال (Accessories)</span>
             </a>
             <a href="{{ route('certificates.create', ['type' => 'general']) }}" class="flex items-center gap-2 px-3 py-1.5 hover:bg-blue-50 text-slate-700 hover:text-[#0E4DA4] font-medium transition">
-                <img src="{{ asset('branding/odoo-icons/repair.svg') }}" class="w-4 h-4">
+                <img src="{{ asset('branding/IsoOx-icons/repair.svg') }}" class="w-4 h-4">
                 <span>معدات عامة وباليتات (General Cargo)</span>
             </a>
         </div>
@@ -97,7 +97,7 @@ As demonstrated in Odoo Enterprise settings and technical menus, the top header 
         <div class="py-1">
             <span class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">السجلات والعمليات</span>
             <a href="{{ route('certificates.index') }}" class="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-50 text-slate-700 font-medium">
-                <img src="{{ asset('branding/odoo-icons/documents.svg') }}" class="w-4 h-4">
+                <img src="{{ asset('branding/IsoOx-icons/documents.svg') }}" class="w-4 h-4">
                 <span>جميع الشهادات (All Certificates)</span>
             </a>
         </div>
@@ -107,9 +107,9 @@ As demonstrated in Odoo Enterprise settings and technical menus, the top header 
 
 ---
 
-## 3. Odoo Control Panel (`x-odoo-control-panel`)
+## 3. IsoOx Control Panel (`x-IsoOx-control-panel`)
 
-The Control Panel provides the standard Odoo header for list and kanban views:
+The Control Panel provides the standard IsoOx header for list and kanban views:
 - **Left**: Primary Action button (`New`), Page Title, Settings Cog.
 - **Center**: Search Bar with integrated Filter/Group-by dropdown popover.
 - **Right**: Pager (`1-15 / 142`) with navigation arrows, and dual view switchers (List, Kanban).
@@ -123,6 +123,6 @@ The Control Panel provides the standard Odoo header for list and kanban views:
    - Label: `text-xs font-bold text-slate-700 mb-1`.
    - Input: `px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs`.
    - Grid layout: 3 to 4 columns on desktop, 2 on tablet, 1 on mobile.
-3. **No Emojis**: Always use SVG icons or vector assets from `public/branding/odoo-icons/`.
+3. **No Emojis**: Always use SVG icons or vector assets from `public/branding/IsoOx-icons/`.
 4. **Fast Actions**: Provide batch and "Mark All" capabilities (e.g. `Pass All` button for crane checklists).
 

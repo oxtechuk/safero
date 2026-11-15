@@ -40,7 +40,7 @@
                 <a href="{{ route('training-certificates.index') }}" class="text-[11px] text-slate-500 hover:text-slate-800 underline">
                     إعادة ضبط الفلاتر
                 </a>
-                <span class="text-[10px] text-slate-400 font-en">Odoo 17 Filter Logic</span>
+                <span class="text-[10px] text-slate-400 font-en">IsoOx 17 Filter Logic</span>
             </div>
         </div>
     </x-odoo-control-panel>
@@ -91,11 +91,11 @@
         </div>
     @endif
 
-    <!-- 1. Odoo Data Table View (Default) -->
-    <div id="odooListView" class="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden transition-all duration-150">
+    <!-- 1. IsoOx Data Table View (Default) -->
+    <div id="IsoOxListView" class="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden transition-all duration-150">
         <div class="overflow-x-auto">
             <table class="w-full text-right text-xs border-collapse">
-                <!-- Odoo Table Header -->
+                <!-- IsoOx Table Header -->
                 <thead class="bg-[#F8FAFC] text-slate-600 border-b border-slate-200 select-none">
                     <tr>
                         <th class="w-10 px-3 py-2.5 text-center">
@@ -130,7 +130,7 @@
                     </tr>
                 </thead>
 
-                <!-- Odoo Table Rows -->
+                <!-- IsoOx Table Rows -->
                 <tbody class="divide-y divide-slate-100">
                     @forelse($certificates as $cert)
                         <tr class="hover:bg-slate-50/90 transition-colors group">
@@ -143,7 +143,7 @@
                                        class="cert-row-checkbox rounded border-slate-300 text-[#006837] focus:ring-[#006837] w-3.5 h-3.5 cursor-pointer">
                             </td>
 
-                            <!-- Serial Number (Bold, Odoo Style e.g. S00016) -->
+                            <!-- Serial Number (Bold, IsoOx Style e.g. S00016) -->
                             <td class="px-3 py-2.5 whitespace-nowrap">
                                 <a href="{{ route('training-certificates.show', $cert) }}" 
                                    class="font-mono font-bold text-slate-900 group-hover:text-[#006837] transition font-en tracking-wide text-xs">
@@ -192,7 +192,7 @@
                                 </div>
                             </td>
 
-                            <!-- Activities (Icon + Label, Odoo Reference) -->
+                            <!-- Activities (Icon + Label, IsoOx Reference) -->
                             <!-- Activities (Image 1 Match: Clean SVG Icons) -->
                             <td class="px-3 py-2.5 whitespace-nowrap">
                                 <div class="inline-flex items-center gap-1.5 text-xs">
@@ -270,8 +270,8 @@
         </div>
     </div>
 
-    <!-- 2. Odoo Kanban View (Cards Grid) -->
-    <div id="odooKanbanView" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- 2. IsoOx Kanban View (Cards Grid) -->
+    <div id="IsoOxKanbanView" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @forelse($certificates as $cert)
             <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-xs hover:shadow-md transition relative flex flex-col justify-between group">
                 <div>

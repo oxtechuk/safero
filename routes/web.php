@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TraineeController;
 use App\Http\Controllers\TrainingCertificateController;
 use Illuminate\Support\Facades\Route;
@@ -31,7 +32,7 @@ Route::get('/training-certificates/{trainingCertificate}/pdf', [TrainingCertific
 
 // Protected ERP routes
 Route::middleware('auth')->group(function () {
-    // Odoo-Style App Modules Launcher (/app)
+    // IsoOx-Style App Modules Launcher (/app)
     Route::get('/app', [DashboardController::class, 'apps'])->name('apps');
     Route::get('/apps', fn () => redirect()->route('apps'));
 
@@ -49,4 +50,9 @@ Route::middleware('auth')->group(function () {
 
     // Training Certificates Module
     Route::resource('training-certificates', TrainingCertificateController::class);
+
+    // Enterprise Platform Settings & Company Configuration (/settings)
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::post('/settings/invite-user', [SettingController::class, 'inviteUser'])->name('settings.invite_user');
 });

@@ -11,7 +11,7 @@
         max-width: 860px;
         margin: 0 auto 30px auto;
         background-color: #ffffff;
-        background-image: url('{{ asset("branding/cert_inspect_bg.jpg") }}');
+        background-image: url('{{ asset(file_exists(public_path("build/assets/cert-inspect.pdf.jpg")) ? "build/assets/cert-inspect.pdf.jpg" : "branding/cert_inspect_bg.jpg") }}');
         background-size: 100% 100%;
         background-repeat: no-repeat;
         background-position: top center;
@@ -55,7 +55,7 @@
             max-width: 100% !important;
             min-height: 100vh !important;
             page-break-after: always;
-            background-image: url('{{ asset("branding/cert_inspect_bg.jpg") }}') !important;
+            background-image: url('{{ asset(file_exists(public_path("build/assets/cert-inspect.pdf.jpg")) ? "build/assets/cert-inspect.pdf.jpg" : "branding/cert_inspect_bg.jpg") }}') !important;
             background-size: 100% 100% !important;
             background-repeat: no-repeat !important;
             -webkit-print-color-adjust: exact !important;

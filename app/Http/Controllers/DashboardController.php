@@ -11,7 +11,7 @@ use Illuminate\View\View;
 class DashboardController extends Controller
 {
     /**
-     * Odoo-Style Main Apps Launcher (/app)
+     * IsoOx-Style Main Apps Launcher (/app)
      */
     public function apps(): View
     {

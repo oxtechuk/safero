@@ -41,8 +41,8 @@
         </div>
     @endif
 
-    <!-- 1. Odoo Data Table View -->
-    <div id="odooListView" class="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden">
+    <!-- 1. IsoOx Data Table View -->
+    <div id="IsoOxListView" class="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-right text-xs border-collapse">
                 <thead class="bg-[#F8FAFC] text-slate-600 border-b border-slate-200 select-none">
@@ -146,8 +146,8 @@
         </div>
     </div>
 
-    <!-- 2. Odoo Kanban View -->
-    <div id="odooKanbanView" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- 2. IsoOx Kanban View -->
+    <div id="IsoOxKanbanView" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @forelse($trainees as $trainee)
             <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-xs hover:shadow-md transition flex flex-col justify-between">
                 <div>

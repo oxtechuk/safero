@@ -2,7 +2,7 @@
     'title' => '',
     'newUrl' => null,
     'newText' => 'New',
-    'newColor' => 'bg-[#714B67]', // Authentic Odoo Plum from Image 1
+    'newColor' => 'bg-[#714B67]', // Authentic IsoOx Plum from Image 1
     'searchAction' => '',
     'searchValue' => '',
     'searchPlaceholder' => 'البحث...',
@@ -34,7 +34,7 @@
                     @endif
                 </h1>
 
-                <!-- Settings Cog (Odoo style) -->
+                <!-- Settings Cog (IsoOx style) -->
                 <button type="button" 
                         class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition" 
                         title="إعدادات العرض والحقول">
@@ -48,9 +48,9 @@
         <!-- Center & Right: Search, Filter Popover, Pager, View Switchers -->
         <div class="flex flex-wrap items-center justify-between lg:justify-end gap-2 sm:gap-3">
             
-            <!-- Search Input with Integrated Dropdown Caret (Odoo 17 Searchbox) -->
+            <!-- Search Input with Integrated Dropdown Caret (IsoOx 17 Searchbox) -->
             <div class="relative flex-1 sm:w-80 max-w-md">
-                <form method="GET" action="{{ $searchAction }}" class="relative m-0" id="odooSearchForm">
+                <form method="GET" action="{{ $searchAction }}" class="relative m-0" id="IsoOxSearchForm">
                     <!-- Keep existing query params except search & page -->
                     @foreach(request()->except(['search', 'page']) as $k => $v)
                         @if(is_string($v) || is_numeric($v))
@@ -73,7 +73,7 @@
 
                         <!-- Filter Popover Toggle -->
                         <button type="button" 
-                                onclick="toggleOdooFilterMenu()" 
+                                onclick="toggleIsoOxFilterMenu()" 
                                 class="absolute inset-y-0 left-0 pl-2.5 pr-1.5 flex items-center text-slate-400 hover:text-slate-700 transition" 
                                 title="خيارات التصفية والتجميع (Filters &amp; Group By)">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -84,7 +84,7 @@
                 </form>
 
                 <!-- Filter & Group By Dropdown Menu -->
-                <div id="odooFilterMenu" class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl p-3 z-50 text-xs">
+                <div id="IsoOxFilterMenu" class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl p-3 z-50 text-xs">
                     {{ $slot }}
                 </div>
             </div>
@@ -128,7 +128,7 @@
             <div class="inline-flex items-center rounded border border-slate-300 bg-white p-0.5 shadow-2xs text-slate-500">
                 <!-- List View Button -->
                 <button type="button" 
-                        onclick="switchOdooView('list')" 
+                        onclick="switchIsoOxView('list')" 
                         id="viewBtnList"
                         class="p-1.5 rounded transition text-slate-700 bg-slate-100 border border-slate-300/80 shadow-2xs font-bold" 
                         title="عرض القائمة (List View)">
@@ -139,7 +139,7 @@
 
                 <!-- Kanban View Button -->
                 <button type="button" 
-                        onclick="switchOdooView('kanban')" 
+                        onclick="switchIsoOxView('kanban')" 
                         id="viewBtnKanban"
                         class="p-1.5 rounded transition text-slate-500 hover:text-slate-800 hover:bg-slate-50" 
                         title="عرض البطاقات (Kanban View)">
@@ -173,16 +173,16 @@
 </div>
 
 <script>
-    function toggleOdooFilterMenu() {
-        const menu = document.getElementById('odooFilterMenu');
+    function toggleIsoOxFilterMenu() {
+        const menu = document.getElementById('IsoOxFilterMenu');
         if (menu) {
             menu.classList.toggle('hidden');
         }
     }
 
-    function switchOdooView(view) {
-        const listView = document.getElementById('odooListView');
-        const kanbanView = document.getElementById('odooKanbanView');
+    function switchIsoOxView(view) {
+        const listView = document.getElementById('IsoOxListView');
+        const kanbanView = document.getElementById('IsoOxKanbanView');
         const btnList = document.getElementById('viewBtnList');
         const btnKanban = document.getElementById('viewBtnKanban');
 
@@ -195,7 +195,7 @@
             if (btnKanban) {
                 btnKanban.className = 'p-1.5 rounded transition text-slate-500 hover:text-slate-800 hover:bg-slate-50';
             }
-            localStorage.setItem('odoo_pref_view', 'list');
+            localStorage.setItem('IsoOx_pref_view', 'list');
         } else if (view === 'kanban') {
             if (listView) listView.classList.add('hidden');
             if (kanbanView) kanbanView.classList.remove('hidden');
@@ -205,21 +205,21 @@
             if (btnKanban) {
                 btnKanban.className = 'p-1.5 rounded transition text-slate-700 bg-slate-100 border border-slate-300/80 shadow-2xs font-bold';
             }
-            localStorage.setItem('odoo_pref_view', 'kanban');
+            localStorage.setItem('IsoOx_pref_view', 'kanban');
         }
     }
 
     // Auto restore preference
     document.addEventListener('DOMContentLoaded', function() {
-        const savedView = localStorage.getItem('odoo_pref_view');
-        if (savedView === 'kanban' && document.getElementById('odooKanbanView')) {
-            switchOdooView('kanban');
+        const savedView = localStorage.getItem('IsoOx_pref_view');
+        if (savedView === 'kanban' && document.getElementById('IsoOxKanbanView')) {
+            switchIsoOxView('kanban');
         }
 
         // Close filter dropdown when clicking outside
         document.addEventListener('click', function(e) {
-            const menu = document.getElementById('odooFilterMenu');
-            const toggle = e.target.closest('[onclick="toggleOdooFilterMenu()"]');
+            const menu = document.getElementById('IsoOxFilterMenu');
+            const toggle = e.target.closest('[onclick="toggleIsoOxFilterMenu()"]');
             if (menu && !menu.contains(e.target) && !toggle && !menu.classList.contains('hidden')) {
                 menu.classList.add('hidden');
             }

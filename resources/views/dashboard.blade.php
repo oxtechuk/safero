@@ -6,16 +6,13 @@
 <div class="space-y-8">
 
     <!-- Top Greeting & Welcome Bar -->
-    <div class="bg-gradient-to-l from-[#0E4DA4] via-[#0b418c] to-[#083370] rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+    <div class="bg-gradient-to-l from-[#0E4DA4] via-[#0b418c] to-[#083370]  p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
         <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
-        <div class="absolute right-10 -top-10 w-40 h-40 bg-[#22A447]/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="absolute right-10 -top-10 w-40 h-40 /20 rounded-full blur-2xl pointer-events-none"></div>
         
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#E8F7EC] text-xs font-bold mb-3">
-                    <span class="w-2 h-2 rounded-full bg-[#22A447] animate-pulse"></span>
-                    بوابة إدارة الفحص والمعايرة وشهادات التدريب المعتمدة
-                </div>
+           
                 <h1 class="text-2xl sm:text-3xl font-black text-white">
                     مرحباً بك، {{ Auth::user()->name }} 👋
                 </h1>
@@ -43,13 +40,13 @@
         </div>
     </div>
 
-    <!-- Odoo-Style App Modules Grid -->
+    <!-- IsoOx-Style App Modules Grid -->
     <div>
         <div class="flex items-center justify-between mb-4">
             <div>
                 <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
                     <span class="w-2.5 h-6 bg-[#0E4DA4] rounded-full inline-block"></span>
-                    مديولات النظام (Odoo-Style Apps)
+                    مديولات النظام (IsoOx-Style Apps)
                 </h2>
                 <p class="text-xs text-slate-500 mt-0.5">انقر على أي مديول للبدء في إدارة وتتبع عملياته</p>
             </div>
@@ -63,7 +60,7 @@
                 <a href="{{ $module['active'] ? $module['route'] : 'javascript:void(0)' }}" 
                    class="group bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-[#0E4DA4]/50 hover:-translate-y-1 transition-all duration-200 flex flex-col items-center text-center relative overflow-hidden {{ !$module['active'] ? 'opacity-70 cursor-not-allowed' : '' }}">
                     
-                    <!-- App Icon Box with Odoo vibe -->
+                    <!-- App Icon Box with IsoOx vibe -->
                     <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-3 shadow-sm transition-transform duration-200 group-hover:scale-110" 
                          style="background-color: {{ $module['bg_light'] }}; color: {{ $module['color'] }};">
                         @if($module['icon'] === 'document-check')

@@ -27,39 +27,7 @@
 @section('content')
 <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-4">
 
-    <!-- Top Action & Navigation Bar -->
-    <div class="bg-white rounded-xl border border-slate-200 p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-[#E6F2FF] text-[#0E4DA4] flex items-center justify-center shrink-0 p-1.5 border border-blue-100">
-                @if($type === 'crane')
-                    <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-7 h-7 object-contain" alt="Cranes">
-                @elseif($type === 'accessory')
-                    <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-7 h-7 object-contain" alt="Accessories">
-                @else
-                    <img src="{{ asset('branding/odoo-icons/repair.svg') }}" class="w-7 h-7 object-contain" alt="General">
-                @endif
-            </div>
-            <div>
-                <div class="flex items-center gap-2">
-                    <h1 class="text-base sm:text-lg font-black text-slate-900 leading-tight">تعديل شهادة: {{ $certificate->certificate_number }}</h1>
-                    <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-[#0E4DA4] border border-blue-200 font-en">
-                        {{ $activeMeta['ar'] }}
-                    </span>
-                </div>
-                <p class="text-[11px] text-slate-500 font-en leading-tight mt-0.5">{{ $activeMeta['en'] }} &bull; Issued: {{ $certificate->thorough_examination_date?->format('d/m/Y') }}</p>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-2 self-end sm:self-center">
-            <a href="{{ route('certificates.show', $certificate) }}" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold transition">
-                إلغاء وعودة
-            </a>
-            <button type="submit" form="certEditForm" class="px-4 py-1.5 rounded-lg bg-[#0E4DA4] hover:bg-[#0a3a7d] text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                <span>حفظ التعديلات</span>
-            </button>
-        </div>
-    </div>
+   
 
     <!-- Main Edit Form -->
     <form method="POST" action="{{ route('certificates.update', $certificate) }}" id="certEditForm" class="space-y-4">

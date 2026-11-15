@@ -36,13 +36,13 @@ class CertificateFlowTest extends TestCase
         $response->assertRedirect(route('apps'));
     }
 
-    public function test_dashboard_displays_odoo_style_modules_and_stats(): void
+    public function test_dashboard_displays_iso_ox_style_modules_and_stats(): void
     {
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/dashboard');
         $response->assertStatus(200);
-        $response->assertSee('مديولات النظام (Odoo-Style Apps)');
+        $response->assertSee('مديولات النظام (IsoOx-Style Apps)');
         $response->assertSee('شهادات الفحص والمعايرة');
         $response->assertSee('إدارة العملاء');
     }
