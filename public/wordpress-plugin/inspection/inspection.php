@@ -21,6 +21,9 @@ class OxTechSaferoInspectionPlugin
         add_shortcode('inspection', [$this, 'render_shortcode']);
         add_action('admin_menu', [$this, 'register_admin_menu']);
         add_action('admin_init', [$this, 'register_settings']);
+        add_action('admin_post_inspaction_export_csv', [$this, 'export_records_csv']);
+        add_action('admin_post_inspaction_export_json', [$this, 'export_records_json']);
+        add_action('admin_post_inspaction_export_erp_csv', [$this, 'export_erp_csv']);
     }
 
     public function register_admin_menu()
@@ -44,7 +47,10 @@ class OxTechSaferoInspectionPlugin
 
     public function render_settings_page()
     {
-        $erp_url = get_option('inspaction_erp_url', 'http://127.0.0.1:8000');
+        $erp_url = get_option('inspaction_erp_url');
+        if (empty($erp_url)) {
+            $erp_url = 'http://localhost/saferoo/public';
+        }
         $iframe_height = get_option('inspaction_iframe_height', '950');
         ?>
         <div class="wrap" dir="rtl" style="font-family: 'Cairo', Tahoma, sans-serif;">
@@ -66,7 +72,7 @@ class OxTechSaferoInspectionPlugin
                             <td>
                                 <input type="url" name="inspaction_erp_url" value="<?php echo esc_attr($erp_url); ?>" style="width: 420px; padding: 8px 12px; border-radius: 8px; direction: ltr;" placeholder="https://erp.safero-eg.com" required />
                                 <p class="description" style="color: #64748b; margin-top: 6px;">
-                                    الرابط الذي يعمل عليه نظام لارفيل ERP (مثال: <code>https://erp.safero-eg.com</code> أو <code>http://127.0.0.1:8000</code> محلياً).
+                                    الرابط الذي يعمل عليه نظام لارفيل ERP (مثال محلياً: <code>http://localhost/saferoo/public</code> أو <code>http://127.0.0.1:8000</code>، أو على السيرفر المباشر: <code>https://erp.safero-eg.com</code>).
                                 </p>
                             </td>
                         </tr>
@@ -84,6 +90,102 @@ class OxTechSaferoInspectionPlugin
                         <?php submit_button('حفظ الإعدادات', 'primary', 'submit', false, ['style' => 'background: #0E4DA4; border-color: #0a3a7d; padding: 8px 24px; font-size: 14px; border-radius: 8px; font-weight: bold;']); ?>
                     </div>
                 </form>
+
+                <div style="margin-top: 35px; background: #ffffff; border-radius: 14px; padding: 25px; border: 1px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                    <?php
+                    global $wpdb;
+                    $table_records = $wpdb->prefix . 'inspection_records';
+                    $total_records = 0;
+                    $has_table = $wpdb->get_var("SHOW TABLES LIKE '$table_records'");
+                    if ($has_table) {
+                        $total_records = (int) $wpdb->get_var("SELECT COUNT(*) FROM `$table_records`");
+                        $recent_records = $wpdb->get_results("SELECT * FROM `$table_records` ORDER BY id DESC LIMIT 5", ARRAY_A);
+                    } else {
+                        $recent_records = [];
+                    }
+
+                    $erp_certs_count = 0;
+                    try {
+                        $c = @new mysqli('127.0.0.1', 'root', '', 'safero_erp');
+                        if (!$c->connect_error) {
+                            $r = $c->query("SELECT COUNT(*) FROM certificates");
+                            if ($r) {
+                                $erp_certs_count = (int) $r->fetch_row()[0];
+                            }
+                            $c->close();
+                        }
+                    } catch (\Throwable $e) {}
+                    ?>
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;">
+                        <div>
+                            <h2 style="color: #0E4DA4; font-size: 19px; font-weight: 900; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                <span>📦</span> تصدير جميع بيانات شهادات وسجلات الفحص (Export All Data)
+                            </h2>
+                            <p style="color: #64748b; font-size: 13px; margin: 5px 0 0 0;">
+                                تمكين تصدير كافة سجلات ومعدات الفحص إلى ملف Excel (CSV مع دعم العربية الكامل) أو JSON بنقرة واحدة.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <a href="<?php echo esc_url(admin_url('admin-post.php?action=inspaction_export_csv')); ?>" class="button button-primary" style="background: #22A447; border-color: #1b8539; font-weight: bold; padding: 5px 16px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
+                                📥 تصدير سجلات الفحص (Excel / CSV)
+                            </a>
+                            <a href="<?php echo esc_url(admin_url('admin-post.php?action=inspaction_export_json')); ?>" class="button" style="font-weight: bold; padding: 5px 14px; font-size: 13px;">
+                                📄 تصدير سجلات الفحص (JSON)
+                            </a>
+                            <?php if ($erp_certs_count > 0) : ?>
+                            <a href="<?php echo esc_url(admin_url('admin-post.php?action=inspaction_export_erp_csv')); ?>" class="button" style="background: #0E4DA4; color: #fff; border-color: #0a3a7d; font-weight: bold; padding: 5px 14px; font-size: 13px;">
+                                🏛️ تصدير شهادات ERP (Excel)
+                            </a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- إحصائيات سريعة -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; text-align: center;">
+                            <div style="font-size: 26px; font-weight: 900; color: #0E4DA4;"><?php echo esc_html($total_records); ?></div>
+                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">إجمالي سجلات الفحص المحفوظة (WordPress)</div>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; text-align: center;">
+                            <div style="font-size: 26px; font-weight: 900; color: #22A447;"><?php echo esc_html($erp_certs_count); ?></div>
+                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">شهادات الفحص المعتمدة بنظام Safero ERP</div>
+                        </div>
+                    </div>
+
+                    <?php if (!empty($recent_records)) : ?>
+                    <div style="margin-top: 15px;">
+                        <h4 style="color: #334155; font-size: 14px; margin: 0 0 10px 0;">معاينة لأحدث سجلات الفحص المتاحة للتصدير:</h4>
+                        <div style="overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
+                            <table class="wp-list-table widefat fixed striped" style="margin: 0; font-size: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">#</th>
+                                        <th>رقم الإشارة / الشهادة</th>
+                                        <th>العميل</th>
+                                        <th>نوع المعدة</th>
+                                        <th>الرقم التسلسلي</th>
+                                        <th>الحالة</th>
+                                        <th>تاريخ الفحص</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($recent_records as $rec) : ?>
+                                    <tr>
+                                        <td><?php echo esc_html($rec['id']); ?></td>
+                                        <td><strong><?php echo esc_html($rec['reference_number']); ?></strong></td>
+                                        <td><?php echo esc_html($rec['client_name']); ?></td>
+                                        <td><?php echo esc_html($rec['type_of_equipment']); ?></td>
+                                        <td><?php echo esc_html($rec['serial_number']); ?></td>
+                                        <td><span style="background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-weight: bold;"><?php echo esc_html($rec['status']); ?></span></td>
+                                        <td><?php echo esc_html($rec['inspection_date']); ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                </div>
 
                 <div style="margin-top: 35px; background: #F4F6F8; border-radius: 12px; padding: 20px; border: 1px dashed #cbd5e1;">
                     <h3 style="color: #0E4DA4; font-size: 16px; margin: 0 0 10px 0; font-weight: bold;">طريقة الاستخدام في صفحات الموقع:</h3>
@@ -105,7 +207,11 @@ class OxTechSaferoInspectionPlugin
 
     public function render_shortcode($atts)
     {
-        $erp_url = rtrim(get_option('inspaction_erp_url', 'http://127.0.0.1:8000'), '/');
+        $erp_url = get_option('inspaction_erp_url');
+        if (empty($erp_url)) {
+            $erp_url = 'http://localhost/saferoo/public';
+        }
+        $erp_url = rtrim($erp_url, '/');
         $height = intval(get_option('inspaction_iframe_height', 950));
 
         // التحقق من وجود رقم شهادة أو UUID في الرابط (عند مسح الـ QR كود)
@@ -120,7 +226,8 @@ class OxTechSaferoInspectionPlugin
 
         $embed_src = '';
         if (! empty($cert_param)) {
-            $embed_src = $erp_url.'/embed/certificate/'.rawurlencode($cert_param);
+            // نستخدم بارامتر الاستعلام ?cert= لضمان عدم حدوث خطأ 404 في خوادم أباتشي بسبب الشرطة المائلة %2F
+            $embed_src = $erp_url . '/embed/certificate?cert=' . rawurlencode($cert_param);
         }
 
         ob_start();
@@ -283,7 +390,8 @@ class OxTechSaferoInspectionPlugin
                     var frameBox = document.getElementById('inspaction-frame-box');
                     var iframe = document.getElementById('inspaction-iframe-element');
 
-                    var finalUrl = erpBaseUrl + '/embed/certificate/' + encodeURIComponent(inputVal);
+                    // نمرر الرقم كبارامتر استعلام ?cert= ليعمل بسلاسة على كافة الخوادم وأباتشي دون تعارض مع الشرطة المائلة
+                    var finalUrl = erpBaseUrl + '/embed/certificate?cert=' + encodeURIComponent(inputVal);
                     iframe.src = finalUrl;
                     frameBox.style.display = 'block';
 
@@ -302,6 +410,175 @@ class OxTechSaferoInspectionPlugin
         </div>
         <?php
         return ob_get_clean();
+    }
+
+    /**
+     * تصدير سجلات الفحص بصيغة CSV / Excel تدعم اللغة العربية بالكامل
+     */
+    public function export_records_csv()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_die('Access denied.');
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'inspection_records';
+        $rows = $wpdb->get_results("SELECT * FROM `$table` ORDER BY id ASC", ARRAY_A);
+        if (!is_array($rows)) {
+            $rows = [];
+        }
+
+        $filename = 'inspection-records-' . date('Y-m-d') . '.csv';
+
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $output = fopen('php://output', 'w');
+        // UTF-8 BOM لضمان فتح الحروف العربية بشكل سليم في برنامج Excel
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+
+        fputcsv($output, [
+            'ID / المعرف',
+            'Reference Number / رقم الشهادة أو الإشارة',
+            'Client Name / اسم العميل',
+            'Type of Equipment / نوع المعدة',
+            'Description / الوصف والمواصفات',
+            'Serial Number / الرقم التسلسلي',
+            'Status / الحالة الفنية',
+            'Inspection Date / تاريخ الفحص',
+            'Next Inspection Date / تاريخ الفحص القادم'
+        ]);
+
+        foreach ($rows as $r) {
+            fputcsv($output, [
+                $r['id'] ?? '',
+                $r['reference_number'] ?? '',
+                $r['client_name'] ?? '',
+                $r['type_of_equipment'] ?? '',
+                $r['description'] ?? '',
+                $r['serial_number'] ?? '',
+                $r['status'] ?? '',
+                $r['inspection_date'] ?? '',
+                $r['next_inspection_date'] ?? ''
+            ]);
+        }
+
+        fclose($output);
+        exit;
+    }
+
+    /**
+     * تصدير سجلات الفحص بصيغة JSON
+     */
+    public function export_records_json()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_die('Access denied.');
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'inspection_records';
+        $rows = $wpdb->get_results("SELECT * FROM `$table` ORDER BY id ASC", ARRAY_A);
+        if (!is_array($rows)) {
+            $rows = [];
+        }
+
+        $filename = 'inspection-records-' . date('Y-m-d') . '.json';
+
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: application/json; charset=UTF-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        echo json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    /**
+     * تصدير شهادات الفحص المعتمدة من نظام Safero ERP
+     */
+    public function export_erp_csv()
+    {
+        if (!current_user_can('manage_options')) {
+            wp_die('Access denied.');
+        }
+
+        $filename = 'safero-erp-certificates-' . date('Y-m-d') . '.csv';
+
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $output = fopen('php://output', 'w');
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+
+        fputcsv($output, [
+            'ID',
+            'Certificate Number / رقم الشهادة',
+            'Order No / رقم أمر الشغل',
+            'Equipment Type / نوع المعدة',
+            'Manufacturer / المصنع',
+            'Model / الموديل',
+            'Capacity / الحمولة',
+            'SWL / أقصى حمولة عمل آمنة',
+            'Chassis No / رقم الشاسيه',
+            'Serial / Range / الأرقام التسلسلية',
+            'Status / الحالة',
+            'Examination Date / تاريخ الفحص',
+            'Next Due Date / موعد الفحص القادم',
+            'Issuer / المصدر',
+            'Authenticator / المعتمد'
+        ]);
+
+        try {
+            $conn = @new mysqli('127.0.0.1', 'root', '', 'safero_erp');
+            if (!$conn->connect_error) {
+                $conn->set_charset('utf8mb4');
+                $res = $conn->query("SELECT * FROM certificates ORDER BY id ASC");
+                if ($res && $res->num_rows > 0) {
+                    while ($r = $res->fetch_assoc()) {
+                        fputcsv($output, [
+                            $r['id'] ?? '',
+                            $r['certificate_number'] ?? '',
+                            $r['order_no'] ?? '',
+                            $r['equipment_type'] ?? '',
+                            $r['manufacturer'] ?? '',
+                            $r['model'] ?? '',
+                            $r['capacity'] ?? '',
+                            $r['swl'] ?? '',
+                            $r['chassis_no'] ?? '',
+                            $r['equipment_id_range'] ?? '',
+                            $r['status'] ?? (!empty($r['is_safe_to_operate']) ? 'Safe' : 'Unsafe'),
+                            $r['thorough_examination_date'] ?? '',
+                            $r['next_examination_due_date'] ?? '',
+                            $r['issuer_name'] ?? '',
+                            $r['authenticator_name'] ?? ''
+                        ]);
+                    }
+                }
+                $conn->close();
+            }
+        } catch (\Throwable $e) {
+            // Ignore
+        }
+
+        fclose($output);
+        exit;
     }
 }
 

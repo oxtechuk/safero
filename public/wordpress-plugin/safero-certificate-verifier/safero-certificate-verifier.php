@@ -19,7 +19,8 @@ class SaferoCertificateVerifier
     public function __construct()
     {
         // ERP Base URL (يمكن تعديلها من إعدادات الإضافة في ووردبريس)
-        $this->api_base_url = get_option('safero_erp_url', 'http://localhost:8000');
+        $saved_url = get_option('safero_erp_url');
+        $this->api_base_url = !empty($saved_url) ? $saved_url : 'http://localhost/saferoo/public';
 
         // Shortcodes
         add_shortcode('safero_certificate_verifier', [$this, 'render_universal_verifier']);
@@ -139,13 +140,15 @@ class SaferoCertificateVerifier
 
         // Read query param if not set in shortcode
         $cert_serial = ! empty($a['serial']) ? $a['serial'] : sanitize_text_field($_GET['cert'] ?? $_GET['serial'] ?? $_GET['number'] ?? '');
-        $erp_url = rtrim(get_option('safero_erp_url', 'http://localhost:8000'), '/');
+        $saved_erp = get_option('safero_erp_url');
+        $erp_url = rtrim(!empty($saved_erp) ? $saved_erp : 'http://localhost/saferoo/public', '/');
 
         if (empty($cert_serial)) {
             return $this->build_verifier_html('training', $atts);
         }
 
-        $embed_url = $erp_url.'/embed/training-certificate/'.urlencode($cert_serial);
+        // Pass cert as query parameter to prevent Apache 404 with %2F in path
+        $embed_url = $erp_url.'/embed/training-certificate?cert='.urlencode($cert_serial);
 
         ob_start();
         ?>
@@ -432,8 +435,8 @@ class SaferoCertificateVerifier
         // Clean & normalize input
         $cert_number = trim($cert_number);
 
-        // 1. Try primary unified verification endpoint
-        $endpoint = rtrim($this->api_base_url, '/').'/api/v1/verify/'.urlencode($cert_number);
+        // 1. Try primary unified verification endpoint via query parameter (?identifier=) to avoid Apache 404 with %2F
+        $endpoint = rtrim($this->api_base_url, '/').'/api/v1/verify?identifier='.urlencode($cert_number);
 
         $response = wp_remote_get($endpoint, [
             'timeout' => 15,
@@ -445,7 +448,7 @@ class SaferoCertificateVerifier
         // If unified endpoint 404s, try secondary endpoints
         if (is_wp_error($response) || wp_remote_retrieve_response_code($response) === 404) {
             // Try training certificates endpoint directly
-            $fallback_endpoint = rtrim($this->api_base_url, '/').'/api/v1/training-certificates/verify/'.urlencode($cert_number);
+            $fallback_endpoint = rtrim($this->api_base_url, '/').'/api/v1/training-certificates/verify?identifier='.urlencode($cert_number);
             $fallback_response = wp_remote_get($fallback_endpoint, [
                 'timeout' => 15,
                 'headers' => ['Accept' => 'application/json'],
@@ -455,7 +458,7 @@ class SaferoCertificateVerifier
                 $response = $fallback_response;
             } else {
                 // Try inspection certificates endpoint directly
-                $fallback_insp = rtrim($this->api_base_url, '/').'/api/v1/certificates/verify/'.urlencode($cert_number);
+                $fallback_insp = rtrim($this->api_base_url, '/').'/api/v1/certificates/verify?identifier='.urlencode($cert_number);
                 $fallback_insp_res = wp_remote_get($fallback_insp, [
                     'timeout' => 15,
                     'headers' => ['Accept' => 'application/json'],
