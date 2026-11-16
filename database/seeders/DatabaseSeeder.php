@@ -104,6 +104,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $this->call(TrainingCertificateSeeder::class);
+        $this->call([
+            TrainingCertificateSeeder::class,
+            CertificateTemplateSeeder::class,
+        ]);
     }
 }

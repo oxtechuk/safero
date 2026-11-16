@@ -29,11 +29,84 @@
 @section('content')
 <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-4">
 
+    <!-- Secondary Submenu & Template Selector Bar -->
+    <div class="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs space-y-2">
+        <div class="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-slate-100">
+            <div class="flex items-center gap-1.5 flex-wrap">
+                <a href="{{ route('certificates.index') }}" class="px-2.5 py-1 rounded text-xs font-bold text-slate-600 hover:bg-slate-100 transition">
+                    ← سجل الشهادات
+                </a>
+                <span class="text-slate-300">|</span>
+                <span class="text-xs font-bold text-slate-700">نوع الفحص:</span>
+                <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="px-2.5 py-1 rounded text-xs font-bold transition {{ $type === 'crane' ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
+                    أوناش (Crane)
+                </a>
+                <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="px-2.5 py-1 rounded text-xs font-bold transition {{ $type === 'accessory' ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
+                    مهمات رفع (Accessory)
+                </a>
+                <a href="{{ route('certificates.create', ['type' => 'general']) }}" class="px-2.5 py-1 rounded text-xs font-bold transition {{ $type === 'general' ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
+                    عام وباليتات (General)
+                </a>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <a href="{{ route('certificate-templates.index') }}" class="px-3 py-1 rounded-lg border border-slate-200 bg-white text-[#0E4DA4] hover:bg-slate-50 text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
+                    <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-4 h-4 object-contain" alt="">
+                    <span>ستوديو قوالب الفحص</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Studio Template Quick-Apply Bar -->
+        <div class="flex items-center justify-between gap-3 flex-wrap bg-slate-50 p-2 rounded-lg border border-slate-200/80 text-xs">
+            <div class="flex items-center gap-2 flex-grow sm:flex-grow-0">
+                <span class="font-bold text-slate-700 whitespace-nowrap flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-[#0E4DA4]"></span>
+                    <span>تحميل قالب فحص من الاستوديو:</span>
+                </span>
+                <select onchange="if(this.value) window.location.href=this.value;" class="bg-white border border-slate-300 rounded-md py-1 px-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-[#0E4DA4] max-w-[280px]">
+                    <option value="{{ route('certificates.create', ['type' => $type]) }}">-- اختر قالباً لتعبئة البيانات تلقائياً --</option>
+                    @foreach($templates as $tmpl)
+                        <option value="{{ route('certificates.create', ['template_id' => $tmpl->id]) }}" {{ ($activeTemplate && $activeTemplate->id == $tmpl->id) ? 'selected' : '' }}>
+                            {{ $tmpl->name }} [{{ $tmpl->equipment_type_label }} - {{ $tmpl->swl }}]
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            @if($activeTemplate)
+                <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-1 rounded-md bg-blue-50 text-[#0E4DA4] border border-blue-200 font-bold text-[11px] flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span>تم تفعيل القالب: <strong>{{ $activeTemplate->name }}</strong></span>
+                    </span>
+                    <a href="{{ route('certificates.create', ['type' => $type]) }}" class="text-[11px] text-rose-600 hover:underline font-bold">
+                        إلغاء القالب
+                    </a>
+                </div>
+            @elseif($renewCertificate)
+                <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 border border-slate-200 font-bold text-[11px] flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        <span>تجديد فحص دوري للشهادة: <strong class="font-mono">{{ $renewCertificate->certificate_number }}</strong></span>
+                    </span>
+                    <a href="{{ route('certificates.create', ['type' => $type]) }}" class="text-[11px] text-rose-600 hover:underline font-bold">
+                        إلغاء
+                    </a>
+                </div>
+            @else
+                <span class="text-[11px] text-slate-500">اختر قالباً جاهزاً من الاستوديو لتعبئة المواصفات والأدوات تلقائياً</span>
+            @endif
+        </div>
+    </div>
 
     <!-- Main Form Container -->
     <form method="POST" action="{{ route('certificates.store') }}" id="certForm" class="space-y-4">
         @csrf
         <input type="hidden" name="equipment_type" value="{{ $type }}">
+        @if($activeTemplate)
+            <input type="hidden" name="template_id" value="{{ $activeTemplate->id }}">
+        @endif
 
         <!-- CARD 1: Certificate & Customer Meta (Compact 4-Column Grid) -->
         <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs space-y-3">
@@ -58,7 +131,7 @@
                 <div>
                     <label for="order_no" class="block font-bold text-slate-700 mb-1">رقم أمر الشغل (Order No)</label>
                     <input type="text" name="order_no" id="order_no" 
-                           value="{{ old('order_no', '100000') }}" placeholder="100000"
+                           value="{{ old('order_no', $renewCertificate ? $renewCertificate->order_no : '100000') }}" placeholder="100000"
                            class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                 </div>
 
@@ -70,7 +143,7 @@
                             class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] bg-white outline-none">
                         <option value="">-- اختر العميل --</option>
                         @foreach($customers as $c)
-                            <option value="{{ $c->id }}" data-address="{{ $c->address }}" {{ (old('customer_id', $selectedCustomerId) == $c->id) ? 'selected' : '' }}>
+                            <option value="{{ $c->id }}" data-address="{{ $c->address }}" {{ (old('customer_id', $renewCertificate ? $renewCertificate->customer_id : $selectedCustomerId) == $c->id) ? 'selected' : '' }}>
                                 {{ $c->name }}
                             </option>
                         @endforeach
@@ -82,7 +155,7 @@
                         موقع الفحص <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="examination_address" id="examination_address" 
-                           value="{{ old('examination_address', $type === 'crane' ? 'Dabaa NPP' : 'Om Zoghio - Alexandria') }}" required
+                           value="{{ old('examination_address', $renewCertificate?->examination_address ?? ($activeTemplate?->examination_address ?? ($type === 'crane' ? 'Dabaa NPP' : 'Om Zoghio - Alexandria'))) }}" required
                            class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] outline-none">
                 </div>
             </div>
@@ -111,7 +184,7 @@
                         المواصفة المرجعية <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="reference_standard" id="reference_standard" 
-                           value="{{ old('reference_standard', $type === 'crane' ? 'EN 13000' : ($type === 'accessory' ? 'BS EN 1492-2' : 'ASTM A6')) }}" required 
+                           value="{{ old('reference_standard', $activeTemplate?->reference_standard ?? ($renewCertificate?->reference_standard ?? ($type === 'crane' ? 'EN 13000' : ($type === 'accessory' ? 'BS EN 1492-2' : 'ASTM A6')))) }}" required 
                            class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                 </div>
 
@@ -120,7 +193,7 @@
                         الحمل الآمن (SWL) <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="swl" id="swl" 
-                           value="{{ old('swl', $type === 'crane' ? '90  Ton' : ($type === 'accessory' ? '30 Ton' : '70  Ton')) }}" required
+                           value="{{ old('swl', $activeTemplate?->swl ?? ($renewCertificate?->swl ?? ($type === 'crane' ? '90  Ton' : ($type === 'accessory' ? '30 Ton' : '70  Ton')))) }}" required
                            class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en font-bold text-[#0E4DA4] outline-none">
                 </div>
             </div>
@@ -145,31 +218,31 @@
                                 وصف المعدة (Description) <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="equipment_description" id="equipment_description" 
-                                   value="{{ old('equipment_description', 'Mobile Telescopic Crane') }}" required
+                                   value="{{ old('equipment_description', $activeTemplate?->description ?: ($activeTemplate?->name ?? ($renewCertificate?->equipment_description ?? 'Mobile Telescopic Crane'))) }}" required
                                    class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] outline-none font-semibold">
                         </div>
                         <div>
                             <label for="manufacturer" class="block font-bold text-slate-700 mb-1">الشركة المصنعة (Manufacturer)</label>
-                            <input type="text" name="manufacturer" id="manufacturer" value="{{ old('manufacturer', 'Liebherr') }}" placeholder="Liebherr / Grove" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="text" name="manufacturer" id="manufacturer" value="{{ old('manufacturer', $activeTemplate?->default_manufacturer ?? ($renewCertificate?->manufacturer ?? 'Liebherr')) }}" placeholder="Liebherr / Grove" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div>
                             <label for="model" class="block font-bold text-slate-700 mb-1">الموديل (Model)</label>
-                            <input type="text" name="model" id="model" value="{{ old('model', 'LTM 1090-4.1') }}" placeholder="LTM 1090-4.1" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="text" name="model" id="model" value="{{ old('model', $activeTemplate?->default_model ?? ($renewCertificate?->model ?? 'LTM 1090-4.1')) }}" placeholder="LTM 1090-4.1" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                         <div>
                             <label for="capacity" class="block font-bold text-slate-700 mb-1">السعة (Capacity)</label>
-                            <input type="text" name="capacity" id="capacity" value="{{ old('capacity', '90 Ton') }}" placeholder="90 Ton" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="text" name="capacity" id="capacity" value="{{ old('capacity', $activeTemplate?->swl ?? ($renewCertificate?->capacity ?? '90 Ton')) }}" placeholder="90 Ton" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                         <div>
                             <label for="chassis_no" class="block font-bold text-slate-700 mb-1">رقم الشاسيه / السيريال</label>
-                            <input type="text" name="chassis_no" id="chassis_no" value="{{ old('chassis_no', '071490') }}" placeholder="071490" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en font-bold outline-none">
+                            <input type="text" name="chassis_no" id="chassis_no" value="{{ old('chassis_no', $renewCertificate?->chassis_no ?? '071490') }}" placeholder="071490" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en font-bold outline-none">
                         </div>
                         <div>
                             <label for="date_of_manufacture" class="block font-bold text-slate-700 mb-1">سنة الصنع (Year)</label>
-                            <input type="text" name="date_of_manufacture" id="date_of_manufacture" value="{{ old('date_of_manufacture', '2008') }}" placeholder="2008" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="text" name="date_of_manufacture" id="date_of_manufacture" value="{{ old('date_of_manufacture', $renewCertificate?->date_of_manufacture ?? '2008') }}" placeholder="2008" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                     </div>
 
@@ -207,31 +280,31 @@
                                 وصف المهمات (Description) <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="equipment_description" id="equipment_description" 
-                                   value="{{ old('equipment_description', 'Round Sling BS EN 1492-2') }}" required
+                                   value="{{ old('equipment_description', $activeTemplate?->description ?: ($activeTemplate?->name ?? ($renewCertificate?->equipment_description ?? 'Round Sling BS EN 1492-2'))) }}" required
                                    class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] outline-none font-semibold">
                         </div>
                         <div>
                             <label for="manufacturer" class="block font-bold text-slate-700 mb-1">جهة التصنيع (Manufacturer)</label>
-                            <input type="text" name="manufacturer" id="manufacturer" value="{{ old('manufacturer', 'Lifting safety') }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="text" name="manufacturer" id="manufacturer" value="{{ old('manufacturer', $activeTemplate?->default_manufacturer ?? ($renewCertificate?->manufacturer ?? 'Lifting safety')) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div>
                             <label for="safety_factor" class="block font-bold text-slate-700 mb-1">معامل الأمان (Safety Factor)</label>
-                            <input type="text" name="safety_factor" id="safety_factor" value="{{ old('safety_factor', '7:1') }}" placeholder="7:1 / 5:1 / 4:1" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en font-bold text-emerald-700 outline-none">
+                            <input type="text" name="safety_factor" id="safety_factor" value="{{ old('safety_factor', $renewCertificate?->safety_factor ?? '7:1') }}" placeholder="7:1 / 5:1 / 4:1" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en font-bold text-emerald-700 outline-none">
                         </div>
                         <div>
                             <label for="length" class="block font-bold text-slate-700 mb-1">الطول (Length)</label>
-                            <input type="text" name="length" id="length" value="{{ old('length', '6.0 M') }}" placeholder="6.0 M" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="text" name="length" id="length" value="{{ old('length', $renewCertificate?->length ?? '6.0 M') }}" placeholder="6.0 M" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                         <div>
                             <label for="quantity" class="block font-bold text-slate-700 mb-1">الكمية (Quantity)</label>
-                            <input type="number" name="quantity" id="quantity" value="{{ old('quantity', 4) }}" min="1" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="number" name="quantity" id="quantity" value="{{ old('quantity', $renewCertificate?->quantity ?? 4) }}" min="1" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                         <div>
                             <label for="equipment_id_range" class="block font-bold text-slate-700 mb-1">سيريال / كود المهمات (ID Range)</label>
-                            <input type="text" name="equipment_id_range" id="equipment_id_range" value="{{ old('equipment_id_range', 'From R00772 To R00775') }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en font-bold text-[#0E4DA4] outline-none">
+                            <input type="text" name="equipment_id_range" id="equipment_id_range" value="{{ old('equipment_id_range', $renewCertificate?->equipment_id_range ?? 'From R00772 To R00775') }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en font-bold text-[#0E4DA4] outline-none">
                         </div>
                     </div>
                 </div>
@@ -245,31 +318,56 @@
                                 وصف المعدة (Description) <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="equipment_description" id="equipment_description" 
-                                   value="{{ old('equipment_description', 'Move Pallet') }}" required
+                                   value="{{ old('equipment_description', $activeTemplate?->description ?: ($activeTemplate?->name ?? ($renewCertificate?->equipment_description ?? 'Move Pallet'))) }}" required
                                    class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] outline-none font-semibold">
                         </div>
                         <div>
                             <label for="date_of_manufacture" class="block font-bold text-slate-700 mb-1">سنة الصنع (Manufacture Date)</label>
-                            <input type="text" name="date_of_manufacture" id="date_of_manufacture" value="{{ old('date_of_manufacture', '2009') }}" placeholder="2009" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="text" name="date_of_manufacture" id="date_of_manufacture" value="{{ old('date_of_manufacture', $renewCertificate?->date_of_manufacture ?? '2009') }}" placeholder="2009" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>
                             <label for="dimensions" class="block font-bold text-slate-700 mb-1">الأبعاد (Dimensions: L, W, H)</label>
-                            <input type="text" name="dimensions" id="dimensions" value="{{ old('dimensions', 'Length: 0.48 m Width: 0.22 m Height: 0.19 m') }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="text" name="dimensions" id="dimensions" value="{{ old('dimensions', $renewCertificate?->dimensions ?? 'Length: 0.48 m Width: 0.22 m Height: 0.19 m') }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                         <div>
                             <label for="quantity" class="block font-bold text-slate-700 mb-1">الكمية (Quantity)</label>
-                            <input type="number" name="quantity" id="quantity" value="{{ old('quantity', 6) }}" min="1" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
+                            <input type="number" name="quantity" id="quantity" value="{{ old('quantity', $renewCertificate?->quantity ?? 6) }}" min="1" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                         </div>
                         <div>
                             <label for="equipment_id_range" class="block font-bold text-slate-700 mb-1">ترقيم المعدات (Equipment ID)</label>
-                            <input type="text" name="equipment_id_range" id="equipment_id_range" value="{{ old('equipment_id_range', 'From 01 To 06') }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en font-bold text-[#0E4DA4] outline-none">
+                            <input type="text" name="equipment_id_range" id="equipment_id_range" value="{{ old('equipment_id_range', $renewCertificate?->equipment_id_range ?? 'From 01 To 06') }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en font-bold text-[#0E4DA4] outline-none">
                         </div>
                     </div>
                 </div>
             @endif
+        </div>
+
+        @if($activeTemplate && !empty($activeTemplate->custom_specifications) && count($activeTemplate->custom_specifications) > 0)
+            <!-- SPECIALIZED CMS TOOLS & TEST EQUIPMENT (From Template) -->
+            <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs space-y-2">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <div class="flex items-center gap-2">
+                        <span class="w-5 h-5 rounded bg-blue-50 text-[#0E4DA4] text-[11px] font-bold flex items-center justify-center">
+                            <svg class="w-3 h-3 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </span>
+                        <h2 class="font-bold text-slate-800 text-xs">أدوات ومعدات الفحص المخصصة (قالب: {{ $activeTemplate->name }})</h2>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-mono">Custom CMS Equipment & Tools</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs">
+                    @foreach($activeTemplate->custom_specifications as $spec)
+                        <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 shadow-2xs">
+                            <span class="block text-[11px] font-bold text-slate-600">{{ $spec['label'] ?? 'بند' }}</span>
+                            <span class="block text-xs font-mono font-bold text-[#0E4DA4] mt-0.5">{{ $spec['value'] ?? '-' }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
         </div>
 
         <!-- CARD 3: CRANE 28-POINT CHECKLIST (Shown ONLY when type === 'crane', in Ultra-Compact 2-Column Grid with "Mark All Pass" button) -->
@@ -425,7 +523,7 @@
                     تفاصيل الفحوصات والاختبارات المنفذة <span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="tests_carried_out" id="tests_carried_out" required
-                       value="{{ old('tests_carried_out', $type === 'crane' ? 'Visual and Functional Thorough Examination and Load Test has been conducted Satisfactorily in accordance with EN 13000' : ($type === 'accessory' ? 'Visual and Functional Thorough Examination has been conducted Satisfactorily in accordance with BS EN 1492-2' : 'Visual Inspection, Function Test Were Carried Out and ACCEPTED in accordance with ASTM A6')) }}"
+                       value="{{ old('tests_carried_out', ($activeTemplate && !empty($activeTemplate->custom_specifications)) ? ('Visual & Functional Thorough Examination conducted with: ' . collect($activeTemplate->custom_specifications)->pluck('value', 'label')->map(fn($v, $k) => "$k: $v")->implode(' | ') . ' in accordance with ' . ($activeTemplate->reference_standard ?? 'EN 13000')) : ($type === 'crane' ? 'Visual and Functional Thorough Examination and Load Test has been conducted Satisfactorily in accordance with EN 13000' : ($type === 'accessory' ? 'Visual and Functional Thorough Examination has been conducted Satisfactorily in accordance with BS EN 1492-2' : 'Visual Inspection, Function Test Were Carried Out and ACCEPTED in accordance with ASTM A6'))) }}"
                        class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
             </div>
 

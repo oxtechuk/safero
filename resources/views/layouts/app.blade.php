@@ -81,7 +81,7 @@
                                 <img src="{{ asset('branding/odoo-icons/industry_certification.svg') }}" class="w-4 h-4 object-contain" alt="Training">
                             </div>
                             <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">شهادات التدريب</span>
-                        @elseif(request()->routeIs('certificates.*'))
+                        @elseif(request()->routeIs('certificates.*') || request()->routeIs('certificate-templates.*'))
                             <div class="w-6 h-6 rounded bg-blue-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-blue-200">
                                 <img src="{{ asset('branding/odoo-icons/quality_control.svg') }}" class="w-4 h-4 object-contain" alt="Inspection">
                             </div>
@@ -215,7 +215,7 @@
                                 
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'inspection' ? null : 'inspection')"
-                                        class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('certificates.*') && !request()->routeIs('certificates.verify.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
+                                        class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ (request()->routeIs('certificates.*') || request()->routeIs('certificate-templates.*')) && !request()->routeIs('certificates.verify.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
                                     <span>شهادات الفحص</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'inspection' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
@@ -255,6 +255,23 @@
                                             </a>
                                         </div>
 
+                                        <!-- Tree Branch: ستوديو قوالب الفحص (Studio) -->
+                                        <div class="py-1 bg-blue-50/30">
+                                            <div class="px-3 py-1 text-[10px] font-bold text-[#0E4DA4] uppercase tracking-wider flex items-center justify-between">
+                                                <span>ستوديو شهادات الفحص (Studio)</span>
+                                                <span class="text-[9px] bg-blue-100 text-[#0E4DA4] px-1.5 py-0.2 rounded font-bold font-mono">CMS</span>
+                                            </div>
+                                            <a href="{{ route('certificate-templates.index') }}" 
+                                               class="flex items-center justify-between px-3.5 py-1.5 hover:bg-blue-100/50 text-slate-800 hover:text-[#0E4DA4] transition font-bold {{ request()->routeIs('certificate-templates.index') ? 'bg-blue-100/60 text-[#0E4DA4]' : '' }}">
+                                                <span>🎨 ستوديو قوالب الفحص</span>
+                                                <span class="text-[10px] text-[#0E4DA4] font-medium font-en">Templates</span>
+                                            </a>
+                                            <a href="{{ route('certificate-templates.create') }}" 
+                                               class="block px-3.5 py-1.5 hover:bg-blue-100/50 text-slate-700 hover:text-[#0E4DA4] transition text-xs {{ request()->routeIs('certificate-templates.create') ? 'bg-blue-100/60 font-bold text-[#0E4DA4]' : '' }}">
+                                                + تصميم وتخصيص قالب جديد
+                                            </a>
+                                        </div>
+
                                         <!-- Tree Branch 2: سجل الشهادات والعمليات -->
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
@@ -267,6 +284,11 @@
                                             <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request('status') === 'issued' ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
                                                 الشهادات السارية المعتمدة
+                                            </a>
+                                            <a href="{{ route('certificates.expiring') }}" 
+                                               class="flex items-center justify-between px-3.5 py-1.5 hover:bg-amber-50 text-amber-800 transition font-bold {{ request()->routeIs('certificates.expiring') ? 'bg-amber-100/60 text-amber-900' : '' }}">
+                                                <span>⚠️ الشهادات القريبة من الانتهاء</span>
+                                                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
                                             </a>
                                             <a href="{{ route('certificates.index', ['status' => 'draft']) }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request('status') === 'draft' ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
@@ -585,24 +607,43 @@
         </div>
     </header>
 
-    @if(request()->routeIs('certificates.*') && !request()->routeIs('certificates.verify.*'))
+    @if((request()->routeIs('certificates.*') || request()->routeIs('certificate-templates.*')) && !request()->routeIs('certificates.verify.*'))
         <div class="bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-10 gap-3 text-xs">
-                   
+                    <!-- Left: Subheader Navigation -->
+                    <div class="flex items-center gap-1.5 overflow-x-auto py-1">
+                        <a href="{{ route('certificates.index') }}" 
+                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.index') && !request('status')) ? 'bg-blue-50 text-[#0E4DA4] border border-blue-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                            <img src="{{ asset('branding/IsoOx-icons/documents.svg') }}" class="w-3.5 h-3.5">
+                            <span>سجل الشهادات</span>
+                        </a>
+
+                        <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
+                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition {{ request('status') === 'issued' ? 'bg-blue-50 text-[#0E4DA4] font-bold border border-blue-200/80' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>السارية</span>
+                        </a>
+
+                        <a href="{{ route('certificates.expiring') }}" 
+                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('certificates.expiring') ? 'bg-amber-100 text-amber-900 font-bold border border-amber-300 shadow-2xs' : 'text-amber-700 hover:bg-amber-50' }}">
+                            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span>قريبة من الانتهاء</span>
+                        </a>
+
+                        <span class="text-slate-300">|</span>
+
+                        <a href="{{ route('certificate-templates.index') }}" 
+                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-bold transition {{ request()->routeIs('certificate-templates.*') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-[#0E4DA4] hover:bg-blue-50' }}">
+                            <span>🎨 ستوديو قوالب الفحص</span>
+                        </a>
+                    </div>
 
                     <!-- Right: Quick Filters & Actions -->
                     <div class="hidden md:flex items-center gap-2.5 text-slate-500 text-[11px]">
-                        <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
-                           class="hover:text-emerald-700 transition flex items-center gap-1 px-2 py-0.5 rounded {{ request('status') === 'issued' ? 'bg-emerald-50 text-emerald-800 font-bold' : '' }}">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#22A447]"></span>
-                            <span>الشهادات السارية المعتمدة</span>
-                        </a>
-                        <span class="text-slate-300">|</span>
-                        <a href="{{ route('certificates.index', ['status' => 'draft']) }}" 
-                           class="hover:text-sky-700 transition flex items-center gap-1 px-2 py-0.5 rounded {{ request('status') === 'draft' ? 'bg-sky-50 text-sky-800 font-bold' : '' }}">
-                            <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
-                            <span>المسودات</span>
+                        <a href="{{ route('certificates.create') }}" 
+                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#0E4DA4] hover:bg-blue-800 text-white font-bold transition shadow-2xs">
+                            <span>+ إصدار شهادة</span>
                         </a>
                         <span class="text-slate-300">|</span>
                         <a href="{{ route('certificates.verify.lookup') }}" 

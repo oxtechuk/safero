@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\CertificateTemplateController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InspectionTaskController;
@@ -45,8 +46,14 @@ Route::middleware('auth')->group(function () {
     // Customers CRM
     Route::resource('customers', CustomerController::class);
 
-    // Inspection & Certificates
+    // Inspection & Certificates & Studio
+    Route::get('/certificates/expiring', [CertificateController::class, 'expiring'])->name('certificates.expiring');
     Route::resource('certificates', CertificateController::class);
+
+    // Certificate Studio (Templates & Equipment CMS Builder)
+    Route::post('/certificate-templates/{certificateTemplate}/duplicate', [CertificateTemplateController::class, 'duplicate'])->name('certificate-templates.duplicate');
+    Route::get('/certificate-templates/{certificateTemplate}/api', [CertificateTemplateController::class, 'apiData'])->name('certificate-templates.api');
+    Route::resource('certificate-templates', CertificateTemplateController::class);
 
     // Trainees CRM
     Route::resource('trainees', TraineeController::class);

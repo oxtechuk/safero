@@ -20,7 +20,7 @@ class SaferoCertificateVerifier
     {
         // ERP Base URL (يمكن تعديلها من إعدادات الإضافة في ووردبريس)
         $saved_url = get_option('safero_erp_url');
-        $this->api_base_url = !empty($saved_url) ? $saved_url : 'http://localhost/saferoo/public';
+        $this->api_base_url = ! empty($saved_url) ? $saved_url : 'http://localhost/saferoo/public';
 
         // Shortcodes
         add_shortcode('safero_certificate_verifier', [$this, 'render_universal_verifier']);
@@ -141,32 +141,36 @@ class SaferoCertificateVerifier
         // Read query param if not set in shortcode
         $cert_serial = ! empty($a['serial']) ? $a['serial'] : sanitize_text_field($_GET['cert'] ?? $_GET['serial'] ?? $_GET['number'] ?? '');
         $saved_erp = get_option('safero_erp_url');
-        $erp_url = rtrim(!empty($saved_erp) ? $saved_erp : 'http://localhost/saferoo/public', '/');
+        $erp_url = rtrim(! empty($saved_erp) ? $saved_erp : 'http://localhost/saferoo/public', '/');
 
         if (empty($cert_serial)) {
             return $this->build_verifier_html('training', $atts);
         }
 
-        // Pass cert as query parameter to prevent Apache 404 with %2F in path
-        $embed_url = $erp_url.'/embed/training-certificate?cert='.urlencode($cert_serial);
+        $pdf_url = $erp_url.'/training-certificates/'.urlencode($cert_serial).'/pdf';
+        $download_url = $pdf_url.'?download=1';
+        $frame_src = $pdf_url.'#toolbar=1&navpanes=0';
 
         ob_start();
         ?>
-        <div class="safero-direct-frame-wrapper" style="max-width: 1000px; margin: 25px auto; text-align: center; font-family: 'Cairo', Tahoma, sans-serif;">
-            <div style="background: #fff; padding: 15px 20px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap;">
+        <div class="safero-direct-frame-wrapper" style="max-width: 1050px; margin: 25px auto; text-align: right; font-family: 'Cairo', Tahoma, sans-serif;" dir="rtl">
+            <div style="background: #fff; padding: 15px 22px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                 <div style="text-align: right;">
-                    <span style="display: inline-block; background: #E8F7EC; color: #006837; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">✓ شهادة معتمدة وموثقة</span>
-                    <h3 style="margin: 5px 0 0 0; color: #1e293b; font-size: 16px; font-weight: 800;">الشهادة الرسمية رقم #<?php echo esc_html($cert_serial); ?></h3>
+                    <span style="display: inline-block; background: #E8F7EC; color: #006837; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">✓ شهادة تدريب معتمدة وموثقة</span>
+                    <h3 style="margin: 6px 0 0 0; color: #1e293b; font-size: 17px; font-weight: 800;">شهادة التدريب الرسمية رقم #<?php echo esc_html($cert_serial); ?></h3>
                 </div>
-                <div>
-                    <a href="<?php echo esc_url($erp_url.'/training-certificates/'.urlencode($cert_serial).'/pdf'); ?>" target="_blank" style="background: #006837; color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px;">
-                        <span>تحميل النسخة الرسمية PDF</span> &darr;
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <a href="<?php echo esc_url($download_url); ?>" download style="background: #006837; color: #fff; text-decoration: none; padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 3px 10px rgba(0,104,55,0.25);">
+                        <span>📥 تحميل النسخة الرسمية PDF</span>
+                    </a>
+                    <a href="<?php echo esc_url($pdf_url); ?>" target="_blank" style="background: #f1f5f9; color: #334155; text-decoration: none; padding: 9px 14px; border-radius: 10px; font-size: 13px; font-weight: 600;">
+                        ⤢ فتح بملء الشاشة
                     </a>
                 </div>
             </div>
             
-            <div style="width: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #cbd5e1;">
-                <iframe src="<?php echo esc_url($embed_url); ?>" width="100%" height="<?php echo esc_attr($a['height']); ?>" frameborder="0" style="width: 100%; min-height: <?php echo esc_attr($a['height']); ?>px; display: block; border: none;" allowfullscreen></iframe>
+            <div style="width: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #cbd5e1; background: #525659;">
+                <iframe src="<?php echo esc_url($frame_src); ?>" width="100%" height="<?php echo esc_attr($a['height']); ?>" frameborder="0" style="width: 100%; min-height: <?php echo esc_attr($a['height']); ?>px; display: block; border: none;" allowfullscreen title="Training Certificate PDF"></iframe>
             </div>
         </div>
         <?php
@@ -384,13 +388,26 @@ class SaferoCertificateVerifier
 
                             // Live Certificate Iframe (for Training Certificates)
                             <?php if ($show_frame) { ?>
-                            if (isTraining && d.embed_url) {
-                                html += '<div class="safero-frame-box">';
-                                html += '  <div style="background: #f8fafc; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">';
-                                html += '    <span style="font-weight: 800; font-size: 13px; color: #006837;">معاينة الشهادة الرسمية الأصلية (Official Live Certificate)</span>';
-                                html += '    <a href="' + d.embed_url + '" target="_blank" style="font-size: 12px; color: #0E4DA4; font-weight: bold; text-decoration: none;">فتح في نافذة كاملة &larr;</a>';
+                            if (isTraining && (d.pdf_url || d.embed_url)) {
+                                var pdfStreamUrl = d.pdf_view_url || d.pdf_url;
+                                var pdfDownloadUrl = d.pdf_download_url || (d.pdf_url + '?download=1');
+
+                                html += '<div class="safero-frame-box" style="margin-top: 25px; background: #ffffff; border-radius: 16px; border: 1px solid #cbd5e1; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.06);">';
+                                html += '  <div style="background: #f8fafc; padding: 14px 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">';
+                                html += '    <div style="display: flex; align-items: center; gap: 8px;">';
+                                html += '      <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #006837;"></span>';
+                                html += '      <strong style="font-size: 13.5px; color: #006837;">معاينة ملف الشهادة المعتمد (PDF Certificate)</strong>';
+                                html += '    </div>';
+                                html += '    <div style="display: flex; align-items: center; gap: 10px;">';
+                                html += '      <a href="' + pdfDownloadUrl + '" download style="background: #006837; color: #ffffff; text-decoration: none; padding: 8px 18px; border-radius: 8px; font-weight: bold; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,104,55,0.25);">';
+                                html += '        <span>📥 تحميل الشهادة PDF</span>';
+                                html += '      </a>';
+                                html += '      <a href="' + pdfStreamUrl + '" target="_blank" style="background: #e2e8f0; color: #334155; text-decoration: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold;">';
+                                html += '        ⤢ فتح بملء الشاشة';
+                                html += '      </a>';
+                                html += '    </div>';
                                 html += '  </div>';
-                                html += '  <iframe src="' + d.embed_url + '" width="100%" height="680" frameborder="0" style="width: 100%; min-height: 650px; border: none; display: block;" allowfullscreen></iframe>';
+                                html += '  <iframe src="' + pdfStreamUrl + '#toolbar=1&navpanes=0" width="100%" height="750" frameborder="0" style="width: 100%; min-height: 750px; border: none; display: block;" allowfullscreen title="Training Certificate PDF"></iframe>';
                                 html += '</div>';
                             }
                             <?php } ?>

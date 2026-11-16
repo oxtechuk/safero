@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificate;
+use App\Models\CertificateTemplate;
 use App\Models\Customer;
 use App\Models\InspectionTask;
 use App\Services\GoogleSheetsSyncService;
@@ -59,7 +60,108 @@ class CertificateController extends Controller
         $defaultCertNo = Certificate::generateNextNumber($today->toDateString());
         $defaultCraneChecklist = Certificate::defaultCraneChecklist();
 
-        return view('certificates.create', compact('customers', 'selectedCustomerId', 'today', 'nextDue', 'defaultCertNo', 'defaultCraneChecklist', 'type'));
+        // Check if loading from Studio Template
+        $activeTemplate = null;
+        if ($templateId = $request->input('template_id')) {
+            $activeTemplate = CertificateTemplate::find($templateId);
+            if ($activeTemplate) {
+                $type = $activeTemplate->equipment_type;
+                $months = $activeTemplate->validity_months ?: 6;
+                $nextDue = Carbon::today()->addMonths($months)->subDay();
+            }
+        }
+
+        // Check if renewing from previous certificate
+        $renewCertificate = null;
+        if ($renewId = $request->input('renew_from')) {
+            $renewCertificate = Certificate::with('customer')->find($renewId);
+            if ($renewCertificate) {
+                $type = $renewCertificate->equipment_type;
+                $selectedCustomerId = $renewCertificate->customer_id;
+                $nextDue = Carbon::today()->addMonths(6)->subDay();
+            }
+        }
+
+        $templates = CertificateTemplate::active()->orderBy('name')->get();
+
+        return view('certificates.create', compact(
+            'customers',
+            'selectedCustomerId',
+            'today',
+            'nextDue',
+            'defaultCertNo',
+            'defaultCraneChecklist',
+            'type',
+            'templates',
+            'activeTemplate',
+            'renewCertificate'
+        ));
+    }
+
+    public function expiring(Request $request): View
+    {
+        $today = Carbon::today();
+        $query = Certificate::with('customer');
+
+        // Filter by timeframe
+        $timeframe = $request->input('timeframe', '30');
+        if ($timeframe === 'expired') {
+            $query->whereDate('next_examination_due_date', '<', $today);
+        } elseif ($timeframe === '7') {
+            $query->whereDate('next_examination_due_date', '>=', $today)
+                ->whereDate('next_examination_due_date', '<=', $today->copy()->addDays(7));
+        } elseif ($timeframe === '15') {
+            $query->whereDate('next_examination_due_date', '>=', $today)
+                ->whereDate('next_examination_due_date', '<=', $today->copy()->addDays(15));
+        } elseif ($timeframe === '30') {
+            $query->whereDate('next_examination_due_date', '>=', $today)
+                ->whereDate('next_examination_due_date', '<=', $today->copy()->addDays(30));
+        } elseif ($timeframe === '60') {
+            $query->whereDate('next_examination_due_date', '>=', $today)
+                ->whereDate('next_examination_due_date', '<=', $today->copy()->addDays(60));
+        } elseif ($timeframe === 'all_expiring') {
+            $query->whereDate('next_examination_due_date', '<=', $today->copy()->addDays(60));
+        }
+
+        if ($customerId = $request->input('customer_id')) {
+            $query->where('customer_id', $customerId);
+        }
+
+        if ($type = $request->input('type')) {
+            $query->where('equipment_type', $type);
+        }
+
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('certificate_number', 'like', "%{$search}%")
+                    ->orWhere('equipment_description', 'like', "%{$search}%")
+                    ->orWhere('order_no', 'like', "%{$search}%")
+                    ->orWhereHas('customer', function ($cq) use ($search) {
+                        $cq->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $certificates = $query->orderBy('next_examination_due_date', 'asc')
+            ->paginate(15)
+            ->withQueryString();
+
+        $customers = Customer::orderBy('name')->get();
+
+        $stats = [
+            'expired' => Certificate::whereDate('next_examination_due_date', '<', $today)->count(),
+            'due_7' => Certificate::whereDate('next_examination_due_date', '>=', $today)
+                ->whereDate('next_examination_due_date', '<=', $today->copy()->addDays(7))->count(),
+            'due_30' => Certificate::whereDate('next_examination_due_date', '>=', $today)
+                ->whereDate('next_examination_due_date', '<=', $today->copy()->addDays(30))->count(),
+            'total_active' => Certificate::where('status', 'issued')->count(),
+        ];
+
+        return view('certificates.expiring', compact('certificates', 'customers', 'stats', 'timeframe', 'today'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -119,6 +221,10 @@ class CertificateController extends Controller
         }
 
         $certificate = Certificate::create($validated);
+
+        if ($request->filled('template_id')) {
+            CertificateTemplate::where('id', $request->input('template_id'))->increment('usage_count');
+        }
 
         if ($request->filled('task_id')) {
             $task = InspectionTask::find($request->input('task_id'));

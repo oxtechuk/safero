@@ -47,6 +47,44 @@
 
     <div class="px-4 sm:px-6 lg:px-8 py-3 space-y-3">
 
+        <!-- Secondary Sub-Menu Tabs Navigation (Requested in User Prompt) -->
+        <div class="bg-white border border-slate-200 rounded-xl p-1.5 flex items-center justify-between gap-2 shadow-2xs flex-wrap">
+            <div class="flex items-center gap-1 flex-wrap">
+                <a href="{{ route('certificates.index') }}" 
+                   class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ !request('status') && !request()->routeIs('certificates.expiring') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">
+                    <img src="{{ asset('branding/IsoOx-icons/documents.svg') }}" class="w-4 h-4 {{ !request('status') && !request()->routeIs('certificates.expiring') ? 'brightness-0 invert' : '' }}">
+                    <span>جميع الشهادات</span>
+                </a>
+                <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
+                   class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ request('status') === 'issued' ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">
+                    <span class="w-2 h-2 rounded-full {{ request('status') === 'issued' ? 'bg-white' : 'bg-emerald-500' }}"></span>
+                    <span>السارية المعتمدة</span>
+                </a>
+                <a href="{{ route('certificates.index', ['status' => 'draft']) }}" 
+                   class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ request('status') === 'draft' ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">
+                    <span class="w-2 h-2 rounded-full {{ request('status') === 'draft' ? 'bg-white' : 'bg-slate-400' }}"></span>
+                    <span>المسودات</span>
+                </a>
+                <a href="{{ route('certificates.expiring') }}" 
+                   class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:bg-slate-100">
+                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                    <span>الشهادات القريبة من الانتهاء</span>
+                </a>
+                <a href="{{ route('certificate-templates.index') }}" 
+                   class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:bg-slate-100">
+                    <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-4 h-4">
+                    <span>ستوديو قوالب الفحص</span>
+                </a>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <a href="{{ route('certificates.create') }}" 
+                   class="px-3 py-1.5 rounded-lg bg-[#0E4DA4] hover:bg-blue-800 text-white text-xs font-bold transition flex items-center gap-1 shadow-2xs">
+                    <span>+ شهادة فحص جديدة</span>
+                </a>
+            </div>
+        </div>
+
         <!-- Batch Selection Toolbar -->
     <div id="batchActionBar" class="hidden bg-slate-900 text-white px-4 py-2.5 rounded-lg flex items-center justify-between shadow-lg text-xs animate-fade-in">
         <div class="flex items-center gap-3">
