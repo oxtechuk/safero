@@ -270,11 +270,27 @@ class CertificateController extends Controller
         return view('certificates.verify', compact('certificate', 'qrCodeSvg'));
     }
 
-    public function embed(string $uuid): Response
+    public function embed(Request $request, ?string $uuid = null): Response
     {
+        $raw = trim((string) ($uuid ?: $request->query('cert') ?: $request->query('number') ?: $request->query('uuid')));
+        if ($raw === '') {
+            abort(404, 'Certificate identifier is required.');
+        }
+
+        $raw = urldecode($raw);
+
+        $variants = array_unique(array_filter([
+            $raw,
+            strtoupper($raw),
+            str_replace('-', '/', $raw),
+            str_replace('/', '-', $raw),
+            str_starts_with(strtoupper($raw), 'SAF/') ? substr($raw, 4) : 'SAF/'.$raw,
+            str_starts_with(strtoupper($raw), 'SAF-') ? substr($raw, 4) : 'SAF-'.$raw,
+        ]));
+
         $certificate = Certificate::with('customer')
-            ->where('uuid', $uuid)
-            ->orWhere('certificate_number', $uuid)
+            ->whereIn('certificate_number', $variants)
+            ->orWhere('uuid', $raw)
             ->firstOrFail();
 
         $verifyUrl = $certificate->verification_url;

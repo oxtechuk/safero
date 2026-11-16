@@ -180,11 +180,25 @@ class TrainingCertificateController extends Controller
         return view('training-certificates.verify', compact('certificate', 'qrCodeSvg'));
     }
 
-    public function embed(string $uuid): Response
+    public function embed(Request $request, ?string $uuid = null): Response
     {
+        $raw = trim((string) ($uuid ?: $request->query('cert') ?: $request->query('serial') ?: $request->query('uuid')));
+        if ($raw === '') {
+            abort(404, 'Training certificate identifier is required.');
+        }
+
+        $raw = urldecode($raw);
+
+        $variants = array_unique(array_filter([
+            $raw,
+            strtoupper($raw),
+            str_replace('-', '/', $raw),
+            str_replace('/', '-', $raw),
+        ]));
+
         $certificate = TrainingCertificate::with('trainee')
-            ->where('uuid', $uuid)
-            ->orWhere('certificate_serial', $uuid)
+            ->whereIn('certificate_serial', $variants)
+            ->orWhere('uuid', $raw)
             ->firstOrFail();
 
         $verifyUrl = $certificate->verification_url;

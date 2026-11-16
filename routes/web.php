@@ -24,13 +24,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Public verification routes (QR Code scan destination & manual lookup)
 Route::get('/verify/{uuid}', [CertificateController::class, 'verify'])->name('certificates.verify');
-Route::get('/embed/certificate/{uuid}', [CertificateController::class, 'embed'])->where('uuid', '.*')->name('certificates.embed');
+Route::get('/embed/certificate/{uuid?}', [CertificateController::class, 'embed'])->where('uuid', '.*')->name('certificates.embed');
 Route::get('/verify-lookup', [CertificateController::class, 'verifyLookup'])->name('certificates.verify.lookup');
 Route::get('/certificates/{certificate}/pdf', [CertificateController::class, 'pdf'])->name('certificates.pdf');
 
 // Public Training Certificate routes (QR Code scan, Embed & PDF)
 Route::get('/verify/training/{uuid}', [TrainingCertificateController::class, 'verify'])->name('training-certificates.verify');
-Route::get('/embed/training-certificate/{uuid}', [TrainingCertificateController::class, 'embed'])->where('uuid', '.*')->name('training-certificates.embed');
+Route::get('/embed/training-certificate/{uuid?}', [TrainingCertificateController::class, 'embed'])->where('uuid', '.*')->name('training-certificates.embed');
 Route::get('/training-certificates/{trainingCertificate}/pdf', [TrainingCertificateController::class, 'pdf'])->name('training-certificates.pdf');
 
 // Protected ERP routes

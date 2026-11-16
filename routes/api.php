@@ -10,16 +10,16 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // Public unified verification API (Supports both Inspection and Training Certificates)
-Route::get('/v1/verify/{identifier}', [CertificateApiController::class, 'verify'])
+Route::get('/v1/verify/{identifier?}', [CertificateApiController::class, 'verify'])
     ->where('identifier', '.*')
     ->name('api.verify');
 
 // Public verification API for WordPress plugin / external validation (Inspection Certificates)
-Route::get('/v1/certificates/verify/{identifier}', [CertificateApiController::class, 'verify'])
+Route::get('/v1/certificates/verify/{identifier?}', [CertificateApiController::class, 'verify'])
     ->where('identifier', '.*')
     ->name('api.certificates.verify');
 
 // Public verification API for WordPress plugin (Training Certificates)
-Route::get('/v1/training-certificates/verify/{identifier}', [TrainingCertificateApiController::class, 'verify'])
+Route::get('/v1/training-certificates/verify/{identifier?}', [TrainingCertificateApiController::class, 'verify'])
     ->where('identifier', '.*')
     ->name('api.training-certificates.verify');

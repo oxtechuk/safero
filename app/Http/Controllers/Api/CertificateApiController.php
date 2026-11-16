@@ -14,9 +14,18 @@ class CertificateApiController extends Controller
      * Unified verification API for certificates (Inspection & Training).
      * Used by WordPress Integration Plugin on safero-eg.com / external validation.
      */
-    public function verify(Request $request, string $identifier): JsonResponse
+    public function verify(Request $request, ?string $identifier = null): JsonResponse
     {
-        $raw = trim(urldecode($identifier));
+        $raw = trim((string) ($identifier ?: $request->query('cert') ?: $request->query('number') ?: $request->query('identifier') ?: $request->query('uuid')));
+        if ($raw === '') {
+            return response()->json([
+                'success' => false,
+                'valid' => false,
+                'message' => 'الرجاء إدخال رقم الشهادة بدقة.',
+            ], 400);
+        }
+
+        $raw = trim(urldecode($raw));
 
         // Generate normalization variants (e.g. SAF/2026110807, 2026110807, SAF-2026110807)
         $variants = array_unique(array_filter([

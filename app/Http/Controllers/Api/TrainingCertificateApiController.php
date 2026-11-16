@@ -14,9 +14,18 @@ class TrainingCertificateApiController extends Controller
      * Verify a training certificate by Serial Number or UUID.
      * Also falls back to Inspection Certificate if needed.
      */
-    public function verify(Request $request, string $identifier): JsonResponse
+    public function verify(Request $request, ?string $identifier = null): JsonResponse
     {
-        $raw = trim(urldecode($identifier));
+        $raw = trim((string) ($identifier ?: $request->query('cert') ?: $request->query('serial') ?: $request->query('identifier') ?: $request->query('uuid')));
+        if ($raw === '') {
+            return response()->json([
+                'success' => false,
+                'valid' => false,
+                'message' => 'الرجاء إدخال رقم الشهادة بدقة.',
+            ], 400);
+        }
+
+        $raw = trim(urldecode($raw));
 
         $variants = array_unique(array_filter([
             $raw,
