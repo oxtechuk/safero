@@ -310,7 +310,6 @@
                         <input type="text" 
                                name="email" 
                                id="email" 
-                               value="{{ old('email', 'admin@safero-eg.com') }}" 
                                required 
                                autocomplete="username"
                                autofocus
@@ -324,7 +323,6 @@
                             <input type="password" 
                                    name="password" 
                                    id="password" 
-                                   value="password"
                                    required 
                                    autocomplete="current-password"
                                    class="field-input">

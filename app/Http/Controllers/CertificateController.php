@@ -217,8 +217,30 @@ class CertificateController extends Controller
             ->with('success', 'تم حذف الشهادة بنجاح.');
     }
 
-    public function pdf(Certificate $certificate): Response
+    public function pdf(Request $request, string|Certificate $certificate): Response
     {
+        if (is_string($certificate)) {
+            $raw = trim(urldecode($certificate));
+            $variants = array_unique(array_filter([
+                $raw,
+                strtoupper($raw),
+                str_replace('-', '/', $raw),
+                str_replace('/', '-', $raw),
+                str_starts_with(strtoupper($raw), 'SAF/') ? substr($raw, 4) : 'SAF/'.$raw,
+                str_starts_with(strtoupper($raw), 'SAF-') ? substr($raw, 4) : 'SAF-'.$raw,
+            ]));
+
+            $found = is_numeric($raw)
+                ? Certificate::where('id', (int) $raw)->orWhereIn('certificate_number', $variants)->first()
+                : Certificate::whereIn('certificate_number', $variants)->orWhere('uuid', $raw)->first();
+
+            if (! $found) {
+                abort(404, 'Certificate not found.');
+            }
+
+            $certificate = $found;
+        }
+
         $certificate->load('customer');
         $verifyUrl = $certificate->verification_url;
         $qrCodeSvg = base64_encode(QrCode::format('svg')->size(130)->margin(0)->generate($verifyUrl));
@@ -255,7 +277,12 @@ class CertificateController extends Controller
 
         $filename = 'Safero-Certificate-'.Str::slug($certificate->certificate_number).'.pdf';
 
-        return $pdf->stream($filename);
+        $isDownload = $request->boolean('download') || $request->has('dl');
+        $response = $isDownload ? $pdf->download($filename) : $pdf->stream($filename);
+
+        return $response
+            ->header('X-Frame-Options', 'ALLOWALL')
+            ->header('Content-Security-Policy', 'frame-ancestors *');
     }
 
     public function verify(string $uuid): View

@@ -132,8 +132,28 @@ class TrainingCertificateController extends Controller
             ->with('success', 'تم حذف شهادة التدريب بنجاح.');
     }
 
-    public function pdf(TrainingCertificate $trainingCertificate): Response
+    public function pdf(Request $request, string|TrainingCertificate $trainingCertificate): Response
     {
+        if (is_string($trainingCertificate)) {
+            $raw = trim(urldecode($trainingCertificate));
+            $variants = array_unique(array_filter([
+                $raw,
+                strtoupper($raw),
+                str_replace('-', '/', $raw),
+                str_replace('/', '-', $raw),
+            ]));
+
+            $found = is_numeric($raw)
+                ? TrainingCertificate::where('id', (int) $raw)->orWhereIn('certificate_serial', $variants)->first()
+                : TrainingCertificate::whereIn('certificate_serial', $variants)->orWhere('uuid', $raw)->first();
+
+            if (! $found) {
+                abort(404, 'Training certificate not found.');
+            }
+
+            $trainingCertificate = $found;
+        }
+
         $trainingCertificate->load('trainee');
         $verifyUrl = $trainingCertificate->verification_url;
         $qrCodeSvg = base64_encode(QrCode::format('svg')->size(130)->margin(0)->generate($verifyUrl));
@@ -164,7 +184,12 @@ class TrainingCertificateController extends Controller
 
         $filename = 'Safero-Training-Certificate-'.Str::slug($trainingCertificate->certificate_serial).'.pdf';
 
-        return $pdf->stream($filename);
+        $isDownload = $request->boolean('download') || $request->has('dl');
+        $response = $isDownload ? $pdf->download($filename) : $pdf->stream($filename);
+
+        return $response
+            ->header('X-Frame-Options', 'ALLOWALL')
+            ->header('Content-Security-Policy', 'frame-ancestors *');
     }
 
     public function verify(string $uuid): View

@@ -117,6 +117,8 @@ class CertificateApiController extends Controller
                 'authenticator_name' => $certificate->authenticator_name,
                 'verification_url' => route('certificates.verify', ['uuid' => $certificate->uuid]),
                 'pdf_url' => route('certificates.pdf', ['certificate' => $certificate->id]),
+                'pdf_download_url' => route('certificates.pdf', ['certificate' => $certificate->id]).'?download=1',
+                'pdf_view_url' => route('certificates.pdf', ['certificate' => $certificate->id]),
             ],
         ]);
     }
