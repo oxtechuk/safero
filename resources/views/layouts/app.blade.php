@@ -256,18 +256,21 @@
                                         </div>
 
                                         <!-- Tree Branch: ستوديو قوالب الفحص (Studio) -->
-                                        <div class="py-1 bg-blue-50/30">
-                                            <div class="px-3 py-1 text-[10px] font-bold text-[#0E4DA4] uppercase tracking-wider flex items-center justify-between">
+                                        <div class="py-1 bg-slate-50/50">
+                                            <div class="px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
                                                 <span>ستوديو شهادات الفحص (Studio)</span>
-                                                <span class="text-[9px] bg-blue-100 text-[#0E4DA4] px-1.5 py-0.2 rounded font-bold font-mono">CMS</span>
+                                                <span class="text-[9px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded font-bold font-mono">CMS</span>
                                             </div>
                                             <a href="{{ route('certificate-templates.index') }}" 
-                                               class="flex items-center justify-between px-3.5 py-1.5 hover:bg-blue-100/50 text-slate-800 hover:text-[#0E4DA4] transition font-bold {{ request()->routeIs('certificate-templates.index') ? 'bg-blue-100/60 text-[#0E4DA4]' : '' }}">
-                                                <span>🎨 ستوديو قوالب الفحص</span>
-                                                <span class="text-[10px] text-[#0E4DA4] font-medium font-en">Templates</span>
+                                               class="flex items-center justify-between px-3.5 py-1.5 hover:bg-slate-100 text-slate-800 hover:text-[#0E4DA4] transition font-bold {{ request()->routeIs('certificate-templates.index') ? 'bg-blue-50 text-[#0E4DA4]' : '' }}">
+                                                <span class="flex items-center gap-1.5">
+                                                    <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
+                                                    <span>ستوديو قوالب الفحص</span>
+                                                </span>
+                                                <span class="text-[10px] text-slate-500 font-medium font-en">Templates</span>
                                             </a>
                                             <a href="{{ route('certificate-templates.create') }}" 
-                                               class="block px-3.5 py-1.5 hover:bg-blue-100/50 text-slate-700 hover:text-[#0E4DA4] transition text-xs {{ request()->routeIs('certificate-templates.create') ? 'bg-blue-100/60 font-bold text-[#0E4DA4]' : '' }}">
+                                               class="block px-3.5 py-1.5 hover:bg-slate-100 text-slate-700 hover:text-[#0E4DA4] transition text-xs {{ request()->routeIs('certificate-templates.create') ? 'bg-blue-50 font-bold text-[#0E4DA4]' : '' }}">
                                                 + تصميم وتخصيص قالب جديد
                                             </a>
                                         </div>
@@ -286,9 +289,12 @@
                                                 الشهادات السارية المعتمدة
                                             </a>
                                             <a href="{{ route('certificates.expiring') }}" 
-                                               class="flex items-center justify-between px-3.5 py-1.5 hover:bg-amber-50 text-amber-800 transition font-bold {{ request()->routeIs('certificates.expiring') ? 'bg-amber-100/60 text-amber-900' : '' }}">
-                                                <span>⚠️ الشهادات القريبة من الانتهاء</span>
-                                                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                               class="flex items-center justify-between px-3.5 py-1.5 hover:bg-slate-100 text-slate-700 hover:text-[#0E4DA4] transition font-bold {{ request()->routeIs('certificates.expiring') ? 'bg-blue-50 text-[#0E4DA4]' : '' }}">
+                                                <span class="flex items-center gap-1.5">
+                                                    <img src="{{ asset('branding/IsoOx-icons/timer.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
+                                                    <span>الشهادات القريبة من الانتهاء</span>
+                                                </span>
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                                             </a>
                                             <a href="{{ route('certificates.index', ['status' => 'draft']) }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request('status') === 'draft' ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
@@ -626,16 +632,17 @@
                         </a>
 
                         <a href="{{ route('certificates.expiring') }}" 
-                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('certificates.expiring') ? 'bg-amber-100 text-amber-900 font-bold border border-amber-300 shadow-2xs' : 'text-amber-700 hover:bg-amber-50' }}">
-                            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('certificates.expiring') ? 'bg-blue-50 text-[#0E4DA4] font-bold border border-blue-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                            <img src="{{ asset('branding/IsoOx-icons/timer.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
                             <span>قريبة من الانتهاء</span>
                         </a>
 
                         <span class="text-slate-300">|</span>
 
                         <a href="{{ route('certificate-templates.index') }}" 
-                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-bold transition {{ request()->routeIs('certificate-templates.*') ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-[#0E4DA4] hover:bg-blue-50' }}">
-                            <span>🎨 ستوديو قوالب الفحص</span>
+                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-bold transition {{ request()->routeIs('certificate-templates.*') ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                            <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
+                            <span>ستوديو قوالب الفحص</span>
                         </a>
                     </div>
 

@@ -94,28 +94,29 @@ class OxTechSaferoInspectionPlugin
                 <div style="margin-top: 35px; background: #ffffff; border-radius: 14px; padding: 25px; border: 1px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
                     <?php
                     global $wpdb;
-                    $table_records = $wpdb->prefix . 'inspection_records';
-                    $total_records = 0;
-                    $has_table = $wpdb->get_var("SHOW TABLES LIKE '$table_records'");
-                    if ($has_table) {
-                        $total_records = (int) $wpdb->get_var("SELECT COUNT(*) FROM `$table_records`");
-                        $recent_records = $wpdb->get_results("SELECT * FROM `$table_records` ORDER BY id DESC LIMIT 5", ARRAY_A);
-                    } else {
-                        $recent_records = [];
-                    }
+        $table_records = $wpdb->prefix.'inspection_records';
+        $total_records = 0;
+        $has_table = $wpdb->get_var("SHOW TABLES LIKE '$table_records'");
+        if ($has_table) {
+            $total_records = (int) $wpdb->get_var("SELECT COUNT(*) FROM `$table_records`");
+            $recent_records = $wpdb->get_results("SELECT * FROM `$table_records` ORDER BY id DESC LIMIT 5", ARRAY_A);
+        } else {
+            $recent_records = [];
+        }
 
-                    $erp_certs_count = 0;
-                    try {
-                        $c = @new mysqli('127.0.0.1', 'root', '', 'safero_erp');
-                        if (!$c->connect_error) {
-                            $r = $c->query("SELECT COUNT(*) FROM certificates");
-                            if ($r) {
-                                $erp_certs_count = (int) $r->fetch_row()[0];
-                            }
-                            $c->close();
-                        }
-                    } catch (\Throwable $e) {}
-                    ?>
+        $erp_certs_count = 0;
+        try {
+            $c = @new mysqli('127.0.0.1', 'root', '', 'safero_erp');
+            if (! $c->connect_error) {
+                $r = $c->query('SELECT COUNT(*) FROM certificates');
+                if ($r) {
+                    $erp_certs_count = (int) $r->fetch_row()[0];
+                }
+                $c->close();
+            }
+        } catch (Throwable $e) {
+        }
+        ?>
                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;">
                         <div>
                             <h2 style="color: #0E4DA4; font-size: 19px; font-weight: 900; margin: 0; display: flex; align-items: center; gap: 8px;">
@@ -132,11 +133,11 @@ class OxTechSaferoInspectionPlugin
                             <a href="<?php echo esc_url(admin_url('admin-post.php?action=inspaction_export_json')); ?>" class="button" style="font-weight: bold; padding: 5px 14px; font-size: 13px;">
                                 📄 تصدير سجلات الفحص (JSON)
                             </a>
-                            <?php if ($erp_certs_count > 0) : ?>
+                            <?php if ($erp_certs_count > 0) { ?>
                             <a href="<?php echo esc_url(admin_url('admin-post.php?action=inspaction_export_erp_csv')); ?>" class="button" style="background: #0E4DA4; color: #fff; border-color: #0a3a7d; font-weight: bold; padding: 5px 14px; font-size: 13px;">
                                 🏛️ تصدير شهادات ERP (Excel)
                             </a>
-                            <?php endif; ?>
+                            <?php } ?>
                         </div>
                     </div>
 
@@ -152,7 +153,7 @@ class OxTechSaferoInspectionPlugin
                         </div>
                     </div>
 
-                    <?php if (!empty($recent_records)) : ?>
+                    <?php if (! empty($recent_records)) { ?>
                     <div style="margin-top: 15px;">
                         <h4 style="color: #334155; font-size: 14px; margin: 0 0 10px 0;">معاينة لأحدث سجلات الفحص المتاحة للتصدير:</h4>
                         <div style="overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
@@ -169,7 +170,7 @@ class OxTechSaferoInspectionPlugin
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($recent_records as $rec) : ?>
+                                    <?php foreach ($recent_records as $rec) { ?>
                                     <tr>
                                         <td><?php echo esc_html($rec['id']); ?></td>
                                         <td><strong><?php echo esc_html($rec['reference_number']); ?></strong></td>
@@ -179,12 +180,12 @@ class OxTechSaferoInspectionPlugin
                                         <td><span style="background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-weight: bold;"><?php echo esc_html($rec['status']); ?></span></td>
                                         <td><?php echo esc_html($rec['inspection_date']); ?></td>
                                     </tr>
-                                    <?php endforeach; ?>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <?php endif; ?>
+                    <?php } ?>
                 </div>
 
                 <div style="margin-top: 35px; background: #F4F6F8; border-radius: 12px; padding: 20px; border: 1px dashed #cbd5e1;">
@@ -227,7 +228,7 @@ class OxTechSaferoInspectionPlugin
         $embed_src = '';
         if (! empty($cert_param)) {
             // نستخدم بارامتر الاستعلام ?cert= لضمان عدم حدوث خطأ 404 في خوادم أباتشي بسبب الشرطة المائلة %2F
-            $embed_src = $erp_url . '/embed/certificate?cert=' . rawurlencode($cert_param);
+            $embed_src = $erp_url.'/embed/certificate?cert='.rawurlencode($cert_param);
         }
 
         ob_start();
@@ -417,25 +418,25 @@ class OxTechSaferoInspectionPlugin
      */
     public function export_records_csv()
     {
-        if (!current_user_can('manage_options')) {
+        if (! current_user_can('manage_options')) {
             wp_die('Access denied.');
         }
 
         global $wpdb;
-        $table = $wpdb->prefix . 'inspection_records';
+        $table = $wpdb->prefix.'inspection_records';
         $rows = $wpdb->get_results("SELECT * FROM `$table` ORDER BY id ASC", ARRAY_A);
-        if (!is_array($rows)) {
+        if (! is_array($rows)) {
             $rows = [];
         }
 
-        $filename = 'inspection-records-' . date('Y-m-d') . '.csv';
+        $filename = 'inspection-records-'.date('Y-m-d').'.csv';
 
         while (ob_get_level()) {
             ob_end_clean();
         }
 
         header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
         header('Pragma: no-cache');
         header('Expires: 0');
 
@@ -452,7 +453,7 @@ class OxTechSaferoInspectionPlugin
             'Serial Number / الرقم التسلسلي',
             'Status / الحالة الفنية',
             'Inspection Date / تاريخ الفحص',
-            'Next Inspection Date / تاريخ الفحص القادم'
+            'Next Inspection Date / تاريخ الفحص القادم',
         ]);
 
         foreach ($rows as $r) {
@@ -465,7 +466,7 @@ class OxTechSaferoInspectionPlugin
                 $r['serial_number'] ?? '',
                 $r['status'] ?? '',
                 $r['inspection_date'] ?? '',
-                $r['next_inspection_date'] ?? ''
+                $r['next_inspection_date'] ?? '',
             ]);
         }
 
@@ -478,25 +479,25 @@ class OxTechSaferoInspectionPlugin
      */
     public function export_records_json()
     {
-        if (!current_user_can('manage_options')) {
+        if (! current_user_can('manage_options')) {
             wp_die('Access denied.');
         }
 
         global $wpdb;
-        $table = $wpdb->prefix . 'inspection_records';
+        $table = $wpdb->prefix.'inspection_records';
         $rows = $wpdb->get_results("SELECT * FROM `$table` ORDER BY id ASC", ARRAY_A);
-        if (!is_array($rows)) {
+        if (! is_array($rows)) {
             $rows = [];
         }
 
-        $filename = 'inspection-records-' . date('Y-m-d') . '.json';
+        $filename = 'inspection-records-'.date('Y-m-d').'.json';
 
         while (ob_get_level()) {
             ob_end_clean();
         }
 
         header('Content-Type: application/json; charset=UTF-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
         header('Pragma: no-cache');
         header('Expires: 0');
 
@@ -509,18 +510,18 @@ class OxTechSaferoInspectionPlugin
      */
     public function export_erp_csv()
     {
-        if (!current_user_can('manage_options')) {
+        if (! current_user_can('manage_options')) {
             wp_die('Access denied.');
         }
 
-        $filename = 'safero-erp-certificates-' . date('Y-m-d') . '.csv';
+        $filename = 'safero-erp-certificates-'.date('Y-m-d').'.csv';
 
         while (ob_get_level()) {
             ob_end_clean();
         }
 
         header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
         header('Pragma: no-cache');
         header('Expires: 0');
 
@@ -542,14 +543,14 @@ class OxTechSaferoInspectionPlugin
             'Examination Date / تاريخ الفحص',
             'Next Due Date / موعد الفحص القادم',
             'Issuer / المصدر',
-            'Authenticator / المعتمد'
+            'Authenticator / المعتمد',
         ]);
 
         try {
             $conn = @new mysqli('127.0.0.1', 'root', '', 'safero_erp');
-            if (!$conn->connect_error) {
+            if (! $conn->connect_error) {
                 $conn->set_charset('utf8mb4');
-                $res = $conn->query("SELECT * FROM certificates ORDER BY id ASC");
+                $res = $conn->query('SELECT * FROM certificates ORDER BY id ASC');
                 if ($res && $res->num_rows > 0) {
                     while ($r = $res->fetch_assoc()) {
                         fputcsv($output, [
@@ -563,17 +564,17 @@ class OxTechSaferoInspectionPlugin
                             $r['swl'] ?? '',
                             $r['chassis_no'] ?? '',
                             $r['equipment_id_range'] ?? '',
-                            $r['status'] ?? (!empty($r['is_safe_to_operate']) ? 'Safe' : 'Unsafe'),
+                            $r['status'] ?? (! empty($r['is_safe_to_operate']) ? 'Safe' : 'Unsafe'),
                             $r['thorough_examination_date'] ?? '',
                             $r['next_examination_due_date'] ?? '',
                             $r['issuer_name'] ?? '',
-                            $r['authenticator_name'] ?? ''
+                            $r['authenticator_name'] ?? '',
                         ]);
                     }
                 }
                 $conn->close();
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Ignore
         }
 
