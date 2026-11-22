@@ -1,0 +1,133 @@
+<?php
+
+$enPath = __DIR__.'/../lang/en.json';
+$arPath = __DIR__.'/../lang/ar.json';
+
+$en = file_exists($enPath) ? json_decode(file_get_contents($enPath), true) : [];
+$ar = file_exists($arPath) ? json_decode(file_get_contents($arPath), true) : [];
+
+$newTerms = [
+    // Apps Launcher
+    'تطبيقات ومديولات النظام' => 'System Apps & Modules',
+    'بحث في المديولات...' => 'Search modules...',
+    'منصة شركة سافيرو (Safero) الموحدة لإدارة الفحص الشامل، شهادات التدريب المعتمدة، وسجلات المتدربين والعملاء.' => 'Unified Safero Platform for Comprehensive Inspection, Certified Training Certificates, Trainees & Clients Registry.',
+    'إعدادات المنظومة' => 'System Settings',
+    'مدير النظام' => 'System Administrator',
+
+    // Certificate Types & Create / Edit
+    'إصدار شهادة' => 'Issue Certificate',
+    'تعديل شهادة:' => 'Edit Certificate:',
+    'فحص الأوناش والروافع المتنقلة' => 'Lifting Appliances (Mobile Cranes)',
+    'تقرير تفصيلي (صفحتين) + فحص 28 نقطة' => 'Detailed Report (2 Pages) + 28-Point Inspection',
+    'فحص مهمات الرفع والحبال والشكالات' => 'Lifting Accessories (Slings, Shackles & Clamps)',
+    'تقرير فحص معتمد (صفحة واحدة)' => 'Accredited Inspection Report (1 Page)',
+    'فحص المعدات العامة ووحدات الشحن والباليتات' => 'General Cargo Units & Pallet Equipment',
+    'نوع الفحص:' => 'Inspection Type:',
+    'أوناش (Crane)' => 'Cranes (Crane)',
+    'مهمات رفع (Accessory)' => 'Lifting Gear (Accessory)',
+    'عام وباليتات (General)' => 'General & Pallets (General)',
+    'تحميل قالب فحص من الاستوديو:' => 'Load Inspection Template from Studio:',
+    '-- اختر قالباً لتعبئة البيانات تلقائياً --' => '-- Select a template to autofill specs --',
+    'تم تفعيل القالب:' => 'Active Template:',
+    'إلغاء القالب' => 'Discard Template',
+    'تجديد فحص دوري للشهادة:' => 'Periodic Renewal for Certificate:',
+    'إلغاء' => 'Cancel',
+    'اختر قالباً جاهزاً من الاستوديو لتعبئة المواصفات والأدوات تلقائياً' => 'Select a studio template to autofill specifications and inspection tools',
+    'بيانات الشهادة والعميل وموقع الفحص' => 'Certificate, Client & Inspection Location',
+    'معلومات الشهادة والعميل وموقع الفحص' => 'Certificate, Client & Location Information',
+    'رقم أمر الشغل (Order No)' => 'Job Order No (Order No)',
+    'رقم أمر الشغل' => 'Job Order No',
+    'موقع الفحص' => 'Inspection Site',
+    'المواصفة المرجعية' => 'Reference Standard',
+    'الحمل الآمن (SWL)' => 'Safe Working Load (SWL)',
+    'مواصفات وبيانات المعدة المفحوصة' => 'Inspected Equipment Specifications',
+    'وصف المعدة (Description)' => 'Equipment Description',
+    'الشركة المصنعة (Manufacturer)' => 'Manufacturer',
+    'الموديل (Model)' => 'Model',
+    'السعة (Capacity)' => 'Capacity',
+    'رقم الشاسيه / السيريال' => 'Chassis / Serial No',
+    'سنة الصنع (Year)' => 'Manufacture Year',
+    'قطر الواير الرئيسي' => 'Main Wire Diameter',
+    'سعة الهوك الرئيسي' => 'Main Hook Capacity',
+    'رقم شهادة تجربة الحمل' => 'Load Test Certificate No',
+    'تاريخ تجربة الحمل' => 'Load Test Date',
+    'مواصفات ونقطة تجربة الحمل (Test Point Particulars)' => 'Test Point Particulars',
+    'وصف المهمات (Description)' => 'Accessories Description',
+    'جهة التصنيع (Manufacturer)' => 'Manufacturer',
+    'معامل الأمان (Safety Factor)' => 'Safety Factor',
+    'سيريال / كود المهمات (ID Range)' => 'Equipment ID Range',
+    'سنة الصنع (Manufacture Date)' => 'Manufacture Year',
+    'الأبعاد (Dimensions: L, W, H)' => 'Dimensions (L, W, H)',
+    'ترقيم المعدات (Equipment ID)' => 'Equipment ID',
+    'أدوات ومعدات الفحص المخصصة' => 'Custom Inspection Equipment & Tools',
+    'قائمة الفحص الهندسي للونش (28 نقطة فحص معتمدة)' => 'Crane Engineering Checklist (28 Approved Inspection Points)',
+    'تحديد الكل سليم (Pass All)' => 'Pass All Checklist Items',
+    'أسئلة الفحص النظامية (LOLER 1998) والقرار الفني' => 'Statutory Examination Scheme (LOLER 1998) & Technical Decision',
+    'أول فحص بعد التركيب؟' => 'First examination after installation?',
+    'الفحص خلال 6 أشهر؟' => 'Examination within 6 months?',
+    'تم التركيب بشكل سليم؟' => 'Installed correctly?',
+    'الفحص خلال 12 شهر؟' => 'Examination within 12 months?',
+    'وفق مخطط الفحص؟' => 'In accordance with scheme?',
+    'بعد ظروف استثنائية؟' => 'After exceptional circumstances?',
+    'الأجزاء المعيبة إن وجدت' => 'Defects identified (if any)',
+    'الإصلاحات المطلوبة' => 'Required repairs',
+    'هل العيب يشكل خطورة على العمليات؟' => 'Is defect a danger to process/operations?',
+    'تفاصيل الفحوصات والاختبارات المنفذة' => 'Details of Tests & Examination Carried Out',
+    'هل المعدة آمنة تماماً للتشغيل؟ (Is the Equipment Safe to Operate)' => 'Is the Equipment Safe to Operate?',
+    'يعتمد هذا الخيار سلامة المعدة والاعتماد النهائي في الشهادة' => 'This option determines the operational safety approval on the certificate',
+    'YES (آمنة)' => 'YES (Safe to Operate)',
+    'NO (غير آمنة)' => 'NO (Unsafe to Operate)',
+    'مهندس الفحص (Issuer)' => 'Inspection Engineer (Issuer)',
+    'معتمد الشهادة (Authenticator)' => 'Certificate Authenticator',
+    'حالة الشهادة' => 'Certificate Status',
+    'معتمدة ومصدرة (Issued)' => 'Approved & Issued',
+    'مسودة للمراجعة (Draft)' => 'Draft for Review',
+    'حفظ وإصدار' => 'Save & Issue',
+    'تحديث وحفظ التعديلات' => 'Update & Save Changes',
+    'تحديث الشهادة' => 'Update Certificate',
+
+    // Expiring & Verify
+    'الشهادات المنتهية والقريبة من الانتهاء' => 'Expiring & Expired Certificates',
+    'متابعة صلاحية وتجديد شهادات الفحص' => 'Certificates Expiry & Periodic Renewal Tracking',
+    'البحث برقم الشهادة، العميل، اسم المعدة، أمر الشغل...' => 'Search by certificate no, client, equipment, order no...',
+    'نطاق الصلاحية (Expiry Timeframe)' => 'Expiry Timeframe',
+    'منتهية بالفعل' => 'Already Expired',
+    'خلال 7 أيام' => 'Within 7 Days',
+    'خلال 15 يوماً' => 'Within 15 Days',
+    'خلال شهر (30 يوم)' => 'Within 30 Days',
+    'خلال شهرين (60 يوم)' => 'Within 60 Days',
+    'الكل (منتهية وقريبة)' => 'All Expiring & Expired',
+    'إعادة ضبط الفلاتر' => 'Reset Filters',
+    'أداة التحقق من شهادات الفحص' => 'Inspection Certificate Verification Tool',
+    'أداة الاستعلام الرقمي الفوري' => 'Instant Digital Verification Tool',
+    'التحقق من صحة شهادات وتقارير الفحص' => 'Verify Authenticity of Inspection Reports & Certificates',
+    'أدخل رقم الشهادة المطبوع على تقرير فحص معدات الرفع أو رمز التحقق للتأكد من مطابقتها وسريانها الرسمي.' => 'Enter certificate number or verification code to check its validity and authenticity against official records.',
+    'رقم الشهادة أو الرمز المرجعي' => 'Certificate Number or Reference Code',
+    'تحقق الآن' => 'Verify Now',
+    'شهادة تجريبية للاختبار:' => 'Sample certificate for testing:',
+    'نتيجة الفحص الرسمي:' => 'Official Verification Result:',
+    'شهادة معتمدة ومطابقة للسجلات' => 'Valid & Certified Certificate in System Records',
+    'شهادة غير موجودة أو ملغاة' => 'Certificate not found or revoked',
+    'لم يتم العثور على أي شهادة مسجلة بهذا الرقم' => 'No matching certificate found in the database',
+    'سارية' => 'Valid',
+    'منتهية الصلاحية' => 'Expired',
+    'معتمدة' => 'Approved',
+    'مسودة' => 'Draft',
+    'تاريخ الفحص:' => 'Inspection Date:',
+    'تاريخ الصلاحية:' => 'Valid Until:',
+    'النوع والمعدة:' => 'Equipment Type:',
+    'الحمل الآمن:' => 'Safe Working Load (SWL):',
+    'عرض وتحميل الشهادة الرسمية PDF' => 'View & Download Official PDF Certificate',
+    'فحص شهادة أخرى' => 'Verify Another Certificate',
+    'يرجى تصحيح الأخطاء التالية:' => 'Please correct the following errors:',
+];
+
+foreach ($newTerms as $k => $v) {
+    $en[$k] = $v;
+    $ar[$k] = $k;
+}
+
+file_put_contents($enPath, json_encode($en, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+file_put_contents($arPath, json_encode($ar, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+echo 'Dictionaries updated! Total keys in en: '.count($en).PHP_EOL;

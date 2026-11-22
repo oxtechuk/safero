@@ -18,27 +18,27 @@
             </a>
             <div>
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E6F2FF] text-[#0E4DA4]">ستوديو القوالب (CMS Builder)</span>
-                    <h1 class="text-sm sm:text-base font-extrabold text-slate-900">إنشاء قالب شهادة فحص جديد</h1>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E6F2FF] text-[#0E4DA4]">{{ __('ستوديو قوالب الفحص') }}</span>
+                    <h1 class="text-sm sm:text-base font-extrabold text-slate-900">{{ __('إنشاء قالب جديد') }}</h1>
                 </div>
-                <p class="text-[11px] text-slate-500">صمم قالباً مخصصاً للمعدة وأدوات الفحص وبنود الاختبار لإعادة استخدامه بنقرة واحدة</p>
+                <p class="text-[11px] text-slate-500">{{ __('صمم قالباً مخصصاً للمعدة وأدوات الفحص وبنود الاختبار لإعادة استخدامه بنقرة واحدة') }}</p>
             </div>
         </div>
 
         <div class="flex items-center gap-2">
             <a href="{{ route('certificate-templates.index') }}" class="px-3 py-1.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition">
-                إلغاء
+                {{ __('إلغاء') }}
             </a>
             <button type="submit" form="studioForm" class="px-4 py-1.5 rounded-xl bg-[#0E4DA4] hover:bg-[#0a3a7d] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-                <span>حفظ ونشر القالب في الاستوديو</span>
+                <span>{{ __('حفظ ونشر القالب في الاستوديو') }}</span>
             </button>
         </div>
     </div>
 
     @if ($errors->any())
         <div class="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 space-y-1">
-            <strong class="block font-bold">يرجى تصحيح الأخطاء التالية:</strong>
+            <strong class="block font-bold">{{ __('يرجى تصحيح الأخطاء التالية:') }}</strong>
             <ul class="list-disc list-inside space-y-0.5">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -55,14 +55,14 @@
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div class="flex items-center gap-2.5">
                     <span class="w-6 h-6 rounded-lg bg-blue-50 text-[#0E4DA4] text-xs font-bold flex items-center justify-center">1</span>
-                    <h2 class="font-bold text-slate-800 text-xs sm:text-sm">بيانات وهوية القالب (Template Identity)</h2>
+                    <h2 class="font-bold text-slate-800 text-xs sm:text-sm">{{ __('بيانات وهوية القالب (Template Identity)') }}</h2>
                 </div>
                 <span class="text-[11px] text-slate-400 font-en">Basic Properties</span>
             </div>
 
             <!-- Equipment Type Selector Tabs -->
             <div>
-                <label class="block font-bold text-slate-700 text-xs mb-2">نوع فئة القالب (Equipment Category) <span class="text-red-500">*</span></label>
+                <label class="block font-bold text-slate-700 text-xs mb-2">{{ __('نوع فئة القالب (Equipment Category)') }} <span class="text-red-500">*</span></label>
                 <div class="grid grid-cols-3 gap-3">
                     <label class="cursor-pointer border-2 rounded-xl p-3 flex items-center gap-3 transition"
                            :class="type === 'crane' ? 'border-[#0E4DA4] bg-blue-50/50' : 'border-slate-200 hover:border-slate-300 bg-white'">
@@ -71,7 +71,7 @@
                             <img src="{{ asset('branding/IsoOx-icons/fleet.svg') }}" class="w-5 h-5">
                         </div>
                         <div>
-                            <strong class="text-xs font-bold block text-slate-800">أوناش وروافع</strong>
+                            <strong class="text-xs font-bold block text-slate-800">{{ __('أوناش وروافع') }}</strong>
                             <span class="text-[10px] text-slate-500 font-en">Cranes &amp; Lifting Appliances</span>
                         </div>
                     </label>
@@ -83,7 +83,7 @@
                             <img src="{{ asset('branding/IsoOx-icons/maintenance.svg') }}" class="w-5 h-5">
                         </div>
                         <div>
-                            <strong class="text-xs font-bold block text-slate-800">مهمات رفع وحبال</strong>
+                            <strong class="text-xs font-bold block text-slate-800">{{ __('مهمات رفع وحبال') }}</strong>
                             <span class="text-[10px] text-slate-500 font-en">Slings, Shackles &amp; Gear</span>
                         </div>
                     </label>
@@ -95,7 +95,7 @@
                             <img src="{{ asset('branding/IsoOx-icons/repair.svg') }}" class="w-5 h-5">
                         </div>
                         <div>
-                            <strong class="text-xs font-bold block text-slate-800">معدات عامة وباليتات</strong>
+                            <strong class="text-xs font-bold block text-slate-800">{{ __('معدات عامة وباليتات') }}</strong>
                             <span class="text-[10px] text-slate-500 font-en">General Cargo Units</span>
                         </div>
                     </label>
@@ -105,7 +105,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
                 <div class="sm:col-span-2">
                     <label for="name" class="block font-bold text-slate-700 mb-1">
-                        اسم القالب في الاستوديو (Template Name) <span class="text-red-500">*</span>
+                        {{ __('اسم القالب في الاستوديو (Template Name)') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="name" id="name" value="{{ old('name') }}" required 
                            placeholder="مثال: ونش تلسكوبي ليبهر 90 طن أو وايرات قماشية 30 طن"
@@ -114,7 +114,7 @@
 
                 <div>
                     <label for="code" class="block font-bold text-slate-700 mb-1">
-                        كود القالب الاختياري (Template Code)
+                        {{ __('كود القالب الاختياري (Template Code)') }}
                     </label>
                     <input type="text" name="code" id="code" value="{{ old('code') }}" 
                            placeholder="TMP-CRANE-01"
@@ -125,27 +125,27 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div>
                     <label for="validity_months" class="block font-bold text-slate-700 mb-1">
-                        دورة الصلاحية الافتراضية (الفحص القادم) <span class="text-red-500">*</span>
+                        {{ __('دورة الصلاحية الافتراضية (الفحص القادم)') }} <span class="text-red-500">*</span>
                     </label>
                     <select name="validity_months" id="validity_months" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white outline-none font-bold text-[#0E4DA4]">
-                        <option value="6" {{ old('validity_months', 6) == 6 ? 'selected' : '' }}>كل 6 أشهر (نصف سنوي - مهمات الرفع والأوناش)</option>
-                        <option value="12" {{ old('validity_months') == 12 ? 'selected' : '' }}>كل 12 شهراً (سنوي - المعدات العامة)</option>
-                        <option value="3" {{ old('validity_months') == 3 ? 'selected' : '' }}>كل 3 أشهر (فحص ربع سنوي شاق)</option>
-                        <option value="24" {{ old('validity_months') == 24 ? 'selected' : '' }}>كل 24 شهراً (سنتين)</option>
+                        <option value="6" {{ old('validity_months', 6) == 6 ? 'selected' : '' }}>{{ __('كل 6 أشهر (نصف سنوي - مهمات الرفع والأوناش)') }}</option>
+                        <option value="12" {{ old('validity_months') == 12 ? 'selected' : '' }}>{{ __('كل 12 شهراً (سنوي - المعدات العامة)') }}</option>
+                        <option value="3" {{ old('validity_months') == 3 ? 'selected' : '' }}>{{ __('كل 3 أشهر (فحص ربع سنوي شاق)') }}</option>
+                        <option value="24" {{ old('validity_months') == 24 ? 'selected' : '' }}>{{ __('كل 24 شهراً (سنتين)') }}</option>
                     </select>
                 </div>
 
                 <div class="flex items-center gap-3 pt-5">
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="w-4 h-4 rounded text-[#0E4DA4]">
-                        <span class="font-bold text-slate-700">تفعيل القالب في الاستوديو</span>
+                        <span class="font-bold text-slate-700">{{ __('تفعيل القالب في الاستوديو') }}</span>
                     </label>
                 </div>
 
                 <div class="flex items-center gap-3 pt-5">
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" name="is_default" value="1" {{ old('is_default') ? 'checked' : '' }} class="w-4 h-4 rounded text-[#0E4DA4]">
-                        <span class="font-bold text-purple-700">تعيين كقالب معتمد افتراضي للفئة</span>
+                        <span class="font-bold text-purple-700">{{ __('تعيين كقالب معتمد افتراضي للفئة') }}</span>
                     </label>
                 </div>
             </div>
@@ -156,7 +156,7 @@
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div class="flex items-center gap-2.5">
                     <span class="w-6 h-6 rounded-lg bg-blue-50 text-[#0E4DA4] text-xs font-bold flex items-center justify-center">2</span>
-                    <h2 class="font-bold text-slate-800 text-xs sm:text-sm">المواصفات الفنية الافتراضية للمعدة</h2>
+                    <h2 class="font-bold text-slate-800 text-xs sm:text-sm">{{ __('المواصفات الفنية الافتراضية للمعدة') }}</h2>
                 </div>
                 <span class="text-[11px] text-slate-400 font-en">Default Specifications</span>
             </div>
@@ -164,7 +164,7 @@
             <div class="space-y-3 text-xs">
                 <div>
                     <label for="equipment_description" class="block font-bold text-slate-700 mb-1">
-                        وصف المعدة (Equipment Description)
+                        {{ __('وصف المعدة (Equipment Description)') }}
                     </label>
                     <textarea name="equipment_description" id="equipment_description" rows="2"
                               placeholder="مثال: Mobile Telescopic Crane (Liebherr LTM 1090-4.1) أو Endless Round Polyester Webbing Sling"
@@ -173,7 +173,7 @@
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <div>
-                        <label for="swl" class="block font-bold text-slate-700 mb-1">الحمل الآمن للتشغيل (SWL)</label>
+                        <label for="swl" class="block font-bold text-slate-700 mb-1">{{ __('الحمل الآمن للتشغيل (SWL)') }}</label>
                         <input type="text" name="swl" id="swl" value="{{ old('swl') }}" placeholder="90 Ton / 30 Ton"
                                class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#0E4DA4] font-bold text-[#0E4DA4] outline-none">
                     </div>
@@ -191,7 +191,7 @@
                     </div>
 
                     <div>
-                        <label for="capacity" class="block font-bold text-slate-700 mb-1">السعة / أقصى قدرة</label>
+                        <label for="capacity" class="block font-bold text-slate-700 mb-1">{{ __('السعة / أقصى قدرة') }}</label>
                         <input type="text" name="capacity" id="capacity" value="{{ old('capacity') }}" placeholder="90 Ton @ 3m radius"
                                class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                     </div>
@@ -211,13 +211,13 @@
                     </div>
 
                     <div>
-                        <label for="dimensions" class="block font-bold text-slate-700 mb-1">الأبعاد / الطول والقطر</label>
+                        <label for="dimensions" class="block font-bold text-slate-700 mb-1">{{ __('الأبعاد / الطول والقطر') }}</label>
                         <input type="text" name="dimensions" id="dimensions" value="{{ old('dimensions') }}" placeholder="Length: 6.0 m | Width: 0.48 m"
                                class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                     </div>
 
                     <div>
-                        <label for="length" class="block font-bold text-slate-700 mb-1">الطول الفعال (Length)</label>
+                        <label for="length" class="block font-bold text-slate-700 mb-1">{{ __('الطول الفعال (Length)') }}</label>
                         <input type="text" name="length" id="length" value="{{ old('length') }}" placeholder="50 m / 6.0 m"
                                class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
                     </div>
@@ -236,7 +236,7 @@
                     </div>
                 </div>
                 <button type="button" @click="addSpec()" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-[#0E4DA4] text-xs font-bold transition flex items-center gap-1 border border-blue-200">
-                    <span>+ إضافة أداة / مواصفة</span>
+                    <span>{{ __('+ إضافة أداة / مواصفة') }}</span>
                 </button>
             </div>
 

@@ -1,49 +1,49 @@
 @extends('layouts.app')
 
-@section('title', 'الشهادات المنتهية والقريبة من الانتهاء - Expiring Certificates')
+@section('title', __('الشهادات المنتهية والقريبة من الانتهاء'))
 
 @section('content')
 <div class="space-y-4">
 
     <!-- IsoOx Enterprise Control Panel -->
     <x-odoo-control-panel 
-        title="متابعة صلاحية وتجديد شهادات الفحص"
+        title="{{ __('متابعة صلاحية وتجديد شهادات الفحص') }}"
         new-url="{{ route('certificates.create') }}"
-        new-text="إصدار شهادة جديدة"
+        new-text="{{ __('إصدار شهادة جديدة') }}"
         new-color="bg-[#0E4DA4]"
         search-action="{{ route('certificates.expiring') }}"
         search-value="{{ request('search') }}"
-        search-placeholder="البحث برقم الشهادة، العميل، اسم المعدة، أمر الشغل..."
+        search-placeholder="{{ __('البحث برقم الشهادة، العميل، اسم المعدة، أمر الشغل...') }}"
         :paginator="$certificates"
     >
         <!-- Filter Popover Content -->
         <div class="space-y-3 min-w-[280px]">
             <div>
-                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">نطاق الصلاحية (Expiry Timeframe)</span>
+                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{{ __('نطاق الصلاحية (Expiry Timeframe)') }}</span>
                 <div class="grid grid-cols-2 gap-1.5">
                     <a href="{{ route('certificates.expiring', array_merge(request()->except(['timeframe', 'page']), ['timeframe' => 'expired'])) }}" 
                        class="px-2.5 py-1.5 rounded text-xs font-semibold text-center transition {{ request('timeframe') === 'expired' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        منتهية بالفعل
+                        {{ __('منتهية بالفعل') }}
                     </a>
                     <a href="{{ route('certificates.expiring', array_merge(request()->except(['timeframe', 'page']), ['timeframe' => '7'])) }}" 
                        class="px-2.5 py-1.5 rounded text-xs font-semibold text-center transition {{ request('timeframe') === '7' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        خلال 7 أيام
+                        {{ __('خلال 7 أيام') }}
                     </a>
                     <a href="{{ route('certificates.expiring', array_merge(request()->except(['timeframe', 'page']), ['timeframe' => '15'])) }}" 
                        class="px-2.5 py-1.5 rounded text-xs font-semibold text-center transition {{ request('timeframe') === '15' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        خلال 15 يوماً
+                        {{ __('خلال 15 يوماً') }}
                     </a>
                     <a href="{{ route('certificates.expiring', array_merge(request()->except(['timeframe', 'page']), ['timeframe' => '30'])) }}" 
                        class="px-2.5 py-1.5 rounded text-xs font-semibold text-center transition {{ (request('timeframe', '30') === '30') ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        خلال شهر (30 يوم)
+                        {{ __('خلال شهر (30 يوم)') }}
                     </a>
                     <a href="{{ route('certificates.expiring', array_merge(request()->except(['timeframe', 'page']), ['timeframe' => '60'])) }}" 
                        class="px-2.5 py-1.5 rounded text-xs font-semibold text-center transition {{ request('timeframe') === '60' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        خلال شهرين (60 يوم)
+                        {{ __('خلال شهرين (60 يوم)') }}
                     </a>
                     <a href="{{ route('certificates.expiring', array_merge(request()->except(['timeframe', 'page']), ['timeframe' => 'all_expiring'])) }}" 
                        class="px-2.5 py-1.5 rounded text-xs font-semibold text-center transition {{ request('timeframe') === 'all_expiring' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        الكل (منتهية وقريبة)
+                        {{ __('الكل (منتهية وقريبة)') }}
                     </a>
                 </div>
             </div>
@@ -68,7 +68,7 @@
 
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <a href="{{ route('certificates.expiring') }}" class="text-[11px] text-slate-500 hover:text-slate-800 underline">
-                    إعادة ضبط الفلاتر
+                    {{ __('إعادة ضبط الفلاتر') }}
                 </a>
             </div>
         </div>
@@ -82,22 +82,22 @@
                 <a href="{{ route('certificates.index') }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:bg-slate-100">
                     <img src="{{ asset('branding/IsoOx-icons/documents.svg') }}" class="w-4 h-4">
-                    <span>جميع الشهادات</span>
+                    <span>{{ __('سجل الشهادات') }}</span>
                 </a>
                 <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:bg-slate-100">
                     <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                    <span>السارية المعتمدة</span>
+                    <span>{{ __('الشهادات السارية المعتمدة') }}</span>
                 </a>
                 <a href="{{ route('certificates.index', ['status' => 'draft']) }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:bg-slate-100">
                     <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                    <span>المسودات</span>
+                    <span>{{ __('المسودات قيد المراجعة') }}</span>
                 </a>
                 <a href="{{ route('certificates.expiring') }}" 
                    class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-[#0E4DA4] text-white shadow-xs">
                     <img src="{{ asset('branding/IsoOx-icons/timer.svg') }}" class="w-4 h-4 brightness-0 invert">
-                    <span>الشهادات القريبة من الانتهاء</span>
+                    <span>{{ __('الشهادات القريبة من الانتهاء') }}</span>
                     <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20 font-mono">{{ $stats['due_30'] + $stats['expired'] }}</span>
                 </a>
                 <a href="{{ route('certificate-templates.index') }}" 
@@ -133,7 +133,7 @@
 
             <div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-2xs flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] font-bold text-slate-500 block">تنتهي خلال 7 أيام</span>
+                    <span class="text-[11px] font-bold text-slate-500 block">تنتهي {{ __('خلال 7 أيام') }}</span>
                     <div class="flex items-baseline gap-2 mt-0.5">
                         <span class="text-2xl font-black text-[#0E4DA4] font-en">{{ $stats['due_7'] }}</span>
                         <span class="text-[10px] text-slate-400 font-semibold">متابعة عاجلة</span>
@@ -177,11 +177,11 @@
                 <span class="text-xs text-slate-500 font-bold ml-1">عرض حسب المهلة:</span>
                 <a href="{{ route('certificates.expiring', array_merge(request()->except(['timeframe', 'page']), ['timeframe' => '30'])) }}" 
                    class="px-2.5 py-1 rounded-md text-xs font-semibold transition {{ request('timeframe', '30') === '30' ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50' }}">
-                    خلال شهر (30 يوم)
+                    {{ __('خلال شهر (30 يوم)') }}
                 </a>
                 <a href="{{ route('certificates.expiring', array_merge(request()->except(['timeframe', 'page']), ['timeframe' => '7'])) }}" 
                    class="px-2.5 py-1 rounded-md text-xs font-semibold transition {{ request('timeframe') === '7' ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50' }}">
-                    خلال 7 أيام
+                    {{ __('خلال 7 أيام') }}
                 </a>
                 <a href="{{ route('certificates.expiring', array_merge(request()->except(['timeframe', 'page']), ['timeframe' => '15'])) }}" 
                    class="px-2.5 py-1 rounded-md text-xs font-semibold transition {{ request('timeframe') === '15' ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50' }}">

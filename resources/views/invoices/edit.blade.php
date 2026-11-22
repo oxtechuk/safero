@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'تعديل الفاتورة: '.$invoice->invoice_number)
+@section('title', __('تعديل الفاتورة:') . ' ' . $invoice->invoice_number)
 
 @section('content')
 <div class="space-y-4" x-data="invoiceEditor()">
@@ -17,7 +17,7 @@
                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 font-mono">
                             {{ $invoice->invoice_number }}
                         </span>
-                        <h1 class="text-base sm:text-lg font-black text-slate-900">تعديل الفاتورة وبيانات السداد</h1>
+                        <h1 class="text-base sm:text-lg font-black text-slate-900">{{ __('تعديل الفاتورة وبيانات السداد') }}</h1>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
             <div class="bg-white border border-slate-200 rounded-2xl shadow-xs p-5 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="md:col-span-1">
                     <label for="customer_id" class="block text-xs font-bold text-slate-700 mb-1.5">
-                        العميل (Customer) <span class="text-red-500">*</span>
+                        {{ __('العميل') }} <span class="text-red-500">*</span>
                     </label>
                     <select name="customer_id" id="customer_id" required 
                             class="w-full text-xs font-semibold rounded-lg border-slate-300 py-2.5 bg-white">
@@ -53,7 +53,7 @@
 
                 <div>
                     <label for="invoice_date" class="block text-xs font-bold text-slate-700 mb-1.5">
-                        تاريخ الفاتورة <span class="text-red-500">*</span>
+                        {{ __('تاريخ الفاتورة') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="date" name="invoice_date" id="invoice_date" required 
                            value="{{ old('invoice_date', $invoice->invoice_date->format('Y-m-d')) }}"
@@ -62,7 +62,7 @@
 
                 <div>
                     <label for="due_date" class="block text-xs font-bold text-slate-700 mb-1.5">
-                        تاريخ الاستحقاق
+                        {{ __('تاريخ الاستحقاق') }}
                     </label>
                     <input type="date" name="due_date" id="due_date" 
                            value="{{ old('due_date', $invoice->due_date ? $invoice->due_date->format('Y-m-d') : '') }}"
@@ -73,10 +73,10 @@
             <!-- Invoice Items Table -->
             <div class="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/70 flex items-center justify-between flex-wrap gap-2">
-                    <h2 class="text-sm font-extrabold text-slate-900">بنود الفاتورة والشهادات</h2>
+                    <h2 class="text-sm font-extrabold text-slate-900">{{ __('بنود الفاتورة والشهادات') }}</h2>
                     <button type="button" @click="addCustomItem()" 
                             class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1">
-                        + إضافة بند جديد
+                        {{ __('+ إضافة بند جديد') }}
                     </button>
                 </div>
 
@@ -85,10 +85,10 @@
                         <thead class="text-slate-500 font-bold border-b border-slate-200 pb-2">
                             <tr>
                                 <th class="pb-2 w-10 text-center">#</th>
-                                <th class="pb-2">وصف الخدمة / شهادة الفحص</th>
-                                <th class="pb-2 w-24 text-center">الكمية</th>
-                                <th class="pb-2 w-32 text-center">السعر (ج.م)</th>
-                                <th class="pb-2 w-32 text-center">الإجمالي (ج.م)</th>
+                                <th class="pb-2">{{ __('وصف الخدمة / شهادة الفحص') }}</th>
+                                <th class="pb-2 w-24 text-center">{{ __('الكمية') }}</th>
+                                <th class="pb-2 w-32 text-center">{{ __('السعر (ج.م)') }}</th>
+                                <th class="pb-2 w-32 text-center">{{ __('الإجمالي (ج.م)') }}</th>
                                 <th class="pb-2 w-12 text-center"></th>
                             </tr>
                         </thead>

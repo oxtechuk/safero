@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'تعديل بيانات المتدرب - '.$trainee->name)
+@section('title', '{{ __('تعديل بيانات المتدرب') }} - '.$trainee->name)
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">
@@ -14,7 +14,7 @@
                 <span>/</span>
                 <span class="text-slate-800 font-bold">تعديل</span>
             </nav>
-            <h1 class="text-2xl font-black text-slate-900">تعديل بيانات المتدرب</h1>
+            <h1 class="text-2xl font-black text-slate-900">{{ __('تعديل بيانات المتدرب') }}</h1>
         </div>
         <a href="{{ route('trainees.index') }}" class="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition">
             عودة
@@ -38,7 +38,7 @@
 
         <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">
-                اسم المتدرب بالكامل (Certificate Holder) <span class="text-red-500">*</span>
+                {{ __('اسم المتدرب بالكامل (Certificate Holder)') }} <span class="text-red-500">*</span>
             </label>
             <input type="text" 
                    name="name" 
@@ -50,7 +50,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">
-                    الشركة / جهة العمل (Company)
+                    {{ __('الشركة / جهة العمل (Company)') }}
                 </label>
                 <input type="text" 
                        name="company" 
@@ -60,7 +60,7 @@
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">
-                    المسمى الوظيفي (Job Title)
+                    {{ __('المسمى الوظيفي (Job Title)') }}
                 </label>
                 <input type="text" 
                        name="job_title" 
@@ -80,7 +80,7 @@
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">
-                    رقم الهاتف (Phone)
+                    {{ __('رقم الهاتف (Phone)') }}
                 </label>
                 <input type="text" 
                        name="phone" 
@@ -91,7 +91,7 @@
 
         <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">
-                البريد الإلكتروني (Email)
+                {{ __('البريد الإلكتروني (Email)') }}
             </label>
             <input type="email" 
                    name="email" 
@@ -101,7 +101,7 @@
 
         <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">
-                ملاحظات إضافية (Notes)
+                {{ __('ملاحظات إضافية (Notes)') }}
             </label>
             <textarea name="notes" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#0E4DA4] outline-none text-xs">{{ old('notes', $trainee->notes) }}</textarea>
         </div>

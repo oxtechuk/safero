@@ -59,12 +59,36 @@
             min-width: 288px !important;
             box-sizing: border-box !important;
         }
+
+        /* Strict Global Print Rules - Completely suppress application UI */
+        @media print {
+            header,
+            nav,
+            footer,
+            aside,
+            .print\:hidden,
+            .no-print,
+            #mobile-bottom-bar,
+            .sub-header-bar {
+                display: none !important;
+                visibility: hidden !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            body, html, main {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-[#006837] selection:text-white bg-[#F8FAFC]">
 
     <!-- Top IsoOx 17/18 Enterprise Navbar (Crisp, High-Density, with Apps Return Button) -->
-    <header class="sticky top-0 z-50 bg-white border-b border-slate-200 text-slate-800 shadow-xs" x-data="{ mobileMenuOpen: false }">
+    <header class="print:hidden no-print sticky top-0 z-50 bg-white border-b border-slate-200 text-slate-800 shadow-xs" x-data="{ mobileMenuOpen: false }">
         <div class="px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-13">
                 
@@ -74,12 +98,12 @@
                     <!-- Back to Apps Launcher Button (IsoOx Return Pattern) -->
                     <a href="{{ route('apps') }}" 
                        class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100/90 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 transition-all duration-150 shadow-2xs group" 
-                       title="الرجوع إلى شاشة التطبيقات الرئيسية (Apps Launcher)">
+                       title="{{ __('الرجوع إلى شاشة التطبيقات الرئيسية (Apps Launcher)') }}">
                         <svg class="w-4 h-4 text-slate-500 group-hover:text-slate-800 transition transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
                         <img src="{{ asset('branding/odoo-icons/apps.svg') }}" class="w-4 h-4 object-contain shrink-0" alt="Apps">
-                        <span class="text-xs font-bold text-slate-700 group-hover:text-slate-900 hidden md:inline">الرئيسية</span>
+                        <span class="text-xs font-bold text-slate-700 group-hover:text-slate-900 hidden md:inline">{{ __('الرئيسية') }}</span>
                     </a>
 
                     <!-- Current Active Module Brand / Icon -->
@@ -131,7 +155,6 @@
                             <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('مهام الفحص') }}</span>
                         @else
                             <img src="{{ asset(setting('logo_path', '/branding/safero_logo.jpg')) }}" alt="{{ setting('company_name_en', 'Safero') }}" class="h-5 w-auto object-contain">
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ setting('company_name_en', 'Safero ERP') }}</span>
                         @endif
                     </div>
 
@@ -156,23 +179,23 @@
                             <!-- IsoOx Enterprise Settings Sub-navigation Bar (Image 1 Exact Match) -->
                             <a href="{{ route('settings.index', ['tab' => 'general']) }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request('tab', 'general') === 'general' ? 'bg-purple-100 text-[#714B67]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                <span>الإعدادات العام</span>
+                                <span>{{ __('الإعدادات العامة') }}</span>
                             </a>
 
                             <a href="{{ route('settings.index', ['tab' => 'users']) }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request('tab') === 'users' ? 'bg-purple-100 text-[#714B67]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                <span>المستخدمون</span>
+                                <span>{{ __('المستخدمون') }}</span>
                             </a>
 
                             <a href="{{ route('settings.index', ['tab' => 'localization']) }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request('tab') === 'localization' ? 'bg-purple-100 text-[#714B67]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                <span>اللغات والترجمة</span>
+                                <span>{{ __('اللغات والترجمة') }}</span>
                             </a>
 
                             <a href="{{ route('settings.index', ['tab' => 'google_sheets']) }}" 
                                class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request('tab') === 'google_sheets' ? 'bg-emerald-100 text-emerald-800' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
                                 <span class="w-2 h-2 rounded-full {{ setting('google_sheets_webhook_url') ? 'bg-emerald-500' : 'bg-slate-300' }}"></span>
-                                <span>ربط Google Sheets</span>
+                                <span>{{ __('ربط Google Sheets') }}</span>
                             </a>
 
                             <!-- Technical Dropdown (Image 1 Highlight: Menu Items, Database, Automation) -->
@@ -183,7 +206,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'technical' ? null : 'technical')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ in_array(request('tab'), ['technical', 'saas']) ? 'bg-purple-100 text-[#714B67]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <span>الخيارات التقنية (Technical)</span>
+                                    <span>{{ __('الخيارات التقنية (Technical)') }}</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'technical' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
 
@@ -202,31 +225,31 @@
                                         <!-- User Interface Section (Image 1 Highlight: Menu Items) -->
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                واجهة المستخدم (User Interface)
+                                                {{ __('واجهة المستخدم (User Interface)') }}
                                             </div>
                                             <a href="{{ route('settings.index', ['tab' => 'technical']) }}" 
                                                class="flex items-center justify-between px-3.5 py-2 hover:bg-purple-50 hover:text-[#714B67] text-slate-700 transition font-bold {{ request('tab') === 'technical' ? 'bg-purple-50 text-[#714B67]' : '' }}">
-                                                <span>عناصر القوائم (Menu Items)</span>
+                                                <span>{{ __('عناصر القوائم (Menu Items)') }}</span>
                                                 <span class="text-[9px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded font-bold font-mono">Image 1 Highlight</span>
                                             </a>
                                             <a href="{{ route('settings.index', ['tab' => 'branding']) }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                                قوالب الشهادات والشعار (Branding &amp; Assets)
+                                                {{ __('قوالب الشهادات والشعار (Branding & Assets)') }}
                                             </a>
                                         </div>
 
                                         <!-- Database Structure & Modular Core -->
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                البنية ونظام SaaS (Architecture)
+                                                {{ __('البنية ونظام SaaS (Architecture)') }}
                                             </div>
                                             <a href="{{ route('settings.index', ['tab' => 'saas']) }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition font-bold {{ request('tab') === 'saas' ? 'bg-purple-50 text-[#714B67]' : '' }}">
-                                                منصة SaaS والمديولات مفتوحة المصدر
+                                                {{ __('منصة SaaS والمديولات مفتوحة المصدر') }}
                                             </a>
                                             <a href="{{ route('settings.index', ['tab' => 'certificates']) }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                                معايير الاعتماد الهندسي (ISO 17020)
+                                                {{ __('معايير الاعتماد الهندسي (ISO 17020)') }}
                                             </a>
                                         </div>
                                     </div>
@@ -244,7 +267,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'inspection' ? null : 'inspection')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ (request()->routeIs('certificates.*') || request()->routeIs('certificate-templates.*')) && !request()->routeIs('certificates.verify.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <span>شهادات الفحص</span>
+                                    <span>{{ __('شهادات الفحص') }}</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'inspection' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
                                 
@@ -264,40 +287,40 @@
                                         <!-- Field Inspection (بدء فحص) Highlight -->
                                         <div class="py-1 bg-emerald-50/40">
                                             <div class="px-3 py-1 text-[10px] font-bold text-emerald-800 uppercase tracking-wider flex items-center justify-between">
-                                                <span>الفحص الميداني والشيك ليست</span>
-                                                <span class="text-[9px] bg-emerald-200 text-emerald-800 px-1.5 py-0.2 rounded font-bold">جديد</span>
+                                                <span>{{ __('الفحص الميداني والشيك ليست') }}</span>
+                                                <span class="text-[9px] bg-emerald-200 text-emerald-800 px-1.5 py-0.2 rounded font-bold">{{ __('جديد') }}</span>
                                             </div>
                                             <a href="{{ route('inspections.start') }}" 
                                                class="flex items-center justify-between px-3.5 py-1.5 hover:bg-emerald-100/60 text-emerald-950 font-black transition text-xs">
                                                 <span class="flex items-center gap-1.5">
                                                     <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                                                    <span>بدء فحص ميداني جديد (شيك ليست)</span>
+                                                    <span>{{ __('بدء فحص ميداني جديد (شيك ليست)') }}</span>
                                                 </span>
                                             </a>
                                             <a href="{{ route('inspections.index') }}" 
                                                class="block px-3.5 py-1 text-slate-700 hover:text-emerald-800 text-[11px] font-semibold transition">
-                                                سجل الفحوصات الميدانية
+                                                {{ __('سجل الفحوصات الميدانية') }}
                                             </a>
                                         </div>
 
                                         <!-- Tree Branch 1: نماذج الفحص المعتمدة -->
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                نماذج الفحص المعتمدة
+                                                {{ __('نماذج الفحص المعتمدة') }}
                                             </div>
                                             <a href="{{ route('certificates.create', ['type' => 'crane']) }}" 
                                                class="flex flex-col px-3.5 py-2 hover:bg-[#E6F2FF] hover:text-[#0E4DA4] text-slate-700 transition group {{ (request()->routeIs('certificates.create') && request('type', 'crane') === 'crane') ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
-                                                <span class="font-bold text-xs group-hover:text-[#0E4DA4]">فحص الأوناش والروافع</span>
+                                                <span class="font-bold text-xs group-hover:text-[#0E4DA4]">{{ __('فحص الأوناش والروافع') }}</span>
                                                 <span class="text-[10px] text-slate-400 font-en">Lifting Appliances (Cranes - LOLER)</span>
                                             </a>
                                             <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" 
                                                class="flex flex-col px-3.5 py-2 hover:bg-[#E6F2FF] hover:text-[#0E4DA4] text-slate-700 transition group {{ (request()->routeIs('certificates.create') && request('type') === 'accessory') ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
-                                                <span class="font-bold text-xs group-hover:text-[#0E4DA4]">مهمات الرفع والحبال</span>
+                                                <span class="font-bold text-xs group-hover:text-[#0E4DA4]">{{ __('مهمات الرفع والحبال') }}</span>
                                                 <span class="text-[10px] text-slate-400 font-en">Lifting Accessories (Slings / Shackles)</span>
                                             </a>
                                             <a href="{{ route('certificates.create', ['type' => 'general']) }}" 
                                                class="flex flex-col px-3.5 py-2 hover:bg-[#E6F2FF] hover:text-[#0E4DA4] text-slate-700 transition group {{ (request()->routeIs('certificates.create') && request('type') === 'general') ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
-                                                <span class="font-bold text-xs group-hover:text-[#0E4DA4]">معدات عامة وباليتات</span>
+                                                <span class="font-bold text-xs group-hover:text-[#0E4DA4]">{{ __('معدات عامة وباليتات') }}</span>
                                                 <span class="text-[10px] text-slate-400 font-en">General Cargo Units &amp; Pallets</span>
                                             </a>
                                         </div>
@@ -305,58 +328,58 @@
                                         <!-- Tree Branch: ستوديو قوالب الفحص (Studio) -->
                                         <div class="py-1 bg-slate-50/50">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                                                <span>ستوديو شهادات الفحص (Studio)</span>
+                                                <span>{{ __('ستوديو قوالب الفحص') }}</span>
                                                 <span class="text-[9px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded font-bold font-mono">CMS</span>
                                             </div>
                                             <a href="{{ route('certificate-templates.index') }}" 
                                                class="flex items-center justify-between px-3.5 py-1.5 hover:bg-slate-100 text-slate-800 hover:text-[#0E4DA4] transition font-bold {{ request()->routeIs('certificate-templates.index') ? 'bg-blue-50 text-[#0E4DA4]' : '' }}">
                                                 <span class="flex items-center gap-1.5">
                                                     <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
-                                                    <span>ستوديو قوالب الفحص</span>
+                                                    <span>{{ __('ستوديو قوالب الفحص') }}</span>
                                                 </span>
                                                 <span class="text-[10px] text-slate-500 font-medium font-en">Templates</span>
                                             </a>
                                             <a href="{{ route('certificate-templates.create') }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100 text-slate-700 hover:text-[#0E4DA4] transition text-xs {{ request()->routeIs('certificate-templates.create') ? 'bg-blue-50 font-bold text-[#0E4DA4]' : '' }}">
-                                                + تصميم وتخصيص قالب جديد
+                                                {{ __('+ تصميم وتخصيص قالب جديد') }}
                                             </a>
                                         </div>
 
                                         <!-- Tree Branch 2: سجل الشهادات والعمليات -->
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                سجل الشهادات والعمليات
+                                                {{ __('سجل الشهادات والعمليات') }}
                                             </div>
                                             <a href="{{ route('certificates.index') }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition font-bold {{ (request()->routeIs('certificates.index') && !request('status')) ? 'bg-blue-50/70 text-[#0E4DA4]' : '' }}">
-                                                سجل الشهادات (جميع الشهادات)
+                                                {{ __('سجل الشهادات (جميع الشهادات)') }}
                                             </a>
                                             <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request('status') === 'issued' ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
-                                                الشهادات السارية المعتمدة
+                                                {{ __('الشهادات السارية المعتمدة') }}
                                             </a>
                                             <a href="{{ route('certificates.expiring') }}" 
                                                class="flex items-center justify-between px-3.5 py-1.5 hover:bg-slate-100 text-slate-700 hover:text-[#0E4DA4] transition font-bold {{ request()->routeIs('certificates.expiring') ? 'bg-blue-50 text-[#0E4DA4]' : '' }}">
                                                 <span class="flex items-center gap-1.5">
                                                     <img src="{{ asset('branding/IsoOx-icons/timer.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
-                                                    <span>الشهادات القريبة من الانتهاء</span>
+                                                    <span>{{ __('الشهادات القريبة من الانتهاء') }}</span>
                                                 </span>
                                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                                             </a>
                                             <a href="{{ route('certificates.index', ['status' => 'draft']) }}" 
                                                class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request('status') === 'draft' ? 'bg-blue-50/70 font-bold text-[#0E4DA4]' : '' }}">
-                                                المسودات قيد المراجعة
+                                                {{ __('المسودات قيد المراجعة') }}
                                             </a>
                                         </div>
 
                                         <!-- Tree Branch 3: التحقق والامتثال -->
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                التحقق والامتثال
+                                                {{ __('التحقق والامتثال') }}
                                             </div>
                                             <a href="{{ route('certificates.verify.lookup') }}" 
                                                class="block px-3.5 py-1.5 hover:bg-purple-50 text-slate-700 hover:text-purple-700 transition {{ request()->routeIs('certificates.verify.*') ? 'bg-purple-50/70 font-bold text-purple-700' : '' }}">
-                                                فحص رمز الاستجابة QR Code
+                                                {{ __('فحص رمز الاستجابة QR Code') }}
                                             </a>
                                         </div>
                                     </div>
@@ -371,7 +394,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'training' ? null : 'training')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('training-certificates.*') || request()->routeIs('trainees.*') ? 'bg-slate-100 text-[#006837]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <span>شهادات التدريب</span>
+                                    <span>{{ __('شهادات التدريب') }}</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'training' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
 
@@ -389,28 +412,28 @@
                                     <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100" style="min-width: 288px; width: 288px;">
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                شهادات المتدربين
+                                                {{ __('شهادات المتدربين') }}
                                             </div>
                                             <a href="{{ route('training-certificates.create') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('training-certificates.create') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                                إصدار شهادة تدريب جديدة
+                                                {{ __('إصدار شهادة تدريب جديدة') }}
                                             </a>
                                             <a href="{{ route('training-certificates.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ (request()->routeIs('training-certificates.index') && !request('status')) ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                                سجل شهادات التدريب المعتمدة
+                                                {{ __('سجل شهادات التدريب المعتمدة') }}
                                             </a>
                                             <a href="{{ route('training-certificates.index', ['status' => 'issued']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request('status') === 'issued' ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                                الشهادات السارية المعتمدة
+                                                {{ __('الشهادات السارية المعتمدة') }}
                                             </a>
                                         </div>
 
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                إدارة المتدربين
+                                                {{ __('إدارة المتدربين') }}
                                             </div>
                                             <a href="{{ route('trainees.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('trainees.index') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                                قاعدة بيانات المتدربين
+                                                {{ __('قاعدة بيانات المتدربين') }}
                                             </a>
                                             <a href="{{ route('trainees.create') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('trainees.create') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                                تسجيل متدرب جديد
+                                                {{ __('تسجيل متدرب جديد') }}
                                             </a>
                                         </div>
                                     </div>
@@ -425,7 +448,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'customers' ? null : 'customers')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('customers.*') ? 'bg-slate-100 text-[#0E4DA4]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <span>العملاء </span>
+                                    <span>{{ __('العملاء') }}</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'customers' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
 
@@ -442,13 +465,13 @@
                                     
                                     <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5" style="min-width: 260px; width: 260px;">
                                         <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                            إدارة العملاء
+                                            {{ __('إدارة العملاء') }}
                                         </div>
                                         <a href="{{ route('customers.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request()->routeIs('customers.index') ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                            دليل الشركات والمصانع
+                                            {{ __('دليل الشركات والمصانع') }}
                                         </a>
                                         <a href="{{ route('customers.create') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#0E4DA4] transition {{ request()->routeIs('customers.create') ? 'bg-blue-50/60 font-bold text-[#0E4DA4]' : '' }}">
-                                            إضافة عميل أو شركة جديدة
+                                            {{ __('إضافة عميل أو شركة جديدة') }}
                                         </a>
                                     </div>
                                 </div>
@@ -462,7 +485,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'invoices' ? null : 'invoices')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('invoices.*') ? 'bg-slate-100 text-[#006837]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <span>الفواتير والحسابات</span>
+                                    <span>{{ __('الفواتير والحسابات') }}</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'invoices' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
 
@@ -479,19 +502,19 @@
                                     
                                     <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5" style="min-width: 260px; width: 260px;">
                                         <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                            فواتير الفحص والمعايرة
+                                            {{ __('فواتير الفحص والمعايرة') }}
                                         </div>
                                         <a href="{{ route('invoices.create') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition font-bold {{ request()->routeIs('invoices.create') ? 'bg-emerald-50/60 text-[#006837]' : '' }}">
-                                            + إنشاء فاتورة جديدة للعميل
+                                            {{ __('+ إنشاء فاتورة جديدة للعميل') }}
                                         </a>
                                         <a href="{{ route('invoices.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('invoices.index') && !request('status') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
-                                            سجل الفواتير الصادرة
+                                            {{ __('سجل الفواتير الصادرة') }}
                                         </a>
                                         <a href="{{ route('invoices.index', ['status' => 'unpaid']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-red-600 transition font-bold">
-                                            الفواتير غير المدفوعة / المعلقة
+                                            {{ __('الفواتير غير المدفوعة / المعلقة') }}
                                         </a>
                                         <a href="{{ route('reports.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-emerald-700 transition">
-                                            تقرير الأرباح والتحصيل السريع
+                                            {{ __('تقرير الأرباح والتحصيل السريع') }}
                                         </a>
                                     </div>
                                 </div>
@@ -505,7 +528,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'reporting' ? null : 'reporting')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('dashboard') || request()->routeIs('reports.*') ? 'bg-slate-100 text-amber-600' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                                    <span>التقارير </span>
+                                    <span>{{ __('التقارير') }}</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'reporting' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
 
@@ -522,19 +545,19 @@
                                     
                                     <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5" style="min-width: 260px; width: 260px;">
                                         <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                            التحليلات والمؤشرات والأرباح
+                                            {{ __('التحليلات والمؤشرات والأرباح') }}
                                         </div>
                                         <a href="{{ route('reports.index') }}" class="block px-3.5 py-1.5 hover:bg-emerald-50 text-slate-900 hover:text-emerald-700 font-extrabold transition {{ request()->routeIs('reports.index') ? 'bg-emerald-50 text-emerald-800' : '' }}">
-                                             تقرير الفحص
+                                             {{ __('تقرير الفحص') }}
                                         </a>
                                         <a href="{{ route('dashboard') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition {{ request()->routeIs('dashboard') ? 'bg-amber-50/60 font-bold text-amber-600' : '' }}">
-                                            لوحة المؤشرات الشاملة
+                                            {{ __('لوحة المؤشرات الشاملة') }}
                                         </a>
                                         <a href="{{ route('certificates.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition">
-                                            تقرير فحص الأوناش والمعدات
+                                            {{ __('تقرير فحص الأوناش والمعدات') }}
                                         </a>
                                         <a href="{{ route('training-certificates.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition">
-                                            تقرير شهادات التدريب
+                                            {{ __('تقرير شهادات التدريب') }}
                                         </a>
                                     </div>
                                 </div>
@@ -548,7 +571,7 @@
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'settings' ? null : 'settings')"
                                         class="px-2.5 py-1.5 rounded text-xs font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition flex items-center gap-1.5">
-                                    <span> والإعدادات</span>
+                                    <span>{{ __('التهيئة والإعدادات') }}</span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'settings' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
 
@@ -566,33 +589,33 @@
                                     <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100" style="min-width: 288px; width: 288px;">
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                إعدادات النظام والشركة
+                                                {{ __('إعدادات النظام والشركة') }}
                                             </div>
                                             <a href="{{ route('settings.index') }}" class="block px-3.5 py-1.5 hover:bg-purple-50 text-slate-700 hover:text-[#714B67] transition font-bold">
-                                                الإعدادات العامة (General Settings)
+                                                {{ __('الإعدادات العامة (General Settings)') }}
                                             </a>
                                             <a href="{{ route('settings.index', ['tab' => 'users']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                                المستخدمون والشركات (Users &amp; Companies)
+                                                {{ __('المستخدمون والشركات (Users & Companies)') }}
                                             </a>
                                             <a href="{{ route('settings.index', ['tab' => 'branding']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                                الشعار والأختام والقوالب (Branding)
+                                                {{ __('الشعار والأختام والقوالب (Branding)') }}
                                             </a>
                                             <a href="{{ route('settings.index', ['tab' => 'technical']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                                عناصر القوائم (Menu Items)
+                                                {{ __('عناصر القوائم (Menu Items)') }}
                                             </a>
                                             <a href="{{ route('settings.index', ['tab' => 'saas']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                                منصة SaaS والمديولات (Architecture)
+                                                {{ __('منصة SaaS والمديولات (Architecture)') }}
                                             </a>
                                         </div>
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                أدوات المنظومة
+                                                {{ __('أدوات المنظومة') }}
                                             </div>
                                             <a href="{{ route('apps') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                                شاشة التطبيقات (Apps Launcher)
+                                                {{ __('شاشة التطبيقات (Apps Launcher)') }}
                                             </a>
                                             <a href="{{ route('certificates.verify.lookup') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 transition">
-                                                أداة التحقق من الشهادات
+                                                {{ __('أداة التحقق من الشهادات') }}
                                             </a>
                                         </div>
                                     </div>
@@ -611,7 +634,7 @@
                     <!-- Quick Tool 1: Chat / Communication Bubble -->
                     <button type="button" 
                             class="p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition hidden sm:inline-flex relative" 
-                            title="الرسائل والملاحظات (Activities &amp; Messages)">
+                            title="{{ __('الرسائل والملاحظات (Activities & Messages)') }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                         </svg>
@@ -620,7 +643,7 @@
                     <!-- Quick Tool 2: Clock / Activities (Image 1 Match) -->
                     <button type="button" 
                             class="p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition hidden sm:inline-flex" 
-                            title="الأنشطة المجدولة وجداول الفحص (Activities)">
+                            title="{{ __('الأنشطة المجدولة وجداول الفحص (Activities)') }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -632,7 +655,7 @@
                     <div class="flex items-center p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-bold font-mono">
                         <a href="{{ route('lang.switch', 'ar') }}" 
                            class="px-2 py-0.5 rounded-md transition {{ app()->getLocale() === 'ar' ? 'bg-white text-[#0E4DA4] shadow-2xs font-black' : 'text-slate-500 hover:text-slate-800' }}"
-                           title="التحويل للغة العربية">
+                           title="{{ __('التحويل للغة العربية') }}">
                             عربي
                         </a>
                         <a href="{{ route('lang.switch', 'en') }}" 
@@ -657,7 +680,7 @@
                             @csrf
                             <button type="submit" 
                                     class="p-1.5 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 transition" 
-                                    title="تسجيل الخروج">
+                                    title="{{ __('تسجيل الخروج') }}">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                                 </svg>
@@ -834,31 +857,31 @@
             </div>
         </div>
     @elseif(request()->routeIs('training-certificates.*') || request()->routeIs('trainees.*'))
-        <div class="bg-white border-b border-slate-200 shadow-2xs">
+        <div class="print:hidden no-print bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-10 gap-3 text-xs">
                     <div class="flex items-center gap-1.5 overflow-x-auto py-1">
                         <a href="{{ route('training-certificates.index') }}" 
                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('training-certificates.index') && !request('status')) ? 'bg-emerald-50 text-[#006837] border border-emerald-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <svg class="w-3.5 h-3.5 text-[#006837]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                            <span>سجل شهادات التدريب</span>
+                            <span>{{ __('سجل شهادات التدريب') }}</span>
                         </a>
 
                         <span class="text-slate-300">|</span>
 
                         <a href="{{ route('training-certificates.create') }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('training-certificates.create') ? 'bg-[#006837] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#006837] hover:bg-emerald-50/70' }}">
-                            <span>إصدار شهادة تدريب</span>
+                            <span>{{ __('إصدار شهادة تدريب') }}</span>
                         </a>
 
                         <a href="{{ route('trainees.index') }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('trainees.index') ? 'bg-[#006837] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#006837] hover:bg-emerald-50/70' }}">
-                            <span>قاعدة بيانات المتدربين</span>
+                            <span>{{ __('قاعدة بيانات المتدربين') }}</span>
                         </a>
 
                         <a href="{{ route('trainees.create') }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('trainees.create') ? 'bg-[#006837] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#006837] hover:bg-emerald-50/70' }}">
-                            <span>تسجيل متدرب جديد</span>
+                            <span>{{ __('تسجيل متدرب جديد') }}</span>
                         </a>
                     </div>
 
@@ -866,105 +889,105 @@
                         <a href="{{ route('training-certificates.index', ['status' => 'issued']) }}" 
                            class="hover:text-emerald-700 transition flex items-center gap-1 px-2 py-0.5 rounded {{ request('status') === 'issued' ? 'bg-emerald-50 text-emerald-800 font-bold' : '' }}">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#22A447]"></span>
-                            <span>الشهادات السارية المعتمدة</span>
+                            <span>{{ __('الشهادات السارية المعتمدة') }}</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     @elseif(request()->routeIs('users.*') || request()->routeIs('roles.*'))
-        <div class="bg-white border-b border-slate-200 shadow-2xs">
+        <div class="print:hidden no-print bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-10 gap-3 text-xs">
                     <div class="flex items-center gap-1.5 overflow-x-auto py-1">
                         <a href="{{ route('users.index') }}" 
                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ request()->routeIs('users.index') ? 'bg-purple-100 text-[#714B67] border border-purple-200 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <svg class="w-3.5 h-3.5 text-[#714B67]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                            <span>سجل المستخدمين</span>
+                            <span>{{ __('سجل المستخدمين') }}</span>
                         </a>
 
                         <span class="text-slate-300">|</span>
 
                         <a href="{{ route('users.create') }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('users.create') ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
-                            <span>إضافة مستخدم جديد</span>
+                            <span>{{ __('إضافة مستخدم جديد') }}</span>
                         </a>
 
                         <a href="{{ route('roles.index') }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('roles.*') ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
-                            <span>أدوار النظام ومصفوفة الصلاحيات</span>
+                            <span>{{ __('أدوار النظام ومصفوفة الصلاحيات') }}</span>
                         </a>
 
                         <a href="{{ route('settings.index', ['tab' => 'users']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium text-slate-700 hover:text-[#714B67] hover:bg-purple-50">
-                            <span>إعدادات الشركات والولوج</span>
+                            <span>{{ __('إعدادات الشركات والولوج') }}</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     @elseif(request()->routeIs('settings.*'))
-        <div class="bg-white border-b border-slate-200 shadow-2xs">
+        <div class="print:hidden no-print bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-10 gap-3 text-xs">
                     <div class="flex items-center gap-1.5 overflow-x-auto py-1">
                         <a href="{{ route('settings.index', ['tab' => 'general']) }}" 
                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ request('tab', 'general') === 'general' ? 'bg-purple-100 text-[#714B67] border border-purple-200 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <svg class="w-3.5 h-3.5 text-[#714B67]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                            <span>الإعدادات العامة</span>
+                            <span>{{ __('الإعدادات العامة') }}</span>
                         </a>
 
                         <span class="text-slate-300">|</span>
 
                         <a href="{{ route('settings.index', ['tab' => 'users']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('tab') === 'users' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
-                            <span>المستخدمون والشركات</span>
+                            <span>{{ __('المستخدمون والشركات') }}</span>
                         </a>
 
                         <a href="{{ route('settings.index', ['tab' => 'localization']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('tab') === 'localization' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
-                            <span>اللغات والترجمة</span>
+                            <span>{{ __('اللغات والترجمة') }}</span>
                         </a>
 
                         <a href="{{ route('settings.index', ['tab' => 'google_sheets']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('tab') === 'google_sheets' ? 'bg-[#006837] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-emerald-800 hover:bg-emerald-50' }}">
-                            <span>ربط Google Sheets</span>
+                            <span>{{ __('ربط Google Sheets') }}</span>
                         </a>
 
                         <a href="{{ route('settings.index', ['tab' => 'branding']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('tab') === 'branding' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
-                            <span>الشعار والأختام والقوالب</span>
+                            <span>{{ __('الشعار والأختام والقوالب') }}</span>
                         </a>
 
                         <a href="{{ route('settings.index', ['tab' => 'technical']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('tab') === 'technical' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
-                            <span>عناصر القوائم (Menu Items)</span>
+                            <span>{{ __('عناصر القوائم (Menu Items)') }}</span>
                         </a>
 
                         <a href="{{ route('settings.index', ['tab' => 'saas']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('tab') === 'saas' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#714B67] hover:bg-purple-50' }}">
-                            <span>منصة SaaS والمديولات</span>
+                            <span>{{ __('منصة SaaS والمديولات') }}</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     @elseif(request()->routeIs('tasks.*'))
-        <div class="bg-white border-b border-slate-200 shadow-2xs">
+        <div class="print:hidden no-print bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-10 gap-3 text-xs overflow-x-auto py-1">
                     <div class="flex items-center gap-1.5 flex-nowrap">
                         <a href="{{ route('tasks.index') }}" 
                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('tasks.index') && !request('status')) ? 'bg-blue-50 text-[#0E4DA4] border border-blue-200 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <svg class="w-3.5 h-3.5 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                            <span>أوامر الشغل ومهام الفحص</span>
+                            <span>{{ __('أوامر الشغل ومهام الفحص') }}</span>
                         </a>
 
                         <span class="text-slate-300">|</span>
 
                         <a href="{{ route('tasks.create') }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('tasks.create') ? 'bg-[#0E4DA4] text-white font-bold shadow-xs' : 'text-slate-700 hover:text-[#0E4DA4] hover:bg-blue-50/70' }}">
-                            <span>+ إضافة أمر شغل جديد</span>
+                            <span>{{ __('+ إضافة أمر شغل جديد') }}</span>
                         </a>
 
                         <span class="text-slate-300">|</span>
@@ -972,13 +995,13 @@
                         <a href="{{ route('tasks.index', ['status' => 'in_progress']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('status') === 'in_progress' ? 'bg-amber-50 text-amber-800 font-bold border border-amber-200' : 'text-slate-700 hover:text-amber-800 hover:bg-amber-50/70' }}">
                             <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                            <span>قيد الفحص الميداني</span>
+                            <span>{{ __('قيد الفحص الميداني') }}</span>
                         </a>
 
                         <a href="{{ route('tasks.index', ['status' => 'completed']) }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request('status') === 'completed' ? 'bg-emerald-50 text-emerald-800 font-bold border border-emerald-200' : 'text-slate-700 hover:text-emerald-800 hover:bg-emerald-50/70' }}">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#22A447]"></span>
-                            <span>مكتملة الفحص</span>
+                            <span>{{ __('مكتملة الفحص') }}</span>
                         </a>
                     </div>
 
@@ -988,13 +1011,13 @@
                             @csrf
                             <button type="submit" 
                                     class="px-3 py-1 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95" 
-                                    title="مزامنة فورية مع Google Sheets">
+                                    title="{{ __('مزامنة فورية مع Google Sheets') }}">
                                 <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                                <span>مزامنة Google Sheets</span>
+                                <span>{{ __('مزامنة Google Sheets') }}</span>
                             </button>
                         </form>
                         <a href="{{ route('settings.index', ['tab' => 'google_sheets']) }}" 
-                           class="text-slate-400 hover:text-slate-700 p-1" title="إعدادات الربط">
+                           class="text-slate-400 hover:text-slate-700 p-1" title="{{ __('إعدادات الربط') }}">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </a>
                     </div>
@@ -1002,47 +1025,47 @@
             </div>
         </div>
     @elseif(request()->routeIs('customers.*'))
-        <div class="bg-white border-b border-slate-200 shadow-2xs">
+        <div class="print:hidden no-print bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-10 gap-3 text-xs">
                     <div class="flex items-center gap-1.5 overflow-x-auto py-1">
                         <a href="{{ route('customers.index') }}" 
-                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition bg-amber-50 text-amber-900 border border-amber-200 shadow-2xs">
+                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition bg-amber-50 text-amber-900 border border-amber-200 shadow-2xs">
                             <svg class="w-3.5 h-3.5 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                            <span>دليل العملاء والشركات</span>
+                            <span>{{ __('دليل العملاء والشركات') }}</span>
                         </a>
 
                         <span class="text-slate-300">|</span>
 
                         <a href="{{ route('customers.create') }}" 
-                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('customers.create') ? 'bg-amber-600 text-white font-bold shadow-xs' : 'text-slate-700 hover:text-amber-800 hover:bg-amber-50' }}">
-                            <span>إضافة عميل جديد</span>
+                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('customers.create') ? 'bg-amber-600 text-white font-bold shadow-xs' : 'text-slate-700 hover:text-amber-800 hover:bg-amber-50' }}">
+                            <span>{{ __('إضافة عميل جديد') }}</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     @elseif(request()->routeIs('dashboard'))
-        <div class="bg-white border-b border-slate-200 shadow-2xs">
+        <div class="print:hidden no-print bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-10 gap-3 text-xs">
                     <div class="flex items-center gap-1.5 overflow-x-auto py-1">
                         <a href="{{ route('dashboard') }}" 
-                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition bg-blue-50 text-[#0E4DA4] border border-blue-200 shadow-2xs">
+                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition bg-blue-50 text-[#0E4DA4] border border-blue-200 shadow-2xs">
                             <svg class="w-3.5 h-3.5 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                            <span>لوحة المؤشرات والتقارير</span>
+                            <span>{{ __('لوحة المؤشرات والتقارير') }}</span>
                         </a>
 
                         <span class="text-slate-300">|</span>
 
                         <a href="{{ route('certificates.index') }}" 
-                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium text-slate-700 hover:text-[#0E4DA4] hover:bg-blue-50">
-                            <span>مؤشرات شهادات الفحص</span>
+                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium text-slate-700 hover:text-[#0E4DA4] hover:bg-blue-50">
+                            <span>{{ __('مؤشرات شهادات الفحص') }}</span>
                         </a>
 
                         <a href="{{ route('training-certificates.index') }}" 
-                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium text-slate-700 hover:text-emerald-800 hover:bg-emerald-50">
-                            <span>مؤشرات شهادات التدريب</span>
+                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md font-medium text-slate-700 hover:text-emerald-800 hover:bg-emerald-50">
+                            <span>{{ __('مؤشرات شهادات التدريب') }}</span>
                         </a>
                     </div>
                 </div>
@@ -1052,7 +1075,7 @@
 
 
     <!-- Flash Messages -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
+    <div class="print:hidden no-print max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
         @if(session('success'))
             <div class="flex items-center gap-3 p-3 mb-3 rounded-lg bg-[#E8F7EC] border border-[#22A447]/30 text-emerald-900 text-xs shadow-xs">
                 <svg class="w-5 h-5 text-[#22A447] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1064,7 +1087,7 @@
 
         @if(isset($errors) && $errors->any())
             <div class="p-3 mb-3 rounded-lg bg-red-50 border border-red-200 text-red-900 text-xs shadow-xs">
-                <div class="font-bold mb-1">يرجى تصحيح الأخطاء التالية:</div>
+                <div class="font-bold mb-1">{{ __('يرجى تصحيح الأخطاء التالية:') }}</div>
                 <ul class="list-disc list-inside space-y-0.5">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -1075,13 +1098,13 @@
     </div>
 
     <!-- Main View Content -->
-    <main class="flex-1 pb-20 md:pb-10">
+    <main class="flex-1 pb-20 md:pb-10 print:pb-0 print:m-0">
         @yield('content')
     </main>
 
     <!-- Mobile Quick-Access Floating Bottom Bar (IsoOx Mobile Ergonomic Pattern) -->
     @unless(View::hasSection('hide_bottom_nav'))
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-3 py-1.5 shadow-2xl flex items-center justify-around text-slate-500 transition-all select-none">
+    <nav class="print:hidden no-print md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-3 py-1.5 shadow-2xl flex items-center justify-around text-slate-500 transition-all select-none">
         <!-- 1. Apps Home -->
         <a href="{{ route('apps') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('apps') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <img src="{{ asset('branding/IsoOx-icons/apps.svg') }}" class="w-5 h-5 object-contain" alt="Apps">

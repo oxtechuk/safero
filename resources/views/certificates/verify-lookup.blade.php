@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'أداة التحقق من شهادات الفحص')
+@section('title', __('أداة التحقق من شهادات الفحص'))
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
@@ -9,11 +9,11 @@
     <div class="text-center space-y-2">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F7EC] text-[#22A447] text-xs font-bold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            <span>أداة الاستعلام الرقمي الفوري</span>
+            <span>{{ __('أداة الاستعلام الرقمي الفوري') }}</span>
         </div>
-        <h1 class="text-3xl font-black text-slate-900">التحقق من صحة شهادات وتقارير الفحص</h1>
+        <h1 class="text-3xl font-black text-slate-900">{{ __('التحقق من صحة شهادات وتقارير الفحص') }}</h1>
         <p class="text-xs text-slate-500 max-w-md mx-auto">
-            أدخل رقم الشهادة المطبوع على تقرير فحص معدات الرفع أو رمز التحقق للتأكد من مطابقتها وسريانها الرسمي.
+            {{ __('أدخل رقم الشهادة المطبوع على تقرير فحص معدات الرفع أو رمز التحقق للتأكد من مطابقتها وسريانها الرسمي.') }}
         </p>
     </div>
 
@@ -21,7 +21,7 @@
     <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lg p-6 sm:p-8">
         <form method="GET" action="{{ route('certificates.verify.lookup') }}" class="space-y-4">
             <div>
-                <label for="number" class="block text-xs font-bold text-slate-700 mb-2">رقم الشهادة أو الرمز المرجعي</label>
+                <label for="number" class="block text-xs font-bold text-slate-700 mb-2">{{ __('رقم الشهادة أو الرمز المرجعي') }}</label>
                 <div class="relative">
                     <input type="text" 
                            name="number" 
@@ -33,11 +33,11 @@
                     <button type="submit" 
                             class="absolute inset-y-2 left-2 px-6 rounded-xl bg-[#0E4DA4] hover:bg-[#0a3a7d] text-white font-bold text-xs sm:text-sm shadow-md transition flex items-center gap-1.5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                        <span>تحقق الآن</span>
+                        <span>{{ __('تحقق الآن') }}</span>
                     </button>
                 </div>
                 <div class="flex items-center gap-2 mt-2 text-[11px] text-slate-400">
-                    <span>شهادة تجريبية للاختبار:</span>
+                    <span>{{ __('شهادة تجريبية للاختبار:') }}</span>
                     <button type="button" 
                             onclick="document.getElementById('number').value='SAF/2026110807'; this.form.submit();"
                             class="font-en font-bold text-[#0E4DA4] hover:underline">
@@ -59,11 +59,11 @@
                         </div>
                         <div>
                             <span class="text-xs text-emerald-100 font-bold block">نتيجة الفحص الرسمي:</span>
-                            <h3 class="text-lg font-black">شهادة معتمدة ومطابقة للسجلات</h3>
+                            <h3 class="text-lg font-black">{{ __('شهادة معتمدة ومطابقة للسجلات') }}</h3>
                         </div>
                     </div>
                     <span class="px-3 py-1 rounded-full text-xs font-bold bg-white text-[#22A447]">
-                        سارية
+                        {{ __('سارية') }}
                     </span>
                 </div>
 

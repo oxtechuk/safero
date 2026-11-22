@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'لوحة المديولات الرئيسية')
+@section('title', __('لوحة المديولات الرئيسية'))
 
 @section('content')
 <div class="space-y-8">
@@ -113,7 +113,7 @@
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex items-center justify-between">
             <div>
-                <span class="text-xs font-bold text-slate-400 block mb-1">شهادات التدريب الصادرة</span>
+                <span class="text-xs font-bold text-slate-400 block mb-1">{{ __('شهادات التدريب الصادرة') }}</span>
                 <span class="text-2xl font-black text-[#006837]">{{ $stats['total_training_certificates'] }}</span>
             </div>
             <div class="w-12 h-12 rounded-xl bg-[#E8F7EC] text-[#006837] flex items-center justify-center font-bold">
@@ -123,7 +123,7 @@
 
         <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex items-center justify-between">
             <div>
-                <span class="text-xs font-bold text-slate-400 block mb-1">المتدربون المسجلون</span>
+                <span class="text-xs font-bold text-slate-400 block mb-1">{{ __('المتدربون المسجلون') }}</span>
                 <span class="text-2xl font-black text-slate-900">{{ $stats['total_trainees'] }}</span>
             </div>
             <div class="w-12 h-12 rounded-xl bg-[#E6F2FF] text-[#0E4DA4] flex items-center justify-center font-bold">
@@ -133,7 +133,7 @@
 
         <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex items-center justify-between">
             <div>
-                <span class="text-xs font-bold text-slate-400 block mb-1">شهادات فحص المعدات</span>
+                <span class="text-xs font-bold text-slate-400 block mb-1">{{ __('شهادات فحص المعدات') }}</span>
                 <span class="text-2xl font-black text-slate-900">{{ $stats['total_certificates'] }}</span>
             </div>
             <div class="w-12 h-12 rounded-xl bg-[#E8F7EC] text-[#22A447] flex items-center justify-center font-bold">
@@ -143,7 +143,7 @@
 
         <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex items-center justify-between">
             <div>
-                <span class="text-xs font-bold text-slate-400 block mb-1">العملاء والشركات</span>
+                <span class="text-xs font-bold text-slate-400 block mb-1">{{ __('العملاء والشركات') }}</span>
                 <span class="text-2xl font-black text-slate-900">{{ $stats['total_customers'] }}</span>
             </div>
             <div class="w-12 h-12 rounded-xl bg-[#E6F2FF] text-[#0E4DA4] flex items-center justify-center font-bold">
@@ -158,12 +158,12 @@
             <div>
                 <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
                     <span class="w-2 h-5 bg-[#006837] rounded-full inline-block"></span>
-                    أحدث شهادات التدريب المعتمدة الصادرة
+                    {{ __('أحدث شهادات التدريب المعتمدة الصادرة') }}
                 </h3>
-                <p class="text-xs text-slate-500">آخر شهادات الدورات التدريبية المعتمدة للمتدربين مع كود QR والـ PDF</p>
+                <p class="text-xs text-slate-500">{{ __('آخر شهادات الدورات التدريبية المعتمدة للمتدربين مع كود QR والـ PDF') }}</p>
             </div>
             <a href="{{ route('training-certificates.index') }}" class="text-xs font-bold text-[#006837] hover:underline flex items-center gap-1">
-                <span>عرض جميع شهادات التدريب ({{ $stats['total_training_certificates'] }})</span>
+                <span>{{ __('عرض جميع شهادات التدريب') }} ({{ $stats['total_training_certificates'] }})</span>
                 <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
@@ -172,14 +172,14 @@
             <table class="w-full text-right text-xs">
                 <thead class="bg-slate-50 text-slate-500 border-b border-slate-200 font-bold">
                     <tr>
-                        <th class="p-3.5">اسم المتدرب (Holder)</th>
-                        <th class="p-3.5">رقم المسلسل</th>
-                        <th class="p-3.5">عنوان البرنامج التدريبي</th>
-                        <th class="p-3.5">المجال</th>
-                        <th class="p-3.5 text-center">الساعات</th>
-                        <th class="p-3.5">تاريخ الشهادة</th>
-                        <th class="p-3.5 text-center">الحالة</th>
-                        <th class="p-3.5 text-center">الإجراءات</th>
+                        <th class="p-3.5">{{ __('اسم المتدرب (Holder)') }}</th>
+                        <th class="p-3.5">{{ __('رقم المسلسل') }}</th>
+                        <th class="p-3.5">{{ __('عنوان البرنامج التدريبي') }}</th>
+                        <th class="p-3.5">{{ __('المجال') }}</th>
+                        <th class="p-3.5 text-center">{{ __('الساعات') }}</th>
+                        <th class="p-3.5">{{ __('تاريخ الشهادة') }}</th>
+                        <th class="p-3.5 text-center">{{ __('الحالة') }}</th>
+                        <th class="p-3.5 text-center">{{ __('الإجراءات') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -207,20 +207,20 @@
                             </td>
                             <td class="p-3.5 text-center">
                                 <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E8F7EC] text-[#22A447]">
-                                    معتمدة
+                                    {{ __('معتمدة') }}
                                 </span>
                             </td>
                             <td class="p-3.5 text-center">
                                 <div class="inline-flex items-center gap-1.5">
                                     <a href="{{ route('training-certificates.show', $tCert) }}" 
                                        class="p-1.5 rounded-lg bg-slate-100 hover:bg-[#E8F7EC] text-slate-700 hover:text-[#006837] transition" 
-                                       title="معاينة">
+                                       title="{{ __('معاينة') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                     </a>
                                     <a href="{{ route('training-certificates.pdf', $tCert) }}" 
                                        target="_blank"
                                        class="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 text-red-600 hover:text-white transition" 
-                                       title="تحميل PDF">
+                                       title="{{ __('تحميل PDF') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                     </a>
                                 </div>
@@ -229,7 +229,7 @@
                     @empty
                         <tr>
                             <td colspan="8" class="p-6 text-center text-slate-400">
-                                لا توجد شهادات تدريب مسجلة بعد.
+                                {{ __('لا توجد شهادات تدريب مسجلة بعد.') }}
                             </td>
                         </tr>
                     @endforelse
@@ -244,12 +244,12 @@
             <div>
                 <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
                     <span class="w-2 h-5 bg-[#0E4DA4] rounded-full inline-block"></span>
-                    أحدث تقارير وشهادات الفحص الشامل
+                    {{ __('أحدث تقارير وشهادات الفحص الشامل') }}
                 </h3>
-                <p class="text-xs text-slate-500">آخر تقارير الفحص الصادرة للمعدات</p>
+                <p class="text-xs text-slate-500">{{ __('آخر تقارير الفحص الصادرة للمعدات') }}</p>
             </div>
             <a href="{{ route('certificates.index') }}" class="text-xs font-bold text-[#0E4DA4] hover:underline flex items-center gap-1">
-                <span>عرض جميع شهادات الفحص ({{ $stats['total_certificates'] }})</span>
+                <span>{{ __('عرض جميع شهادات الفحص') }} ({{ $stats['total_certificates'] }})</span>
                 <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
@@ -258,14 +258,14 @@
             <table class="w-full text-right text-xs">
                 <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
                     <tr>
-                        <th class="p-3.5 font-bold">رقم الشهادة</th>
-                        <th class="p-3.5 font-bold">اسم العميل</th>
-                        <th class="p-3.5 font-bold">وصف المعدة</th>
-                        <th class="p-3.5 font-bold">الحمل الآمن (SWL)</th>
-                        <th class="p-3.5 font-bold">تاريخ الفحص</th>
-                        <th class="p-3.5 font-bold">تاريخ الاستحقاق</th>
-                        <th class="p-3.5 font-bold">الحالة</th>
-                        <th class="p-3.5 font-bold text-center">الإجراءات</th>
+                        <th class="p-3.5 font-bold">{{ __('رقم الشهادة') }}</th>
+                        <th class="p-3.5 font-bold">{{ __('اسم العميل') }}</th>
+                        <th class="p-3.5 font-bold">{{ __('وصف المعدة') }}</th>
+                        <th class="p-3.5 font-bold">{{ __('الحمل الآمن (SWL)') }}</th>
+                        <th class="p-3.5 font-bold">{{ __('تاريخ الفحص') }}</th>
+                        <th class="p-3.5 font-bold">{{ __('تاريخ الاستحقاق') }}</th>
+                        <th class="p-3.5 font-bold">{{ __('الحالة') }}</th>
+                        <th class="p-3.5 font-bold text-center">{{ __('الإجراءات') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -295,12 +295,12 @@
                                 @if($cert->is_safe_to_operate)
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#E8F7EC] text-[#22A447]">
                                         <span class="w-1.5 h-1.5 rounded-full bg-[#22A447]"></span>
-                                        آمنة للتشغيل
+                                        {{ __('آمنة للتشغيل') }}
                                     </span>
                                 @else
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-700">
                                         <span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
-                                        غير آمنة
+                                        {{ __('غير آمنة') }}
                                     </span>
                                 @endif
                             </td>
@@ -308,13 +308,13 @@
                                 <div class="inline-flex items-center gap-2">
                                     <a href="{{ route('certificates.show', $cert) }}" 
                                        class="p-1.5 rounded-lg bg-slate-100 hover:bg-[#E6F2FF] text-slate-700 hover:text-[#0E4DA4] transition" 
-                                       title="معاينة الشهادة والـ QR">
+                                       title="{{ __('معاينة الشهادة والـ QR') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                     </a>
                                     <a href="{{ route('certificates.pdf', $cert) }}" 
                                        target="_blank"
                                        class="p-1.5 rounded-lg bg-[#E8F7EC] hover:bg-[#22A447] text-[#22A447] hover:text-white transition" 
-                                       title="تحميل PDF رسمي">
+                                       title="{{ __('تحميل PDF رسمي') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                     </a>
                                 </div>
@@ -323,7 +323,7 @@
                     @empty
                         <tr>
                             <td colspan="8" class="p-8 text-center text-slate-400">
-                                لا توجد شهادات مسجلة حتى الآن.
+                                {{ __('لا توجد شهادات مسجلة حتى الآن.') }}
                             </td>
                         </tr>
                     @endforelse

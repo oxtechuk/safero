@@ -22,7 +22,7 @@
     $activeMeta = $typeTitles[$type] ?? $typeTitles['crane'];
 @endphp
 
-@section('title', 'تعديل شهادة: ' . $certificate->certificate_number)
+@section('title', __('تعديل شهادة:') . ' ' . $certificate->certificate_number)
 
 @section('content')
 <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-4">
@@ -40,24 +40,24 @@
             <div class="flex items-center justify-between pb-2 border-b border-slate-100">
                 <div class="flex items-center gap-2">
                     <span class="w-5 h-5 rounded bg-blue-50 text-[#0E4DA4] text-[11px] font-bold flex items-center justify-center">1</span>
-                    <h2 class="font-bold text-slate-800 text-xs">معلومات الشهادة والعميل وموقع الفحص</h2>
+                    <h2 class="font-bold text-slate-800 text-xs">{{ __('معلومات الشهادة والعميل وموقع الفحص') }}</h2>
                 </div>
                 <span class="text-[11px] text-slate-400 font-en">General Metadata</span>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                 <div>
-                    <label for="certificate_number" class="block font-bold text-slate-700 mb-1">رقم الشهادة</label>
+                    <label for="certificate_number" class="block font-bold text-slate-700 mb-1">{{ __('رقم الشهادة') }}</label>
                     <input type="text" name="certificate_number" id="certificate_number" value="{{ old('certificate_number', $certificate->certificate_number) }}" required class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en font-bold text-[#0E4DA4] bg-slate-50 outline-none">
                 </div>
 
                 <div>
-                    <label for="order_no" class="block font-bold text-slate-700 mb-1">رقم أمر الشغل</label>
+                    <label for="order_no" class="block font-bold text-slate-700 mb-1">{{ __('رقم أمر الشغل') }}</label>
                     <input type="text" name="order_no" id="order_no" value="{{ old('order_no', $certificate->order_no) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                 </div>
 
                 <div>
-                    <label for="customer_id" class="block font-bold text-slate-700 mb-1">اسم العميل</label>
+                    <label for="customer_id" class="block font-bold text-slate-700 mb-1">{{ __('اسم العميل') }}</label>
                     <select name="customer_id" id="customer_id" required class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white outline-none">
                         @foreach($customers as $c)
                             <option value="{{ $c->id }}" {{ (old('customer_id', $certificate->customer_id) == $c->id) ? 'selected' : '' }}>
@@ -68,29 +68,29 @@
                 </div>
 
                 <div>
-                    <label for="examination_address" class="block font-bold text-slate-700 mb-1">موقع الفحص</label>
+                    <label for="examination_address" class="block font-bold text-slate-700 mb-1">{{ __('موقع الفحص') }}</label>
                     <input type="text" name="examination_address" id="examination_address" value="{{ old('examination_address', $certificate->examination_address) }}" required class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 outline-none">
                 </div>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-1">
                 <div>
-                    <label for="thorough_examination_date" class="block font-bold text-slate-700 mb-1">تاريخ الفحص</label>
+                    <label for="thorough_examination_date" class="block font-bold text-slate-700 mb-1">{{ __('تاريخ الفحص') }}</label>
                     <input type="date" name="thorough_examination_date" id="thorough_examination_date" value="{{ old('thorough_examination_date', $certificate->thorough_examination_date?->format('Y-m-d')) }}" required class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                 </div>
 
                 <div>
-                    <label for="next_examination_due_date" class="block font-bold text-slate-700 mb-1">تاريخ الاستحقاق القادم</label>
+                    <label for="next_examination_due_date" class="block font-bold text-slate-700 mb-1">{{ __('تاريخ الاستحقاق القادم') }}</label>
                     <input type="date" name="next_examination_due_date" id="next_examination_due_date" value="{{ old('next_examination_due_date', $certificate->next_examination_due_date?->format('Y-m-d')) }}" required class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                 </div>
 
                 <div>
-                    <label for="reference_standard" class="block font-bold text-slate-700 mb-1">المواصفة المرجعية</label>
+                    <label for="reference_standard" class="block font-bold text-slate-700 mb-1">{{ __('المواصفة المرجعية') }}</label>
                     <input type="text" name="reference_standard" id="reference_standard" value="{{ old('reference_standard', $certificate->reference_standard) }}" required class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                 </div>
 
                 <div>
-                    <label for="swl" class="block font-bold text-slate-700 mb-1">الحمل الآمن (SWL)</label>
+                    <label for="swl" class="block font-bold text-slate-700 mb-1">{{ __('الحمل الآمن (SWL)') }}</label>
                     <input type="text" name="swl" id="swl" value="{{ old('swl', $certificate->swl) }}" required class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en font-bold text-[#0E4DA4] outline-none">
                 </div>
             </div>
@@ -101,7 +101,7 @@
             <div class="flex items-center justify-between pb-2 border-b border-slate-100">
                 <div class="flex items-center gap-2">
                     <span class="w-5 h-5 rounded bg-blue-50 text-[#0E4DA4] text-[11px] font-bold flex items-center justify-center">2</span>
-                    <h2 class="font-bold text-slate-800 text-xs">مواصفات وبيانات المعدة المفحوصة</h2>
+                    <h2 class="font-bold text-slate-800 text-xs">{{ __('مواصفات وبيانات المعدة المفحوصة') }}</h2>
                 </div>
                 <span class="text-[11px] text-slate-400 font-en">Equipment Specs</span>
             </div>
@@ -121,15 +121,15 @@
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div>
-                            <label for="model" class="block font-bold text-slate-700 mb-1">الموديل (Model)</label>
+                            <label for="model" class="block font-bold text-slate-700 mb-1">{{ __('الموديل (Model)') }}</label>
                             <input type="text" name="model" id="model" value="{{ old('model', $certificate->model) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                         </div>
                         <div>
-                            <label for="capacity" class="block font-bold text-slate-700 mb-1">السعة (Capacity)</label>
+                            <label for="capacity" class="block font-bold text-slate-700 mb-1">{{ __('السعة (Capacity)') }}</label>
                             <input type="text" name="capacity" id="capacity" value="{{ old('capacity', $certificate->capacity) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                         </div>
                         <div>
-                            <label for="chassis_no" class="block font-bold text-slate-700 mb-1">رقم الشاسيه / السيريال</label>
+                            <label for="chassis_no" class="block font-bold text-slate-700 mb-1">{{ __('رقم الشاسيه / السيريال') }}</label>
                             <input type="text" name="chassis_no" id="chassis_no" value="{{ old('chassis_no', $certificate->chassis_no) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en font-bold outline-none">
                         </div>
                         <div>
@@ -140,19 +140,19 @@
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div>
-                            <label for="main_wire" class="block font-bold text-slate-700 mb-1">قطر الواير الرئيسي</label>
+                            <label for="main_wire" class="block font-bold text-slate-700 mb-1">{{ __('قطر الواير الرئيسي') }}</label>
                             <input type="text" name="main_wire" id="main_wire" value="{{ old('main_wire', $certificate->main_wire) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                         </div>
                         <div>
-                            <label for="hook_block" class="block font-bold text-slate-700 mb-1">سعة الهوك الرئيسي</label>
+                            <label for="hook_block" class="block font-bold text-slate-700 mb-1">{{ __('سعة الهوك الرئيسي') }}</label>
                             <input type="text" name="hook_block" id="hook_block" value="{{ old('hook_block', $certificate->hook_block) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                         </div>
                         <div>
-                            <label for="load_test_cert_no" class="block font-bold text-slate-700 mb-1">رقم شهادة تجربة الحمل</label>
+                            <label for="load_test_cert_no" class="block font-bold text-slate-700 mb-1">{{ __('رقم شهادة تجربة الحمل') }}</label>
                             <input type="text" name="load_test_cert_no" id="load_test_cert_no" value="{{ old('load_test_cert_no', $certificate->load_test_cert_no) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                         </div>
                         <div>
-                            <label for="date_of_load_test" class="block font-bold text-slate-700 mb-1">تاريخ تجربة الحمل</label>
+                            <label for="date_of_load_test" class="block font-bold text-slate-700 mb-1">{{ __('تاريخ تجربة الحمل') }}</label>
                             <input type="date" name="date_of_load_test" id="date_of_load_test" value="{{ old('date_of_load_test', $certificate->date_of_load_test?->format('Y-m-d')) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                         </div>
                     </div>
@@ -235,7 +235,7 @@
                     </div>
                     <button type="button" onclick="markAllChecklist('Pass')" class="px-2.5 py-1 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] font-bold transition flex items-center gap-1 shadow-2xs">
                         <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        <span>تحديد الكل سليم (Pass All)</span>
+                        <span>{{ __('تحديد الكل سليم (Pass All)') }}</span>
                     </button>
                 </div>
 
@@ -295,7 +295,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
                 <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200/80">
-                    <span class="text-slate-700">أول فحص بعد التركيب؟</span>
+                    <span class="text-slate-700">{{ __('أول فحص بعد التركيب؟') }}</span>
                     <div class="flex items-center gap-2 font-en font-bold">
                         <label class="cursor-pointer"><input type="radio" name="is_first_examination_after_installation" value="1" {{ old('is_first_examination_after_installation', $certificate->is_first_examination_after_installation) ? 'checked' : '' }}> Yes</label>
                         <label class="cursor-pointer"><input type="radio" name="is_first_examination_after_installation" value="0" {{ !old('is_first_examination_after_installation', $certificate->is_first_examination_after_installation) ? 'checked' : '' }}> No</label>
@@ -303,7 +303,7 @@
                 </div>
 
                 <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200/80">
-                    <span class="text-slate-700">الفحص خلال 6 أشهر؟</span>
+                    <span class="text-slate-700">{{ __('الفحص خلال 6 أشهر؟') }}</span>
                     <div class="flex items-center gap-2 font-en font-bold text-[#22A447]">
                         <label class="cursor-pointer"><input type="radio" name="was_examination_within_6_months" value="1" {{ old('was_examination_within_6_months', $certificate->was_examination_within_6_months) ? 'checked' : '' }}> Yes</label>
                         <label class="cursor-pointer text-slate-600"><input type="radio" name="was_examination_within_6_months" value="0" {{ !old('was_examination_within_6_months', $certificate->was_examination_within_6_months) ? 'checked' : '' }}> No</label>
@@ -311,7 +311,7 @@
                 </div>
 
                 <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200/80">
-                    <span class="text-slate-700">تم التركيب بشكل سليم؟</span>
+                    <span class="text-slate-700">{{ __('تم التركيب بشكل سليم؟') }}</span>
                     <div class="flex items-center gap-2 font-en font-bold text-[#22A447]">
                         <label class="cursor-pointer"><input type="radio" name="has_equipment_installed_correctly" value="1" {{ old('has_equipment_installed_correctly', $certificate->has_equipment_installed_correctly) ? 'checked' : '' }}> Yes</label>
                         <label class="cursor-pointer text-slate-600"><input type="radio" name="has_equipment_installed_correctly" value="0" {{ !old('has_equipment_installed_correctly', $certificate->has_equipment_installed_correctly) ? 'checked' : '' }}> No</label>
@@ -319,7 +319,7 @@
                 </div>
 
                 <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200/80">
-                    <span class="text-slate-700">الفحص خلال 12 شهر؟</span>
+                    <span class="text-slate-700">{{ __('الفحص خلال 12 شهر؟') }}</span>
                     <div class="flex items-center gap-2 font-en font-bold">
                         <label class="cursor-pointer"><input type="radio" name="was_examination_within_12_months" value="1" {{ old('was_examination_within_12_months', $certificate->was_examination_within_12_months) ? 'checked' : '' }}> Yes</label>
                         <label class="cursor-pointer"><input type="radio" name="was_examination_within_12_months" value="0" {{ !old('was_examination_within_12_months', $certificate->was_examination_within_12_months) ? 'checked' : '' }}> No</label>
@@ -327,7 +327,7 @@
                 </div>
 
                 <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200/80">
-                    <span class="text-slate-700">وفق مخطط الفحص؟</span>
+                    <span class="text-slate-700">{{ __('وفق مخطط الفحص؟') }}</span>
                     <div class="flex items-center gap-2 font-en font-bold text-[#22A447]">
                         <label class="cursor-pointer"><input type="radio" name="in_accordance_with_scheme" value="1" {{ old('in_accordance_with_scheme', $certificate->in_accordance_with_scheme) ? 'checked' : '' }}> Yes</label>
                         <label class="cursor-pointer text-slate-600"><input type="radio" name="in_accordance_with_scheme" value="0" {{ !old('in_accordance_with_scheme', $certificate->in_accordance_with_scheme) ? 'checked' : '' }}> No</label>
@@ -335,7 +335,7 @@
                 </div>
 
                 <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200/80">
-                    <span class="text-slate-700">بعد ظروف استثنائية؟</span>
+                    <span class="text-slate-700">{{ __('بعد ظروف استثنائية؟') }}</span>
                     <div class="flex items-center gap-2 font-en font-bold">
                         <label class="cursor-pointer"><input type="radio" name="after_exceptional_circumstances" value="1" {{ old('after_exceptional_circumstances', $certificate->after_exceptional_circumstances) ? 'checked' : '' }}> Yes</label>
                         <label class="cursor-pointer"><input type="radio" name="after_exceptional_circumstances" value="0" {{ !old('after_exceptional_circumstances', $certificate->after_exceptional_circumstances) ? 'checked' : '' }}> No</label>
@@ -350,12 +350,12 @@
                 </div>
 
                 <div>
-                    <label for="repair_particulars" class="block font-bold text-slate-700 mb-1">الإصلاحات المطلوبة</label>
+                    <label for="repair_particulars" class="block font-bold text-slate-700 mb-1">{{ __('الإصلاحات المطلوبة') }}</label>
                     <input type="text" name="repair_particulars" id="repair_particulars" value="{{ old('repair_particulars', $certificate->repair_particulars) }}" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">هل العيب يشكل خطورة على العمليات؟</label>
+                    <label class="block font-bold text-slate-700 mb-1">{{ __('هل العيب يشكل خطورة على العمليات؟') }}</label>
                     <div class="flex items-center gap-3 h-8 px-2 rounded-lg bg-slate-50 border border-slate-200 font-en text-[11px] font-bold">
                         <label class="cursor-pointer text-red-600"><input type="radio" name="is_defect_danger_to_process" value="1" {{ old('is_defect_danger_to_process', $certificate->is_defect_danger_to_process) ? 'checked' : '' }}> Yes</label>
                         <label class="cursor-pointer text-[#22A447]"><input type="radio" name="is_defect_danger_to_process" value="0" {{ !old('is_defect_danger_to_process', $certificate->is_defect_danger_to_process) ? 'checked' : '' }}> No</label>
@@ -364,7 +364,7 @@
             </div>
 
             <div class="text-xs">
-                <label for="tests_carried_out" class="block font-bold text-slate-700 mb-1">تفاصيل الفحوصات والاختبارات المنفذة</label>
+                <label for="tests_carried_out" class="block font-bold text-slate-700 mb-1">{{ __('تفاصيل الفحوصات والاختبارات المنفذة') }}</label>
                 <input type="text" name="tests_carried_out" id="tests_carried_out" value="{{ old('tests_carried_out', $certificate->tests_carried_out) }}" required class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-[#0E4DA4] font-en outline-none">
             </div>
 
@@ -375,11 +375,11 @@
                 <div class="flex items-center gap-2 font-en text-xs font-bold">
                     <label class="cursor-pointer px-3 py-1.5 rounded-lg bg-white border border-emerald-300 text-[#22A447] shadow-2xs">
                         <input type="radio" name="is_safe_to_operate" value="1" {{ old('is_safe_to_operate', $certificate->is_safe_to_operate) ? 'checked' : '' }}>
-                        <span>YES (آمنة)</span>
+                        <span>{{ __('YES (آمنة)') }}</span>
                     </label>
                     <label class="cursor-pointer px-3 py-1.5 rounded-lg bg-white border border-red-300 text-red-600 shadow-2xs">
                         <input type="radio" name="is_safe_to_operate" value="0" {{ !old('is_safe_to_operate', $certificate->is_safe_to_operate) ? 'checked' : '' }}>
-                        <span>NO (غير آمنة)</span>
+                        <span>{{ __('NO (غير آمنة)') }}</span>
                     </label>
                 </div>
             </div>
@@ -399,17 +399,17 @@
                 </div>
 
                 <div>
-                    <label for="status" class="block font-bold text-slate-700 mb-1">حالة الشهادة</label>
+                    <label for="status" class="block font-bold text-slate-700 mb-1">{{ __('حالة الشهادة') }}</label>
                     <select name="status" id="status" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white outline-none">
-                        <option value="issued" {{ old('status', $certificate->status) === 'issued' ? 'selected' : '' }}>معتمدة ومصدرة (Issued)</option>
-                        <option value="draft" {{ old('status', $certificate->status) === 'draft' ? 'selected' : '' }}>مسودة للمراجعة (Draft)</option>
+                        <option value="issued" {{ old('status', $certificate->status) === 'issued' ? 'selected' : '' }}>{{ __('معتمدة ومصدرة (Issued)') }}</option>
+                        <option value="draft" {{ old('status', $certificate->status) === 'draft' ? 'selected' : '' }}>{{ __('مسودة للمراجعة (Draft)') }}</option>
                         <option value="revoked" {{ old('status', $certificate->status) === 'revoked' ? 'selected' : '' }}>ملغاة (Revoked)</option>
                     </select>
                 </div>
 
                 <div class="flex items-center justify-end gap-2">
                     <a href="{{ route('certificates.show', $certificate) }}" class="px-3.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold transition">
-                        إلغاء
+                        {{ __('إلغاء') }}
                     </a>
                     <button type="submit" class="px-5 py-1.5 rounded-lg bg-[#0E4DA4] hover:bg-[#0a3a7d] text-white font-bold shadow-xs transition flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>

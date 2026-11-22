@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'إصدار شهادة تدريب معتمدة')
+@section('title', __('إصدار شهادة تدريب معتمدة'))
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">
@@ -15,8 +15,8 @@
                 <span>/</span>
                 <span class="text-slate-800 font-bold">إصدار جديد</span>
             </nav>
-            <h1 class="text-2xl font-black text-slate-900">إصدار شهادة تدريب معتمدة جديدة</h1>
-            <p class="text-xs text-slate-500 mt-0.5">أدخل بيانات المتدرب والدورة لإصدار الشهادة الرسمية وتوليد رمز QR تلقائياً</p>
+            <h1 class="text-2xl font-black text-slate-900">{{ __('إصدار شهادة تدريب معتمدة جديدة') }}</h1>
+            <p class="text-xs text-slate-500 mt-0.5">{{ __('أدخل بيانات المتدرب والدورة لإصدار الشهادة الرسمية وتوليد رمز QR تلقائياً') }}</p>
         </div>
         <a href="{{ route('training-certificates.index') }}" 
            class="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition">
@@ -43,22 +43,22 @@
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h2 class="text-base font-black text-slate-900 flex items-center gap-2">
                     <span class="w-2 h-5 bg-[#22A447] rounded-full inline-block"></span>
-                    بيانات المتدرب (Certificate Holder)
+                    {{ __('بيانات المتدرب (Certificate Holder)') }}
                 </h2>
                 <a href="{{ route('trainees.create') }}" target="_blank" class="text-xs text-[#0E4DA4] hover:underline font-bold flex items-center gap-1">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span>إضافة متدرب جديد في السجل</span>
+                    <span>{{ __('إضافة متدرب جديد في السجل') }}</span>
                 </a>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">
-                        اختيار من سجل المتدربين المسجلين (اختياري)
+                        {{ __('اختيار من سجل المتدربين المسجلين (اختياري)') }}
                     </label>
                     <select name="trainee_id" id="trainee_select" 
                             class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:border-[#0E4DA4] focus:ring-2 focus:ring-[#0E4DA4]/20 outline-none text-xs sm:text-sm bg-white">
-                        <option value="">-- متدرب جديد / إدخال يدوي --</option>
+                        <option value="">{{ __('-- متدرب جديد / إدخال يدوي --') }}</option>
                         @foreach($trainees as $t)
                             <option value="{{ $t->id }}" 
                                     data-name="{{ $t->name }}" 
@@ -72,7 +72,7 @@
 
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">
-                        اسم المتدرب المعتمد في الشهادة (Certificate Holder Name) <span class="text-red-500">*</span>
+                        {{ __('اسم المتدرب المعتمد في الشهادة (Certificate Holder Name)') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="text" 
                            name="trainee_name" 
@@ -81,7 +81,7 @@
                            required 
                            placeholder="مثال: Mohamed Mahmoud Mahran"
                            class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:border-[#0E4DA4] focus:ring-2 focus:ring-[#0E4DA4]/20 outline-none text-xs sm:text-sm font-semibold">
-                    <span class="text-[11px] text-slate-400 mt-0.5 block">الاسم الذي سيظهر بالخط العريض في منتصف الشهادة</span>
+                    <span class="text-[11px] text-slate-400 mt-0.5 block">{{ __('الاسم الذي سيظهر بالخط العريض في منتصف الشهادة') }}</span>
                 </div>
             </div>
         </div>
@@ -90,13 +90,13 @@
         <div class="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-sm space-y-4">
             <h2 class="text-base font-black text-slate-900 flex items-center gap-2 pb-3 border-b border-slate-100">
                 <span class="w-2 h-5 bg-[#0E4DA4] rounded-full inline-block"></span>
-                تفاصيل البرنامج التدريبي (Training Details)
+                {{ __('تفاصيل البرنامج التدريبي (Training Details)') }}
             </h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">
-                        رقم مسلسل الشهادة (Certificate Serial No) <span class="text-red-500">*</span>
+                        {{ __('رقم مسلسل الشهادة (Certificate Serial No)') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="text" 
                            name="certificate_serial" 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'إنشاء فاتورة فحص جديدة - New Invoice')
+@section('title', __('إنشاء فاتورة وحسابات فحص جديدة'))
 
 @section('content')
 <div class="space-y-4" x-data="invoiceBuilder()">
@@ -17,15 +17,15 @@
                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-[#0E4DA4] border border-blue-200 font-mono">
                             {{ $nextNumber }}
                         </span>
-                        <h1 class="text-base sm:text-lg font-black text-slate-900">إنشاء فاتورة وحسابات فحص جديدة</h1>
+                        <h1 class="text-base sm:text-lg font-black text-slate-900">{{ __('إنشاء فاتورة وحسابات فحص جديدة') }}</h1>
                     </div>
-                    <p class="text-xs text-slate-500 mt-0.5">إضافة شهادات الفحص للعميل، تحديد الأسعار، احتساب الخصم (% أو ج.م)، وتسجيل المبالغ المدفوعة</p>
+                    <p class="text-xs text-slate-500 mt-0.5">{{ __('إضافة شهادات الفحص للعميل، تحديد الأسعار، احتساب الخصم (% أو ج.م)، وتسجيل المبالغ المدفوعة') }}</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2">
                 <a href="{{ route('invoices.index') }}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-bold transition">
-                    إلغاء
+                    {{ __('إلغاء') }}
                 </a>
             </div>
         </div>
@@ -41,12 +41,12 @@
                 <!-- Customer Selection -->
                 <div class="md:col-span-1">
                     <label for="customer_id" class="block text-xs font-bold text-slate-700 mb-1.5">
-                        العميل (Customer) <span class="text-red-500">*</span>
+                        {{ __('العميل') }} <span class="text-red-500">*</span>
                     </label>
                     <select name="customer_id" id="customer_id" required 
                             @change="onCustomerChange($event.target.value)"
                             class="w-full text-xs font-semibold rounded-lg border-slate-300 focus:border-[#0E4DA4] focus:ring-[#0E4DA4] py-2.5 bg-white">
-                        <option value="">-- اختر العميل --</option>
+                        <option value="">{{ __('-- اختر العميل --') }}</option>
                         @foreach($customers as $c)
                             <option value="{{ $c->id }}" {{ (old('customer_id', $selectedCustomerId) == $c->id) ? 'selected' : '' }}>
                                 {{ $c->name }} ({{ $c->certificates->count() }} شهادة)
@@ -58,7 +58,7 @@
                 <!-- Invoice Date -->
                 <div>
                     <label for="invoice_date" class="block text-xs font-bold text-slate-700 mb-1.5">
-                        تاريخ الفاتورة (Invoice Date) <span class="text-red-500">*</span>
+                        {{ __('تاريخ الفاتورة') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="date" name="invoice_date" id="invoice_date" required value="{{ old('invoice_date', $today) }}"
                            class="w-full text-xs font-semibold rounded-lg border-slate-300 focus:border-[#0E4DA4] focus:ring-[#0E4DA4] py-2">
@@ -67,7 +67,7 @@
                 <!-- Due Date -->
                 <div>
                     <label for="due_date" class="block text-xs font-bold text-slate-700 mb-1.5">
-                        تاريخ الاستحقاق (Due Date)
+                        {{ __('تاريخ الاستحقاق') }}
                     </label>
                     <input type="date" name="due_date" id="due_date" value="{{ old('due_date', $dueDate) }}"
                            class="w-full text-xs font-semibold rounded-lg border-slate-300 focus:border-[#0E4DA4] focus:ring-[#0E4DA4] py-2">
@@ -79,10 +79,10 @@
                 <div class="flex items-center justify-between flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <h3 class="text-xs font-extrabold text-[#0E4DA4]">شهادات الفحص المتاحة للعميل (اختر لإضافتها فوراً للفاتورة):</h3>
+                        <h3 class="text-xs font-extrabold text-[#0E4DA4]">{{ __('شهادات الفحص المتاحة للعميل (اختر لإضافتها فوراً للفاتورة):') }}</h3>
                     </div>
                     <button type="button" @click="addAllCertificates()" class="text-[11px] font-bold text-[#0E4DA4] hover:underline">
-                        + إضافة جميع الشهادات المتاحة
+                        {{ __('+ إضافة جميع الشهادات المتاحة') }}
                     </button>
                 </div>
 
@@ -99,7 +99,7 @@
                                     :disabled="isCertAdded(cert.id)"
                                     :class="isCertAdded(cert.id) ? 'bg-slate-100 text-slate-400' : 'bg-blue-600 hover:bg-blue-700 text-white'"
                                     class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition shrink-0">
-                                <span x-text="isCertAdded(cert.id) ? 'تمت الإضافة' : '+ إضافة'"></span>
+                                <span x-text="isCertAdded(cert.id) ? '{{ __('تمت الإضافة') }}' : '{{ __('+ إضافة') }}'"></span>
                             </button>
                         </div>
                     </template>
@@ -113,13 +113,13 @@
                         <div class="w-6 h-6 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
                         </div>
-                        <h2 class="text-sm font-extrabold text-slate-900">بنود وشهادات الفحص المفوترة (Invoice Line Items)</h2>
+                        <h2 class="text-sm font-extrabold text-slate-900">{{ __('بنود وشهادات الفحص المفوترة (Invoice Line Items)') }}</h2>
                     </div>
 
                     <button type="button" @click="addCustomItem()" 
                             class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                        <span>+ إضافة بند خدمة يدوي</span>
+                        <span>{{ __('+ إضافة بند خدمة يدوي') }}</span>
                     </button>
                 </div>
 
@@ -128,10 +128,10 @@
                         <thead class="text-slate-500 font-bold border-b border-slate-200 pb-2">
                             <tr>
                                 <th class="pb-2 w-10 text-center">#</th>
-                                <th class="pb-2">وصف الخدمة / شهادة الفحص</th>
-                                <th class="pb-2 w-24 text-center">الكمية</th>
-                                <th class="pb-2 w-32 text-center">سعر الفحص (ج.م)</th>
-                                <th class="pb-2 w-32 text-center">الإجمالي (ج.م)</th>
+                                <th class="pb-2">{{ __('وصف الخدمة / شهادة الفحص') }}</th>
+                                <th class="pb-2 w-24 text-center">{{ __('الكمية') }}</th>
+                                <th class="pb-2 w-32 text-center">{{ __('سعر الفحص (ج.م)') }}</th>
+                                <th class="pb-2 w-32 text-center">{{ __('الإجمالي (ج.م)') }}</th>
                                 <th class="pb-2 w-12 text-center"></th>
                             </tr>
                         </thead>
@@ -143,7 +143,7 @@
                                         <div class="space-y-1">
                                             <input type="text" :name="'items[' + index + '][description]'" 
                                                    x-model="item.description" required
-                                                   placeholder="وصف فحص المعدة والشهادة المعتمدة..."
+                                                   placeholder="{{ __('وصف فحص المعدة والشهادة المعتمدة...') }}"
                                                    class="w-full text-xs rounded-lg border-slate-300 py-2">
                                             <input type="hidden" :name="'items[' + index + '][certificate_id]'" :value="item.certificate_id || ''">
                                         </div>
@@ -166,7 +166,7 @@
                                     </td>
                                     <td class="py-2.5 text-center">
                                         <button type="button" @click="removeItem(index)" 
-                                                class="text-red-400 hover:text-red-600 p-1 transition" title="حذف البند">
+                                                class="text-red-400 hover:text-red-600 p-1 transition" title="{{ __('حذف البند') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                         </button>
                                     </td>
@@ -182,56 +182,56 @@
                 
                 <!-- Left: Payment details & Notes -->
                 <div class="bg-white border border-slate-200 rounded-2xl shadow-xs p-5 space-y-4">
-                    <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">تفاصيل السداد وطريقة الدفع</h3>
+                    <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">{{ __('تفاصيل السداد وطريقة الدفع') }}</h3>
                     
                     <div>
-                        <label for="payment_method" class="block text-xs font-bold text-slate-700 mb-1">طريقة السداد</label>
+                        <label for="payment_method" class="block text-xs font-bold text-slate-700 mb-1">{{ __('طريقة السداد') }}</label>
                         <select name="payment_method" id="payment_method" class="w-full text-xs font-semibold rounded-lg border-slate-300 py-2">
-                            <option value="cash">نقداً (كاش)</option>
-                            <option value="bank_transfer">تحويل بنكي (Bank Transfer)</option>
-                            <option value="cheque">شيك بنكي (Cheque)</option>
-                            <option value="other">أخرى</option>
+                            <option value="cash">{{ __('نقداً (كاش)') }}</option>
+                            <option value="bank_transfer">{{ __('تحويل بنكي (Bank Transfer)') }}</option>
+                            <option value="cheque">{{ __('شيك بنكي (Cheque)') }}</option>
+                            <option value="other">{{ __('أخرى') }}</option>
                         </select>
                     </div>
 
                     <div>
-                        <label for="notes" class="block text-xs font-bold text-slate-700 mb-1">ملاحظات الفاتورة</label>
-                        <textarea name="notes" id="notes" rows="2" placeholder="أي شروط أو ملاحظات خاصة بالفاتورة..."
+                        <label for="notes" class="block text-xs font-bold text-slate-700 mb-1">{{ __('ملاحظات الفاتورة') }}</label>
+                        <textarea name="notes" id="notes" rows="2" placeholder="{{ __('أي شروط أو ملاحظات خاصة بالفاتورة...') }}"
                                   class="w-full text-xs rounded-lg border-slate-300 py-2"></textarea>
                     </div>
 
                     <div>
-                        <label for="terms" class="block text-xs font-bold text-slate-700 mb-1">شروط الدفع والاعتماد</label>
-                        <input type="text" name="terms" id="terms" value="تعتبر الشهادات سارية فور استيفاء شروط السداد والاعتماد الفني."
+                        <label for="terms" class="block text-xs font-bold text-slate-700 mb-1">{{ __('شروط الدفع والاعتماد') }}</label>
+                        <input type="text" name="terms" id="terms" value="{{ __('تعتبر الشهادات سارية فور استيفاء شروط السداد والاعتماد الفني.') }}"
                                class="w-full text-xs rounded-lg border-slate-300 py-2 text-slate-600">
                     </div>
                 </div>
 
                 <!-- Right: Financial Breakdown (Live Calculated) -->
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl shadow-xs p-5 space-y-3.5">
-                    <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">ملخص الحساب والخصومات</h3>
+                    <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">{{ __('ملخص الحساب والخصومات') }}</h3>
 
                     <!-- Subtotal -->
                     <div class="flex items-center justify-between text-xs font-bold text-slate-700">
-                        <span>المجموع الفرعي (Subtotal):</span>
-                        <span class="font-mono text-sm" x-text="subtotal.toFixed(2) + ' ج.م'">0.00 ج.م</span>
+                        <span>{{ __('المجموع الفرعي (Subtotal):') }}</span>
+                        <span class="font-mono text-sm" x-text="subtotal.toFixed(2) + ' ' + currencySymbol">0.00 ج.م</span>
                     </div>
 
                     <!-- Discount Section (% or Fixed EGP) -->
                     <div class="pt-2 border-t border-slate-200 space-y-2">
                         <div class="flex items-center justify-between gap-2 flex-wrap">
-                            <span class="text-xs font-bold text-slate-700">نوع الخصم (Discount):</span>
+                            <span class="text-xs font-bold text-slate-700">{{ __('نوع الخصم (Discount):') }}</span>
                             
                             <div class="flex items-center gap-1 text-[11px] font-bold">
                                 <label class="cursor-pointer px-2 py-1 rounded transition" 
                                        :class="discountType === 'percentage' ? 'bg-[#0E4DA4] text-white' : 'bg-white border text-slate-600'">
                                     <input type="radio" name="discount_type" value="percentage" x-model="discountType" @change="calculateTotals()" class="hidden">
-                                    <span>نسبة مئوية (%)</span>
+                                    <span>{{ __('نسبة مئوية (%)') }}</span>
                                 </label>
                                 <label class="cursor-pointer px-2 py-1 rounded transition" 
                                        :class="discountType === 'fixed' ? 'bg-[#0E4DA4] text-white' : 'bg-white border text-slate-600'">
                                     <input type="radio" name="discount_type" value="fixed" x-model="discountType" @change="calculateTotals()" class="hidden">
-                                    <span>مبلغ ثابت (ج.م)</span>
+                                    <span>{{ __('مبلغ ثابت (ج.م)') }}</span>
                                 </label>
                             </div>
                         </div>
@@ -242,20 +242,20 @@
                                    @input="calculateTotals()"
                                    :placeholder="discountType === 'percentage' ? 'مثال: 10%' : 'مثال: 500 ج.م'"
                                    class="w-full text-xs font-mono font-bold rounded-lg border-amber-300 bg-amber-50/30 py-2">
-                            <span class="text-xs font-extrabold text-amber-700 shrink-0 font-mono" x-text="'-' + discountAmount.toFixed(2) + ' ج.م'"></span>
+                            <span class="text-xs font-extrabold text-amber-700 shrink-0 font-mono" x-text="'- ' + discountAmount.toFixed(2) + ' ' + currencySymbol"></span>
                         </div>
                     </div>
 
                     <!-- Total Amount -->
                     <div class="pt-2 border-t border-slate-200 flex items-center justify-between text-sm font-black text-slate-900">
-                        <span>الإجمالي المطلوب (Total Amount):</span>
-                        <span class="font-mono text-base text-[#0E4DA4]" x-text="totalAmount.toFixed(2) + ' ج.م'">0.00 ج.م</span>
+                        <span>{{ __('الإجمالي المطلوب (Total Amount):') }}</span>
+                        <span class="font-mono text-base text-[#0E4DA4]" x-text="totalAmount.toFixed(2) + ' ' + currencySymbol">0.00 ج.م</span>
                     </div>
 
                     <!-- Amount Paid (دفع كم) -->
                     <div class="pt-2 border-t border-slate-200 space-y-1">
                         <label for="paid_amount" class="block text-xs font-bold text-emerald-800">
-                            المبلغ المدفوع كاش / تحويل (دفع كم):
+                            {{ __('المبلغ المدفوع كاش / تحويل (دفع كم):') }}
                         </label>
                         <div class="relative">
                             <input type="number" step="0.01" min="0" name="paid_amount" id="paid_amount"
@@ -263,21 +263,21 @@
                                    @input="calculateTotals()"
                                    placeholder="0.00"
                                    class="w-full text-xs font-mono font-black text-emerald-900 rounded-lg border-emerald-300 bg-emerald-50/40 py-2.5">
-                            <span class="absolute left-3 top-2.5 text-xs font-bold text-emerald-700">ج.م</span>
+                            <span class="absolute left-3 top-2.5 text-xs font-bold text-emerald-700">{{ __('ج.م') }}</span>
                         </div>
                     </div>
 
                     <!-- Remaining Balance (المتبقي) & Status Badge -->
                     <div class="pt-2 border-t border-slate-200 flex items-center justify-between">
                         <div>
-                            <span class="text-xs font-bold text-slate-700 block">المبلغ المتبقي (Balance Due):</span>
+                            <span class="text-xs font-bold text-slate-700 block">{{ __('المبلغ المتبقي (Balance Due):') }}</span>
                             <span class="text-base font-black font-mono" 
                                   :class="remainingBalance > 0 ? 'text-red-600' : 'text-emerald-600'"
-                                  x-text="remainingBalance.toFixed(2) + ' ج.م'">0.00 ج.م</span>
+                                  x-text="remainingBalance.toFixed(2) + ' ' + currencySymbol">0.00 ج.م</span>
                         </div>
 
                         <div>
-                            <span class="text-[10px] font-bold text-slate-400 block mb-0.5">حالة الفاتورة:</span>
+                            <span class="text-[10px] font-bold text-slate-400 block mb-0.5">{{ __('حالة الفاتورة:') }}</span>
                             <span class="px-2.5 py-1 rounded-full text-xs font-black inline-block shadow-2xs"
                                   :class="{
                                       'bg-emerald-100 text-emerald-800 border border-emerald-300': paymentStatus === 'paid',
@@ -296,7 +296,7 @@
                 <button type="submit" 
                         class="px-8 py-3 rounded-xl bg-[#006837] hover:bg-[#00522c] text-white text-sm font-extrabold shadow-md hover:shadow-lg transition flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    <span>حفظ وإصدار الفاتورة</span>
+                    <span>{{ __('حفظ وإصدار الفاتورة') }}</span>
                 </button>
             </div>
         </form>
@@ -314,6 +314,7 @@ function invoiceBuilder() {
         discountAmount: 0,
         totalAmount: 0,
         remainingBalance: 0,
+        currencySymbol: '{{ __('ج.م') }}',
         
         items: [
             { description: 'فحص ومعايرة معدة رفع وفق معايير ISO 17020', certificate_id: null, quantity: 1, unit_price: 1500 }
@@ -403,9 +404,9 @@ function invoiceBuilder() {
         },
 
         get paymentStatusLabel() {
-            if (this.paymentStatus === 'paid') return 'مدفوع بالكامل';
-            if (this.paymentStatus === 'partial') return 'سداد جزئي';
-            return 'غير مدفوع (معلق)';
+            if (this.paymentStatus === 'paid') return '{{ __('مدفوع بالكامل') }}';
+            if (this.paymentStatus === 'partial') return '{{ __('سداد جزئي') }}';
+            return '{{ __('غير مدفوع (معلق)') }}';
         }
     };
 }

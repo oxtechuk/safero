@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>تطبيقات ومديولات النظام &mdash; Safero ERP</title>
+    <title>{{ __('تطبيقات ومديولات النظام') }} &mdash; Safero ERP</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,7 +108,7 @@
                 <div class="relative w-48 sm:w-64">
                     <input type="text" 
                            id="appSearchInput" 
-                           placeholder="بحث في المديولات..." 
+                           placeholder="{{ __('بحث في المديولات...') }}" 
                            class="w-full pr-8 pl-3 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-xs focus:bg-white focus:border-[#0E4DA4] focus:ring-2 focus:ring-[#0E4DA4]/15 outline-none transition">
                     <svg class="w-4 h-4 text-slate-400 absolute right-2.5 top-2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -138,7 +138,7 @@
 
                 <div class="flex items-center gap-2 pr-2 border-r border-slate-200">
                     <div class="text-left hidden lg:block">
-                        <span class="block text-xs font-bold text-slate-900">{{ Auth::user()->name ?? 'مدير النظام' }}</span>
+                        <span class="block text-xs font-bold text-slate-900">{{ Auth::user()->name ?? __('مدير النظام') }}</span>
                         <span class="block text-[10px] text-slate-500">{{ Auth::user()->email ?? '' }}</span>
                     </div>
 
@@ -146,7 +146,7 @@
                         @csrf
                         <button type="submit" 
                                 class="p-2 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 transition" 
-                                title="تسجيل الخروج">
+                                title="{{ __('تسجيل الخروج') }}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>
@@ -170,7 +170,7 @@
                 Simple, efficient, yet <span class="brush-underline">affordable!</span>
             </p>
             <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-3 font-sans" dir="rtl">
-                منصة شركة سافيرو (Safero) الموحدة لإدارة الفحص الشامل، شهادات التدريب المعتمدة، وسجلات المتدربين والعملاء.
+                {{ __('منصة شركة سافيرو (Safero) الموحدة لإدارة الفحص الشامل، شهادات التدريب المعتمدة، وسجلات المتدربين والعملاء.') }}
             </p>
         </div>
 
@@ -186,11 +186,11 @@
                         <a href="{{ route('inspections.start') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2 sm:p-2.5 hover:shadow-lg transition">
                             <img src="{{ asset('branding/odoo-icons/survey.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Start Field Inspection">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-600 text-white shadow-sm font-en">
-                                جديد
+                                {{ __('جديد') }}
                             </span>
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-emerald-700 transition">
-                            بدء فحص ميداني
+                            {{ __('بدء فحص ميداني') }}
                         </span>
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Field Inspection</span>
                     </div>
@@ -204,7 +204,7 @@
                             </span>
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#0E4DA4] transition">
-                            شهادات الفحص
+                            {{ __('شهادات الفحص') }}
                         </span>
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Inspection Certs</span>
                     </div>
@@ -218,7 +218,7 @@
                             </span>
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#006837] transition">
-                            الفواتير والحسابات
+                            {{ __('الفواتير والحسابات') }}
                         </span>
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Invoices &amp; Billing</span>
                     </div>
@@ -228,11 +228,11 @@
                         <a href="{{ route('reports.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2 sm:p-2.5 hover:shadow-lg transition">
                             <img src="{{ asset('branding/odoo-icons/point_of_sale.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Profit Reports">
                             <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500 text-white shadow-sm font-en">
-                                أرباح
+                                {{ __('أرباح') }}
                             </span>
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-amber-600 transition">
-                            تقارير الأرباح
+                            {{ __('تقارير الأرباح') }}
                         </span>
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Profit Analytics</span>
                     </div>
@@ -246,7 +246,7 @@
                             </span>
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-rose-600 transition">
-                            إدارة العملاء
+                            {{ __('إدارة العملاء') }}
                         </span>
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Customers CRM</span>
                     </div>
@@ -260,7 +260,7 @@
                             </span>
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-emerald-700 transition">
-                            شهادات التدريب
+                            {{ __('شهادات التدريب') }}
                         </span>
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Training Certs</span>
                     </div>
@@ -274,7 +274,7 @@
                             </span>
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#0E4DA4] transition">
-                            سجل المتدربين
+                            {{ __('سجل المتدربين') }}
                         </span>
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Trainees CRM</span>
                     </div>
@@ -285,7 +285,7 @@
                             <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Settings">
                         </a>
                         <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-[#714B67] transition">
-                            إعدادات المنظومة
+                            {{ __('إعدادات المنظومة') }}
                         </span>
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">System Settings</span>
                     </div>

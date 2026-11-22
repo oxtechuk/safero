@@ -7,36 +7,36 @@
 
     <!-- Odoo Enterprise Control Panel -->
     <x-odoo-control-panel 
-        title="مهام الفحص الميداني وأوامر الشغل (Tasks &amp; Work Orders)"
+        :title="__('مهام الفحص الميداني وأوامر الشغل (Tasks & Work Orders)')"
         new-url="{{ route('tasks.create') }}"
-        new-text="New Task"
+        :new-text="__('مهمة فحص جديدة')"
         new-color="bg-[#0E4DA4]"
         search-action="{{ route('tasks.index') }}"
         search-value="{{ request('search') }}"
-        search-placeholder="البحث برقم المهمة، أمر الشغل، العميل، المعدة، أو الفاحص..."
+        :search-placeholder="__('البحث برقم المهمة، أمر الشغل، العميل، المعدة، أو الفاحص...')"
         :paginator="$tasks"
     >
         <!-- Filter Popover Content -->
         <div class="space-y-3">
             <div>
-                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">حالة المهمة (Task Status)</span>
+                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{{ __('حالة المهمة (Task Status)') }}</span>
                 <div class="flex flex-wrap gap-1.5">
                     @foreach(['scheduled' => 'مجدولة', 'in_progress' => 'قيد الفحص', 'completed' => 'مكتملة', 'certified' => 'معتمدة بشهادة'] as $stKey => $stLabel)
                         <a href="{{ route('tasks.index', array_merge(request()->except(['status', 'page']), ['status' => $stKey])) }}" 
                            class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('status') === $stKey ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                            {{ $stLabel }}
+                            {{ __($stLabel) }}
                         </a>
                     @endforeach
                 </div>
             </div>
 
             <div class="pt-2 border-t border-slate-100">
-                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">نوع المعدة (Equipment Type)</span>
+                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{{ __('قالب الفحص / نوع المعدة') }}</span>
                 <div class="flex flex-wrap gap-1.5">
                     @foreach(['crane' => 'أوناش وروافع', 'accessory' => 'مهمات رفع', 'general' => 'معدات عامة', 'environmental' => 'بيئي'] as $typeKey => $typeLabel)
                         <a href="{{ route('tasks.index', array_merge(request()->except(['equipment_type', 'page']), ['equipment_type' => $typeKey])) }}" 
                            class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('equipment_type') === $typeKey ? 'bg-purple-700 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                            {{ $typeLabel }}
+                            {{ __($typeLabel) }}
                         </a>
                     @endforeach
                 </div>
@@ -44,7 +44,7 @@
 
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <a href="{{ route('tasks.index') }}" class="text-[11px] text-slate-500 hover:text-slate-800 underline">
-                    إعادة ضبط الفلاتر
+                    {{ __('إعادة ضبط الفلاتر') }}
                 </a>
                 <span class="text-[10px] text-slate-400 font-en">Odoo Task Matrix</span>
             </div>

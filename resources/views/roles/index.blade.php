@@ -7,8 +7,8 @@
 
     <!-- Odoo Enterprise Control Panel -->
     <x-odoo-control-panel 
-        title="أدوار النظام ومصفوفة الصلاحيات (Roles &amp; Access Matrix)"
-        search-placeholder="البحث في الأدوار والصلاحيات..."
+        :title="__('أدوار النظام ومصفوفة الصلاحيات (Roles & Access Matrix)')"
+        :search-placeholder="__('البحث في الأدوار والصلاحيات...')"
     />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">

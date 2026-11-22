@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'إضافة متدرب جديد')
+@section('title', __('إضافة متدرب جديد'))
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">
@@ -14,8 +14,8 @@
                 <span>/</span>
                 <span class="text-slate-800 font-bold">إضافة جديد</span>
             </nav>
-            <h1 class="text-2xl font-black text-slate-900">إضافة متدرب جديد</h1>
-            <p class="text-xs text-slate-500 mt-0.5">تسجيل بيانات المتدرب لسرعة استدعائه لاحقاً عند إصدار شهادات التدريب</p>
+            <h1 class="text-2xl font-black text-slate-900">{{ __('إضافة متدرب جديد') }}</h1>
+            <p class="text-xs text-slate-500 mt-0.5">{{ __('تسجيل بيانات المتدرب لسرعة استدعائه لاحقاً عند إصدار شهادات التدريب') }}</p>
         </div>
         <a href="{{ route('trainees.index') }}" class="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition">
             عودة
@@ -24,7 +24,7 @@
 
     @if($errors->any())
         <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm">
-            <span class="font-bold block mb-1">يرجى تصحيح الأخطاء التالية:</span>
+            <span class="font-bold block mb-1">{{ __('يرجى تصحيح الأخطاء التالية:') }}</span>
             <ul class="list-disc list-inside space-y-0.5">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -38,7 +38,7 @@
 
         <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">
-                اسم المتدرب بالكامل (Certificate Holder) <span class="text-red-500">*</span>
+                {{ __('اسم المتدرب بالكامل (Certificate Holder)') }} <span class="text-red-500">*</span>
             </label>
             <input type="text" 
                    name="name" 
@@ -51,7 +51,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">
-                    الشركة / جهة العمل (Company)
+                    {{ __('الشركة / جهة العمل (Company)') }}
                 </label>
                 <input type="text" 
                        name="company" 
@@ -62,7 +62,7 @@
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">
-                    المسمى الوظيفي (Job Title)
+                    {{ __('المسمى الوظيفي (Job Title)') }}
                 </label>
                 <input type="text" 
                        name="job_title" 
@@ -73,7 +73,7 @@
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">
-                    الرقم القومي / جواز السفر (National ID / Passport)
+                    {{ __('الرقم القومي / جواز السفر (National ID / Passport)') }}
                 </label>
                 <input type="text" 
                        name="national_id" 
@@ -83,7 +83,7 @@
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">
-                    رقم الهاتف (Phone)
+                    {{ __('رقم الهاتف (Phone)') }}
                 </label>
                 <input type="text" 
                        name="phone" 
@@ -94,7 +94,7 @@
 
         <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">
-                البريد الإلكتروني (Email)
+                {{ __('البريد الإلكتروني (Email)') }}
             </label>
             <input type="email" 
                    name="email" 
@@ -104,7 +104,7 @@
 
         <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">
-                ملاحظات إضافية (Notes)
+                {{ __('ملاحظات إضافية (Notes)') }}
             </label>
             <textarea name="notes" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#0E4DA4] outline-none text-xs">{{ old('notes') }}</textarea>
         </div>

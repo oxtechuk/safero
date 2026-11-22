@@ -5,8 +5,8 @@
 @section('content')
 <div class="space-y-4">
 
-    <!-- Top Breadcrumb & Control Bar -->
-    <div class="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-3.5 shadow-2xs">
+    <!-- Top Breadcrumb & Control Bar (Screen Only) -->
+    <div class="print:hidden no-print bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-3.5 shadow-2xs">
         <div class="flex items-center justify-between flex-wrap gap-3">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold">
@@ -48,7 +48,38 @@
         </div>
     </div>
 
-    <div class="px-4 sm:px-6 lg:px-8 py-2 space-y-5">
+    <div class="px-4 sm:px-6 lg:px-8 py-2 space-y-5 print:p-0 print:m-0 print:space-y-4">
+
+        <!-- Official Printable Letterhead (Printed only) -->
+        <div class="hidden print:block pb-4 mb-4 border-b-2 border-slate-800">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset(setting('logo_path', '/branding/safero_logo.jpg')) }}" 
+                         alt="{{ setting('company_name_en', 'Safero') }}" 
+                         class="h-14 w-auto object-contain">
+                    <div>
+                        <h2 class="text-base font-black text-slate-900 leading-tight">
+                            {{ setting('company_name_ar', 'شركة سافيرو للخدمات والاستشارات الهندسية والتفتيش') }}
+                        </h2>
+                        <p class="text-xs font-bold text-[#0E4DA4] font-mono mt-0.5">
+                            {{ setting('company_name_en', 'SAFERO Services & Consultations - Inspection Body') }}
+                        </p>
+                        <p class="text-[10px] text-slate-500 mt-0.5">
+                            {{ __('تقرير مالي رسمي لتحليل الأرباح وحجم الأعمال') }} &bull; ISO/IEC 17020 Certified Body
+                        </p>
+                    </div>
+                </div>
+                <div class="text-left rtl:text-right text-xs font-mono text-slate-600 space-y-0.5">
+                    <div>{{ __('الفترة الزمنية:') }} <strong class="text-slate-900">{{ match($period) {
+                        'this_month' => __('هذا الشهر'),
+                        'last_month' => __('الشهر الماضي'),
+                        'this_year' => __('هذا العام'),
+                        default => __('كل الفترات')
+                    } }}</strong></div>
+                    <div>{{ __('تاريخ وتوقيت استخراج التقرير:') }} <strong>{{ now()->format('Y-m-d H:i') }}</strong></div>
+                </div>
+            </div>
+        </div>
 
         <!-- 4 Primary Financial KPI Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -255,4 +286,18 @@
 
     </div>
 </div>
+
+<style>
+@media print {
+    body, html, main {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    @page {
+        size: A4 landscape;
+        margin: 8mm 10mm;
+    }
+}
+</style>
 @endsection

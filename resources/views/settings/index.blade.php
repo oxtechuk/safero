@@ -20,7 +20,7 @@
             </div>
             <div>
                 <div class="flex items-center gap-2">
-                    <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-tight">الإعدادات (Settings)</h1>
+                    <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-tight">{{ __('الإعدادات (Settings)') }}</h1>
                     <span class="text-[10px] font-bold bg-purple-50 text-[#714B67] border border-purple-200 px-2 py-0.5 rounded-full font-mono">IsoOx v .1</span>
                 </div>
                 <p class="text-xs text-slate-500 font-en">Company Profile, Users, Branding, Localization &amp; SaaS Configuration</p>
@@ -33,19 +33,19 @@
                     form="settingsForm"
                     class="px-4 py-2 rounded-lg bg-[#714B67] hover:bg-[#5b3c53] text-white font-bold text-xs sm:text-sm shadow-xs transition flex items-center gap-1.5 active:scale-95">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                <span>حفظ (Save)</span>
+                <span>{{ __('حفظ (Save)') }}</span>
             </button>
 
             <a href="{{ route('apps') }}" 
                class="px-3.5 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition">
-                تراجع (Discard)
+                {{ __('تراجع (Discard)') }}
             </a>
 
             <!-- Quick Settings Search Box (Image 1 top right) -->
             <div class="relative hidden md:block w-48">
                 <input type="text" 
                        x-model="searchQuery" 
-                       placeholder="بحث في الإعدادات..." 
+                       placeholder="{{ __('بحث في الإعدادات...') }}" 
                        class="w-full pr-7 pl-2 py-1.5 rounded-lg border border-slate-200 text-xs focus:border-[#714B67] focus:ring-1 focus:ring-[#714B67] outline-none">
                 <svg class="w-3.5 h-3.5 text-slate-400 absolute right-2 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -60,71 +60,71 @@
         <!-- Left Sidebar: Settings Navigation Tabs (Image 1 Match: General Settings, Sales, Invoicing, Technical) -->
         <div class="lg:col-span-3 bg-white rounded-xl border border-slate-200 shadow-xs p-2 space-y-1 sticky top-32">
             <span class="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                أقسام التهيئة والتحكم (Configuration)
+                {{ __('أقسام التهيئة والتحكم (Configuration)') }}
             </span>
 
             <!-- Tab 1: General Settings (Image 1 Top Tab) -->
             <button type="button" 
                     @click="activeTab = 'general'"
                     :class="activeTab === 'general' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:bg-slate-100 font-medium'"
-                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-right transition">
+                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-start transition">
                 <img src="{{ asset('branding/IsoOx-icons/settings.svg') }}" class="w-4 h-4 object-contain">
-                <span>الإعدادات العامة (General Settings)</span>
+                <span>{{ __('الإعدادات العامة (General Settings)') }}</span>
             </button>
 
             <!-- Tab 2: Company Profile -->
             <button type="button" 
                     @click="activeTab = 'company'"
                     :class="activeTab === 'company' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:bg-slate-100 font-medium'"
-                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-right transition">
+                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-start transition">
                 <img src="{{ asset('branding/IsoOx-icons/crm.svg') }}" class="w-4 h-4 object-contain">
-                <span>بيانات وهوية الشركة (Company)</span>
+                <span>{{ __('بيانات وهوية الشركة (Company)') }}</span>
             </button>
 
             <!-- Tab 3: Branding & Assets (Logo, Stamp, BG Image 5) -->
             <button type="button" 
                     @click="activeTab = 'branding'"
                     :class="activeTab === 'branding' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:bg-slate-100 font-medium'"
-                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-right transition">
+                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-start transition">
                 <img src="{{ asset('branding/IsoOx-icons/sign.svg') }}" class="w-4 h-4 object-contain">
-                <span>الشعار والأختام والقوالب (Branding)</span>
+                <span>{{ __('الشعار والأختام والقوالب (Branding)') }}</span>
             </button>
 
             <!-- Tab 4: Inspection & Certificates (Quality) -->
             <button type="button" 
                     @click="activeTab = 'certificates'"
                     :class="activeTab === 'certificates' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:bg-slate-100 font-medium'"
-                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-right transition">
+                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-start transition">
                 <img src="{{ asset('branding/IsoOx-icons/quality_control.svg') }}" class="w-4 h-4 object-contain">
-                <span>الفحص ومعايير الاعتماد (Inspection)</span>
+                <span>{{ __('الفحص ومعايير الاعتماد (Inspection)') }}</span>
             </button>
 
             <!-- Tab 5: Training & Accreditations -->
             <button type="button" 
                     @click="activeTab = 'training'"
                     :class="activeTab === 'training' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:bg-slate-100 font-medium'"
-                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-right transition">
+                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-start transition">
                 <img src="{{ asset('branding/IsoOx-icons/industry_certification.svg') }}" class="w-4 h-4 object-contain">
-                <span>شهادات التدريب (Training)</span>
+                <span>{{ __('شهادات التدريب (Training)') }}</span>
             </button>
 
             <!-- Tab 6: SaaS & Extensibility -->
             <button type="button" 
                     @click="activeTab = 'saas'"
                     :class="activeTab === 'saas' ? 'bg-[#714B67] text-white font-bold shadow-xs' : 'text-slate-700 hover:bg-slate-100 font-medium'"
-                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-right transition">
+                    class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs text-start transition">
                 <img src="{{ asset('branding/IsoOx-icons/apps.svg') }}" class="w-4 h-4 object-contain">
-                <span>منصة SaaS والمديولات (Architecture)</span>
+                <span>{{ __('منصة SaaS والمديولات (Architecture)') }}</span>
             </button>
 
             <!-- Tab 7: Menu Items (Image 1 Red Highlight: Technical -> Menu Items) -->
             <button type="button" 
                     @click="activeTab = 'technical'"
                     :class="activeTab === 'technical' ? 'bg-[#714B67] text-white font-bold shadow-xs ring-2 ring-red-400' : 'text-slate-700 hover:bg-slate-100 font-medium'"
-                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs text-right transition">
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs text-start transition">
                 <div class="flex items-center gap-2.5">
                     <img src="{{ asset('branding/IsoOx-icons/board.svg') }}" class="w-4 h-4 object-contain">
-                    <span>عناصر القوائم (Menu Items)</span>
+                    <span>{{ __('عناصر القوائم (Menu Items)') }}</span>
                 </div>
                 <span class="text-[9px] bg-red-100 text-red-700 px-1 py-0.5 rounded font-mono font-bold">Image 1</span>
             </button>
@@ -133,10 +133,10 @@
             <button type="button" 
                     @click="activeTab = 'google_sheets'"
                     :class="activeTab === 'google_sheets' ? 'bg-[#006837] text-white font-bold shadow-xs ring-2 ring-emerald-400' : 'text-slate-700 hover:bg-slate-100 font-medium'"
-                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs text-right transition">
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs text-start transition">
                 <div class="flex items-center gap-2.5">
                     <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>ربط Google Sheets</span>
+                    <span>{{ __('ربط Google Sheets') }}</span>
                 </div>
                 <span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold {{ setting('google_sheets_webhook_url') ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600' }}">
                     {{ setting('google_sheets_webhook_url') ? 'متصل' : 'تهيئة' }}
