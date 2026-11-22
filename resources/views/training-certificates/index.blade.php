@@ -7,38 +7,38 @@
 
     <!-- Odoo Enterprise Control Panel -->
     <x-odoo-control-panel 
-        title="سجل شهادات التدريب المعتمدة"
+        :title="__('سجل شهادات التدريب المعتمدة')"
         new-url="{{ route('training-certificates.create') }}"
-        new-text="New"
+        :new-text="__('إصدار شهادة تدريب')"
         new-color="bg-[#006837]"
         search-action="{{ route('training-certificates.index') }}"
         search-value="{{ request('search') }}"
-        search-placeholder="البحث بالمتدرب، الرقم التسلسلي، الدورة..."
+        :search-placeholder="__('البحث بالمتدرب، الرقم التسلسلي، الدورة...')"
         :paginator="$certificates"
     >
         <!-- Filter Popover Content -->
         <div class="space-y-3">
             <div>
-                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">الحالة (Status)</span>
+                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{{ __('حالة الحساب (Status)') }}</span>
                 <div class="flex flex-wrap gap-1.5">
                     <a href="{{ route('training-certificates.index', array_merge(request()->except(['status', 'page']), ['status' => 'issued'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('status') === 'issued' ? 'bg-[#006837] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        ✓ سارية ومعتمدة (In Progress)
+                        {{ __('✓ سارية ومعتمدة (In Progress)') }}
                     </a>
                     <a href="{{ route('training-certificates.index', array_merge(request()->except(['status', 'page']), ['status' => 'draft'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('status') === 'draft' ? 'bg-sky-600 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        مسودة (Draft)
+                        {{ __('مسودة (Draft)') }}
                     </a>
                     <a href="{{ route('training-certificates.index', array_merge(request()->except(['status', 'page']), ['status' => 'revoked'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('status') === 'revoked' ? 'bg-red-600 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        ملغاة (Revoked)
+                        {{ __('ملغاة (Revoked)') }}
                     </a>
                 </div>
             </div>
 
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <a href="{{ route('training-certificates.index') }}" class="text-[11px] text-slate-500 hover:text-slate-800 underline">
-                    إعادة ضبط الفلاتر
+                    {{ __('إعادة ضبط الفلاتر') }}
                 </a>
                 <span class="text-[10px] text-slate-400 font-en">IsoOx 17 Filter Logic</span>
             </div>
@@ -106,22 +106,22 @@
                         </th>
                         <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">
                             <span class="flex items-center gap-1">
-                                <span>Number</span>
+                                <span>{{ __('Number') }}</span>
                                 <span class="text-slate-400 text-[10px]">#</span>
                             </span>
                         </th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Certificate Holder</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Program / Course</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Trainee') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Program / Course') }}</th>
                         <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">
                             <span class="flex items-center gap-1 text-[#006837]">
-                                <span>Certificate Date</span>
+                                <span>{{ __('Certificate Date') }}</span>
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
                             </span>
                         </th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Instructor</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Activities</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Hours</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Status</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Instructor') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Activities') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('Hours') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('Status') }}</th>
                         <th class="w-16 px-3 py-2.5 text-center text-slate-400">
                             <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>

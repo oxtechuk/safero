@@ -1,26 +1,26 @@
 @extends('layouts.app')
 
-@section('title', 'المتدربون - Trainees Directory')
+@section('title', __('المتدربون'))
 
 @section('content')
 <div class="space-y-4">
 
     <!-- Odoo Enterprise Control Panel -->
     <x-odoo-control-panel 
-        title="المتدربون"
+        :title="__('المتدربون')"
         new-url="{{ route('trainees.create') }}"
-        new-text="New"
+        :new-text="__('متدرب جديد')"
         new-color="bg-[#006837]"
         search-action="{{ route('trainees.index') }}"
         search-value="{{ request('search') }}"
-        search-placeholder="البحث بالاسم، الشركة، الرقم القومي، الهاتف..."
+        :search-placeholder="__('البحث بالاسم، الشركة، الرقم القومي، الهاتف...')"
         :paginator="$trainees"
     >
         <div class="space-y-2 text-xs">
-            <span class="block text-[11px] font-bold text-slate-500 uppercase">تجميع وتصفية سريعة</span>
+            <span class="block text-[11px] font-bold text-slate-500 uppercase">{{ __('تجميع وتصفية سريعة') }}</span>
             <div class="flex flex-col gap-1 text-slate-700">
                 <a href="{{ route('trainees.index') }}" class="p-1.5 rounded hover:bg-slate-50 flex items-center justify-between">
-                    <span>جميع المتدربين</span>
+                    <span>{{ __('جميع المتدربين') }}</span>
                     <span class="font-en text-slate-400">{{ $trainees->total() }}</span>
                 </a>
             </div>
@@ -32,31 +32,31 @@
         <!-- Active Filters -->
     @if(request('search'))
         <div class="flex items-center gap-2 text-xs px-1">
-            <span class="text-slate-400">الفلاتر النشطة:</span>
+            <span class="text-slate-400">{{ __('الفلاتر النشطة:') }}</span>
             <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800 text-xs">
-                بحث: "{{ request('search') }}"
+                {{ __('بحث:') }} "{{ request('search') }}"
                 <a href="{{ route('trainees.index') }}" class="hover:text-red-600 font-bold">×</a>
             </span>
-            <a href="{{ route('trainees.index') }}" class="text-[#006837] hover:underline text-xs font-semibold mr-1">مسح الكل</a>
+            <a href="{{ route('trainees.index') }}" class="text-[#006837] hover:underline text-xs font-semibold mr-1">{{ __('مسح الكل') }}</a>
         </div>
     @endif
 
     <!-- 1. IsoOx Data Table View -->
     <div id="IsoOxListView" class="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-right text-xs border-collapse">
+            <table class="w-full text-start text-xs border-collapse">
                 <thead class="bg-[#F8FAFC] text-slate-600 border-b border-slate-200 select-none">
                     <tr>
                         <th class="w-10 px-3 py-2.5 text-center">
                             <input type="checkbox" class="rounded border-slate-300 text-[#006837] focus:ring-[#006837] w-3.5 h-3.5 cursor-pointer">
                         </th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">الاسم والبريد</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">الشركة / جهة العمل</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">المسمى الوظيفي</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">الرقم القومي / جواز السفر</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">رقم الهاتف</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">الشهادات</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">الإجراءات</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('الاسم والبريد') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('الشركة / جهة العمل') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('المسمى الوظيفي') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('الرقم القومي / جواز السفر') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('رقم الهاتف') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('الشهادات') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('الإجراءات') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -107,7 +107,7 @@
                             <td class="px-3 py-2.5 text-center whitespace-nowrap">
                                 @if($trainee->certificates_count > 0)
                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E8F7EC] text-[#15803D] border border-emerald-200">
-                                        {{ $trainee->certificates_count }} شهادة
+                                        {{ $trainee->certificates_count }} {{ __('شهادة') }}
                                     </span>
                                 @else
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-400">
@@ -121,14 +121,14 @@
                                 <div class="flex items-center justify-center gap-1.5 opacity-80 group-hover:opacity-100 transition">
                                     <a href="{{ route('training-certificates.create', ['trainee_id' => $trainee->id]) }}" 
                                        class="px-2 py-1 rounded bg-[#E8F7EC] hover:bg-[#006837] text-[#006837] hover:text-white font-bold transition text-[11px] flex items-center gap-1"
-                                       title="إصدار شهادة جديدة لهذا المتدرب">
+                                       title="{{ __('إصدار شهادة جديدة لهذا المتدرب') }}">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                                        <span>إصدار شهادة</span>
+                                        <span>{{ __('إصدار شهادة') }}</span>
                                     </a>
-                                    <a href="{{ route('trainees.show', $trainee) }}" class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition" title="عرض السجل">
+                                    <a href="{{ route('trainees.show', $trainee) }}" class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition" title="{{ __('عرض السجل') }}">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                     </a>
-                                    <a href="{{ route('trainees.edit', $trainee) }}" class="p-1 rounded text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition" title="تعديل">
+                                    <a href="{{ route('trainees.edit', $trainee) }}" class="p-1 rounded text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition" title="{{ __('تعديل') }}">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                     </a>
                                 </div>
@@ -137,7 +137,7 @@
                     @empty
                         <tr>
                             <td colspan="8" class="py-10 text-center text-slate-400">
-                                لا يوجد متدربون مسجلون حالياً
+                                {{ __('لا يوجد متدربون مسجلون حالياً') }}
                             </td>
                         </tr>
                     @endforelse
@@ -161,22 +161,22 @@
                                     {{ $trainee->name }}
                                 </a>
                             </h3>
-                            <p class="text-[11px] text-slate-400">{{ $trainee->company ?: 'متدرب حر' }}</p>
+                            <p class="text-[11px] text-slate-400">{{ $trainee->job_title ?: __('متدرب') }}</p>
                         </div>
                     </div>
 
                     <div class="space-y-1.5 text-xs text-slate-600 bg-slate-50 p-2.5 rounded border border-slate-100">
                         <div class="flex justify-between">
-                            <span class="text-slate-400">الوظيفة:</span>
-                            <span class="font-medium">{{ $trainee->job_title ?: '—' }}</span>
+                            <span class="text-slate-400">{{ __('الشركة:') }}</span>
+                            <span class="truncate max-w-[180px]">{{ $trainee->company ?: '—' }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-slate-400">الهاتف:</span>
+                            <span class="text-slate-400">{{ __('الهاتف:') }}</span>
                             <span class="font-mono" dir="ltr">{{ $trainee->phone ?: '—' }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-slate-400">الشهادات:</span>
-                            <span class="font-bold text-[#006837]">{{ $trainee->certificates_count }} شهادة</span>
+                            <span class="text-slate-400">{{ __('الشهادات:') }}</span>
+                            <span class="font-bold text-[#006837]">{{ $trainee->certificates_count }} {{ __('شهادة') }}</span>
                         </div>
                     </div>
                 </div>
@@ -184,16 +184,17 @@
                 <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                     <a href="{{ route('training-certificates.create', ['trainee_id' => $trainee->id]) }}" 
                        class="text-xs font-bold text-[#006837] hover:underline flex items-center gap-1">
-                        + إصدار شهادة
+                        {{ __('+ إصدار شهادة تدريب') }}
                     </a>
-                    <a href="{{ route('trainees.show', $trainee) }}" class="text-xs text-slate-500 hover:text-slate-800">
-                        عرض التفاصيل &larr;
+                    <a href="{{ route('trainees.show', $trainee) }}" class="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1">
+                        <span>{{ __('عرض الملف') }}</span>
+                        <span class="rtl:rotate-180">&rarr;</span>
                     </a>
                 </div>
             </div>
         @empty
             <div class="col-span-3 text-center py-8 text-slate-400">
-                لا يوجد متدربون
+                {{ __('لا يوجد متدربون مسجلون') }}
             </div>
         @endforelse
     </div>

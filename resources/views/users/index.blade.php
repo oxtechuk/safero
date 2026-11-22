@@ -7,19 +7,19 @@
 
     <!-- Odoo Enterprise Control Panel -->
     <x-odoo-control-panel 
-        title="المستخدمون والصلاحيات (Users &amp; Access)"
+        :title="__('المستخدمون والصلاحيات (Users & Access)')"
         new-url="{{ route('users.create') }}"
-        new-text="New User"
+        :new-text="__('+ مستخدم جديد')"
         new-color="bg-[#714B67]"
         search-action="{{ route('users.index') }}"
         search-value="{{ request('search') }}"
-        search-placeholder="البحث بالاسم، البريد الإلكتروني، رقم الهاتف، أو المسمى الوظيفي..."
+        :search-placeholder="__('البحث بالاسم، البريد الإلكتروني، رقم الهاتف، أو المسمى الوظيفي...')"
         :paginator="$users"
     >
         <!-- Filter Popover Content -->
         <div class="space-y-3">
             <div>
-                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">الدور الوظيفي (Role)</span>
+                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{{ __('الدور الوظيفي (Role)') }}</span>
                 <div class="flex flex-wrap gap-1.5">
                     @foreach($roles as $role)
                         <a href="{{ route('users.index', array_merge(request()->except(['role', 'page']), ['role' => $role->name])) }}" 
@@ -31,22 +31,22 @@
             </div>
 
             <div class="pt-2 border-t border-slate-100">
-                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">حالة الحساب (Status)</span>
+                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{{ __('حالة الحساب (Status)') }}</span>
                 <div class="flex gap-1.5">
                     <a href="{{ route('users.index', array_merge(request()->except(['status', 'page']), ['status' => 'active'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('status') === 'active' ? 'bg-[#22A447] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        ✓ الحسابات النشطة (Active)
+                        {{ __('✓ الحسابات النشطة (Active)') }}
                     </a>
                     <a href="{{ route('users.index', array_merge(request()->except(['status', 'page']), ['status' => 'inactive'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('status') === 'inactive' ? 'bg-red-600 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        معطلة (Inactive)
+                        {{ __('معطلة (Inactive)') }}
                     </a>
                 </div>
             </div>
 
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <a href="{{ route('users.index') }}" class="text-[11px] text-slate-500 hover:text-slate-800 underline">
-                    إعادة ضبط الفلاتر
+                    {{ __('إعادة ضبط الفلاتر') }}
                 </a>
                 <span class="text-[10px] text-slate-400 font-en">Odoo 17/18 RBAC</span>
             </div>
@@ -60,22 +60,22 @@
             <div class="flex items-center gap-4 sm:gap-6 flex-wrap text-xs">
                 <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
-                    <span class="text-slate-500">إجمالي المستخدمين:</span>
+                    <span class="text-slate-500">{{ __('إجمالي المستخدمين:') }}</span>
                     <span class="font-extrabold text-slate-900 font-en">{{ $stats['total'] }}</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-[#22A447]"></span>
-                    <span class="text-slate-500">نشط وجاهز للتشغيل:</span>
+                    <span class="text-slate-500">{{ __('نشط وجاهز للتشغيل:') }}</span>
                     <span class="font-extrabold text-[#22A447] font-en">{{ $stats['active'] }}</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-                    <span class="text-slate-500">مهندسو وفاحصو الرفع:</span>
+                    <span class="text-slate-500">{{ __('مهندسو وفاحصو الرفع:') }}</span>
                     <span class="font-extrabold text-blue-700 font-en">{{ $stats['inspectors'] }}</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-[#714B67]"></span>
-                    <span class="text-slate-500">مسؤولو النظام (Admins):</span>
+                    <span class="text-slate-500">{{ __('مسؤولو النظام (Admins):') }}</span>
                     <span class="font-extrabold text-[#714B67] font-en">{{ $stats['admins'] }}</span>
                 </div>
             </div>
@@ -87,14 +87,14 @@
                         :class="currentView === 'list' ? 'bg-white shadow-2xs text-[#714B67] font-bold' : 'text-slate-500 hover:text-slate-800'"
                         class="px-2.5 py-1 rounded text-xs flex items-center gap-1.5 transition">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                    <span>جدول (List)</span>
+                    <span>{{ __('عرض القائمة') }}</span>
                 </button>
                 <button type="button" 
                         @click="currentView = 'kanban'" 
                         :class="currentView === 'kanban' ? 'bg-white shadow-2xs text-[#714B67] font-bold' : 'text-slate-500 hover:text-slate-800'"
                         class="px-2.5 py-1 rounded text-xs flex items-center gap-1.5 transition">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
-                    <span>بطاقات (Kanban)</span>
+                    <span>{{ __('عرض البطاقات') }}</span>
                 </button>
             </div>
         </div>
@@ -102,17 +102,17 @@
         <!-- 1. Odoo Enterprise List View -->
         <div x-show="currentView === 'list'" class="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full text-right text-xs border-collapse">
+                <table class="w-full text-start text-xs border-collapse">
                     <thead class="bg-[#F8FAFC] text-slate-600 border-b border-slate-200 select-none">
                         <tr>
                             <th class="w-12 px-3 py-2.5 text-center">#</th>
-                            <th class="px-4 py-2.5 font-bold tracking-tight text-slate-700">المستخدم (User)</th>
-                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">المسمى الوظيفي</th>
-                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">الدور الأساسي (Role)</th>
-                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">الصلاحيات</th>
-                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">الحالة</th>
-                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">تاريخ الانضمام</th>
-                            <th class="w-24 px-3 py-2.5 text-center text-slate-500">الإجراءات</th>
+                            <th class="px-4 py-2.5 font-bold tracking-tight text-slate-700">{{ __('المستخدم') }}</th>
+                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('المسمى الوظيفي') }}</th>
+                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('الدور الأساسي (Role)') }}</th>
+                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('الصلاحيات') }}</th>
+                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('الحالة') }}</th>
+                            <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('تاريخ الانضمام') }}</th>
+                            <th class="w-24 px-3 py-2.5 text-center text-slate-500">{{ __('الإجراءات') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">

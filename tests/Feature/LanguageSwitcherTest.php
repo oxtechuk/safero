@@ -88,5 +88,20 @@ class LanguageSwitcherTest extends TestCase
         $customersEn = $this->withSession(['locale' => 'en'])->get(route('customers.index'));
         $customersEn->assertStatus(200);
         $customersEn->assertSee('Customers &amp; Companies', false);
+
+        // English session on Inspections
+        $inspectionsEn = $this->withSession(['locale' => 'en'])->get(route('inspections.index'));
+        $inspectionsEn->assertStatus(200);
+        $inspectionsEn->assertSee('Field Inspection Sessions', false);
+
+        // English session on Trainees
+        $traineesEn = $this->withSession(['locale' => 'en'])->get(route('trainees.index'));
+        $traineesEn->assertStatus(200);
+        $traineesEn->assertSee('Trainees', false);
+
+        // English session on Users
+        $usersEn = $this->withSession(['locale' => 'en'])->get(route('users.index'));
+        $usersEn->assertStatus(200);
+        $usersEn->assertSee('Users &amp; Permissions', false);
     }
 }
