@@ -58,22 +58,22 @@
                 <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ request('status') === 'issued' ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">
                     <span class="w-2 h-2 rounded-full {{ request('status') === 'issued' ? 'bg-white' : 'bg-emerald-500' }}"></span>
-                    <span>{{ __('السارية') }}</span>
+                    <span>السارية المعتمدة</span>
                 </a>
                 <a href="{{ route('certificates.index', ['status' => 'draft']) }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ request('status') === 'draft' ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">
                     <span class="w-2 h-2 rounded-full {{ request('status') === 'draft' ? 'bg-white' : 'bg-slate-400' }}"></span>
-                    <span>{{ __('المسودات') }}</span>
+                    <span>المسودات</span>
                 </a>
                 <a href="{{ route('certificates.expiring') }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:bg-slate-100">
                     <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                    <span>{{ __('الشهادات القريبة من الانتهاء') }}</span>
+                    <span>الشهادات القريبة من الانتهاء</span>
                 </a>
                 <a href="{{ route('certificate-templates.index') }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:bg-slate-100">
                     <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-4 h-4">
-                    <span>{{ __('ستوديو قوالب الفحص') }}</span>
+                    <span>ستوديو قوالب الفحص</span>
                 </a>
             </div>
 
@@ -145,17 +145,17 @@
                                    onchange="toggleSelectAll(this)" 
                                    class="rounded border-slate-300 text-[#0E4DA4] focus:ring-[#0E4DA4] w-3.5 h-3.5 cursor-pointer">
                         </th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Number') }}</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Customer') }}</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Equipment / Standard') }}</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('SWL') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Number</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Customer</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Equipment / Standard</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">SWL</th>
                         <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 whitespace-nowrap">
-                            <span>{{ __('Next Exam') }}</span>
+                            <span>Next Exam</span>
                             <span class="text-slate-400 font-mono text-[10px]">^</span>
                         </th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Inspector') }}</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('Activities') }}</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('Status') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Inspector</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Activities</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Status</th>
                         <th class="w-16 px-3 py-2.5 text-center text-slate-400">
                             <!-- Column Config Icon (Image 1 match) -->
                             <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
