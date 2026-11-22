@@ -23,6 +23,7 @@ use Illuminate\Support\Collection;
     'is_active',
     'signature_path',
     'avatar',
+    'locale',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable

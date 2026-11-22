@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'en' ? 'ltr' : 'rtl' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,7 +35,7 @@
         [x-cloak] { display: none !important; }
 
         body {
-            font-family: 'Cairo', 'Poppins', system-ui, -apple-system, sans-serif;
+            font-family: {{ app()->getLocale() === 'en' ? "'Poppins', 'Cairo', system-ui, sans-serif" : "'Cairo', 'Poppins', system-ui, sans-serif" }};
             background-color: #F8FAFC;
         }
         .font-en {
@@ -628,6 +628,20 @@
 
 
 
+                    <!-- Language Switcher Capsule (AR / EN) -->
+                    <div class="flex items-center p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-bold font-mono">
+                        <a href="{{ route('lang.switch', 'ar') }}" 
+                           class="px-2 py-0.5 rounded-md transition {{ app()->getLocale() === 'ar' ? 'bg-white text-[#0E4DA4] shadow-2xs font-black' : 'text-slate-500 hover:text-slate-800' }}"
+                           title="التحويل للغة العربية">
+                            عربي
+                        </a>
+                        <a href="{{ route('lang.switch', 'en') }}" 
+                           class="px-2 py-0.5 rounded-md transition {{ app()->getLocale() === 'en' ? 'bg-white text-[#0E4DA4] shadow-2xs font-black' : 'text-slate-500 hover:text-slate-800' }}"
+                           title="Switch to English">
+                            EN
+                        </a>
+                    </div>
+
                     <!-- User Initials Box (Image 1 Plum Square / Rounded 'A Administrator') -->
                     <div class="flex items-center gap-1.5 pr-1 sm:pr-2 border-r border-slate-200">
                         <div class="w-7 h-7 rounded bg-[#714B67] text-white flex items-center justify-center font-bold text-xs shadow-2xs font-en uppercase" title="{{ Auth::user()->name ?? 'Administrator' }}">
@@ -676,6 +690,24 @@
              x-transition:leave-start="opacity-100 translate-y-0"
              x-transition:leave-end="opacity-0 -translate-y-2"
              class="md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-md px-4 py-4 space-y-3 text-xs shadow-xl max-h-[80vh] overflow-y-auto">
+            
+            <!-- Mobile Language Switcher Row -->
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <span class="text-xs font-bold text-slate-500 flex items-center gap-1.5">
+                    <span>🌐</span>
+                    <span>{{ app()->getLocale() === 'ar' ? 'لغة النظام (Language)' : 'Language (لغة النظام)' }}</span>
+                </span>
+                <div class="flex items-center p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-bold font-mono">
+                    <a href="{{ route('lang.switch', 'ar') }}" 
+                       class="px-2.5 py-1 rounded-md transition {{ app()->getLocale() === 'ar' ? 'bg-white text-[#0E4DA4] shadow-2xs font-black' : 'text-slate-500 hover:text-slate-800' }}">
+                        العربية
+                    </a>
+                    <a href="{{ route('lang.switch', 'en') }}" 
+                       class="px-2.5 py-1 rounded-md transition {{ app()->getLocale() === 'en' ? 'bg-white text-[#0E4DA4] shadow-2xs font-black' : 'text-slate-500 hover:text-slate-800' }}">
+                        English
+                    </a>
+                </div>
+            </div>
             
             <!-- Quick Action: Start Inspection Button on Mobile Drawer -->
             <a href="{{ route('inspections.start') }}" class="flex items-center justify-between p-3 rounded-xl bg-[#006837] hover:bg-[#00502a] text-white font-extrabold shadow-sm active:scale-98 transition">

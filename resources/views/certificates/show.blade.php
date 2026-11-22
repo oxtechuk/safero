@@ -88,20 +88,10 @@
             </div>
             @if($certificate->is_safe_to_operate)
                 <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#E8F7EC] text-[#22A447] mr-2">
-                    معتمدة وآمنة للتشغيل
+               صالح للاستخداممدةيل
                 </span>
             @endif
-            @if($certificate->equipment_type === 'crane')
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-[#0E4DA4] border border-blue-200">
-                    <img src="{{ asset('branding/odoo-icons/fleet.svg') }}" class="w-3.5 h-3.5 object-contain">
-                    <span>ونش / رافعة (تقرير صفحتين)</span>
-                </span>
-            @elseif($certificate->equipment_type === 'accessory')
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                    <img src="{{ asset('branding/odoo-icons/maintenance.svg') }}" class="w-3.5 h-3.5 object-contain">
-                    <span>مهمات رفع (وايرات / حبال)</span>
-                </span>
-            @endif
+          
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
@@ -110,7 +100,6 @@
                target="_blank"
                class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5"
                title="طباعة كارت واستيكر فحص المعدة (Sticker Tag)">
-                <span>🏷️</span>
                 <span>استيكر المعدة (Sticker)</span>
             </a>
 
