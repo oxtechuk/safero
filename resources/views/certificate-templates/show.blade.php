@@ -133,30 +133,31 @@
                     </h3>
                     <div class="border border-slate-200 rounded-lg overflow-hidden">
                         <table class="w-full text-right text-xs">
-                            <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                            <thead class="bg-slate-50 text-slate-600 border-b border-slate-200 font-bold">
                                 <tr>
                                     <th class="w-12 px-3 py-2 text-center">#</th>
-                                    <th class="px-3 py-2">بند المعاينة والفحص</th>
-                                    <th class="px-3 py-2">الفئة</th>
-                                    <th class="px-3 py-2 text-center">الحالة الافتراضية</th>
+                                    <th class="px-3 py-2 w-28">رقم البند/الفقرة</th>
+                                    <th class="px-3 py-2">نقطة الفحص والمعاينة</th>
+                                    <th class="px-3 py-2">معايير القبول (Acceptance)</th>
+                                    <th class="px-3 py-2">معايير الرفض (Rejection)</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
                                 @foreach($template->checklist_items as $index => $item)
                                     <tr class="hover:bg-slate-50/50">
-                                        <td class="px-3 py-2 text-center font-mono text-slate-400">{{ $index + 1 }}</td>
-                                        <td class="px-3 py-2 font-medium text-slate-800">{{ $item['item'] ?? $item['name'] ?? 'بند فحص' }}</td>
-                                        <td class="px-3 py-2 text-slate-500">{{ $item['category'] ?? 'عام' }}</td>
-                                        <td class="px-3 py-2 text-center">
-                                            @php $st = $item['default_status'] ?? 'pass'; @endphp
-                                            @if($st === 'pass')
-                                                <span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700 font-bold border border-slate-200">مطابق (Pass)</span>
-                                            @elseif($st === 'fail')
-                                                <span class="px-2 py-0.5 rounded text-[10px] bg-rose-50 text-rose-700 font-bold border border-rose-200">معيب (Fail)</span>
+                                        <td class="px-3 py-2 text-center font-mono text-slate-400 font-bold">{{ $item['no'] ?? ($index + 1) }}</td>
+                                        <td class="px-3 py-2">
+                                            @if(!empty($item['clause_ref']))
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-[#0E4DA4] border border-blue-200 font-mono">
+                                                    Clause {{ $item['clause_ref'] }}
+                                                </span>
                                             @else
-                                                <span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600 font-bold">N/A</span>
+                                                <span class="text-slate-400 font-mono text-[10px]">—</span>
                                             @endif
                                         </td>
+                                        <td class="px-3 py-2 font-bold text-slate-900">{{ $item['item'] ?? $item['question'] ?? 'بند فحص' }}</td>
+                                        <td class="px-3 py-2 text-[11px] text-emerald-800 bg-emerald-50/40">{{ $item['acceptance_criteria'] ?? 'In Order / Accepted' }}</td>
+                                        <td class="px-3 py-2 text-[11px] text-red-800 bg-red-50/40">{{ $item['rejection_criteria'] ?? 'Cracks, excessive wear, deformation' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -166,12 +167,19 @@
             @endif
 
             <!-- Bottom Actions -->
-            <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-                <span class="text-xs text-slate-500">تم إنشاء هذا القالب عبر ستوديو قوالب الفحص</span>
-                <a href="{{ route('certificates.create', ['template_id' => $template->id, 'type' => $template->equipment_type]) }}" 
-                   class="px-4 py-2 rounded-lg bg-[#0E4DA4] hover:bg-[#0a3a7d] text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5">
-                    <span>استخدام هذا القالب لإصدار شهادة فحص جديدة ←</span>
-                </a>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between flex-wrap gap-2">
+                <span class="text-xs text-slate-500">تم اعتماد هذا القالب وفقاً للائحة LOLER ومعايير ISO/IEC 17020</span>
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('inspections.start', ['template_id' => $template->id]) }}" 
+                       class="px-4 py-2 rounded-lg bg-[#006837] hover:bg-[#00522c] text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>بدء فحص ميداني بهذا القالب</span>
+                    </a>
+                    <a href="{{ route('certificates.create', ['template_id' => $template->id, 'type' => $template->equipment_type]) }}" 
+                       class="px-4 py-2 rounded-lg bg-[#0E4DA4] hover:bg-[#0a3a7d] text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5">
+                        <span>إصدار شهادة مباشرة ←</span>
+                    </a>
+                </div>
             </div>
         </div>
 

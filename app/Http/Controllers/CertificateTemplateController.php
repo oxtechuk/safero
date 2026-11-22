@@ -27,16 +27,28 @@ class CertificateTemplateController extends Controller
         }
 
         if ($type = $request->input('type')) {
-            $query->where('equipment_type', $type);
+            if ($type === 'crane') {
+                $query->whereIn('equipment_type', ['crane']);
+            } elseif ($type === 'hoist') {
+                $query->whereIn('equipment_type', ['hoist', 'winch', 'jack']);
+            } elseif ($type === 'accessory') {
+                $query->whereIn('equipment_type', ['accessory', 'sling', 'lashing']);
+            } elseif ($type === 'mewp_forklift') {
+                $query->whereIn('equipment_type', ['mewp', 'forklift', 'basket']);
+            } elseif ($type === 'general') {
+                $query->whereIn('equipment_type', ['general', 'storage', 'container', 'beam', 'clamp', 'magnet_vacuum']);
+            } else {
+                $query->where('equipment_type', $type);
+            }
         }
 
-        $templates = $query->latest('id')->paginate(12)->withQueryString();
+        $templates = $query->latest('id')->paginate(24)->withQueryString();
 
         $stats = [
             'total' => CertificateTemplate::count(),
             'crane' => CertificateTemplate::where('equipment_type', 'crane')->count(),
-            'accessory' => CertificateTemplate::where('equipment_type', 'accessory')->count(),
-            'general' => CertificateTemplate::where('equipment_type', 'general')->count(),
+            'accessory' => CertificateTemplate::whereIn('equipment_type', ['accessory', 'sling', 'lashing'])->count(),
+            'general' => CertificateTemplate::whereNotIn('equipment_type', ['crane', 'accessory', 'sling', 'lashing'])->count(),
         ];
 
         return view('certificate-templates.index', compact('templates', 'stats'));
@@ -136,7 +148,7 @@ class CertificateTemplateController extends Controller
         return $request->validate([
             'name' => ['required', 'string', 'max:190'],
             'code' => ['nullable', 'string', 'max:50', 'unique:certificate_templates,code,'.$id],
-            'equipment_type' => ['required', 'in:crane,accessory,general'],
+            'equipment_type' => ['required', 'string', 'max:100'],
             'equipment_description' => ['nullable', 'string'],
             'reference_standard' => ['nullable', 'string', 'max:190'],
             'swl' => ['nullable', 'string', 'max:100'],
@@ -177,8 +189,11 @@ class CertificateTemplateController extends Controller
             $formatted[] = [
                 'no' => $index++,
                 'category' => $item['category'] ?? 'General',
+                'clause_ref' => $item['clause_ref'] ?? '',
                 'item' => $item['item'] ?? $item['question'] ?? '',
                 'question' => $item['question'] ?? $item['item'] ?? '',
+                'acceptance_criteria' => $item['acceptance_criteria'] ?? '',
+                'rejection_criteria' => $item['rejection_criteria'] ?? '',
                 'status' => $item['status'] ?? 'Pass',
                 'check' => $item['check'] ?? 'In Order',
                 'remarks' => $item['remarks'] ?? 'Good condition',

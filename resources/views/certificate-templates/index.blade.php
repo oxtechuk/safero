@@ -21,17 +21,29 @@
             <div>
                 <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">نوع المعدة (Equipment Type)</span>
                 <div class="flex flex-wrap gap-1.5">
+                    <a href="{{ route('certificate-templates.index') }}" 
+                       class="px-2.5 py-1 rounded text-xs font-semibold transition {{ !request('type') ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
+                        الكل (28+ قالب)
+                    </a>
                     <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'crane'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'crane' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        الأوناش والروافع (Cranes)
+                        الأوناش (Cranes)
+                    </a>
+                    <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'hoist'])) }}" 
+                       class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'hoist' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
+                        روافع وسلاسل (Hoists & Winches)
                     </a>
                     <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'accessory'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'accessory' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        مهمات الرفع والحبال (Accessories)
+                        مهمات الرفع والحبال (Accessories & Slings)
+                    </a>
+                    <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'mewp_forklift'])) }}" 
+                       class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'mewp_forklift' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
+                        شوكات ومان ليفت (Forklifts & MEWPs)
                     </a>
                     <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'general'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'general' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        معدات عامة وباليتات (General)
+                        كمرات وكلابات وتخزين (Beams & Storage)
                     </a>
                 </div>
             </div>

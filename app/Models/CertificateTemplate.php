@@ -80,9 +80,22 @@ class CertificateTemplate extends Model
     {
         return match ($this->equipment_type) {
             'crane' => 'أوناش وروافع (Cranes)',
-            'accessory' => 'مهمات رفع وحبال (Accessories)',
+            'hoist' => 'روافع وسلاسل (Hoists)',
+            'winch' => 'أوناش سحب (Winches)',
+            'jack' => 'كواريك هيدروليكية (Jacks)',
+            'forklift' => 'رافعات شوكية (Forklifts)',
+            'mewp' => 'منصات أفراد متنقلة (MEWPs)',
+            'storage' => 'أرفف تخزين معدنية (Racking)',
+            'container' => 'حاويات بحرية (Offshore Containers)',
+            'basket' => 'باسكت رفع أفراد (Personnel Baskets)',
+            'sling' => 'أحزمة وحبال رفع (Slings)',
+            'accessory' => 'مهمات رفع وشكالات (Accessories)',
+            'beam' => 'كمرات رفع (Lifting Beams)',
+            'clamp' => 'كلابات رفع ألواح (Lifting Clamps)',
+            'magnet_vacuum' => 'مغانط وتفريغ هواء (Magnets & Vacuum)',
+            'lashing' => 'تأمين الحمولات (Load Securing)',
             'general' => 'معدات عامة وباليتات (General Cargo)',
-            default => 'معدات مخصصة ('.$this->equipment_type.')',
+            default => 'معدة ('.$this->equipment_type.')',
         };
     }
 
@@ -90,9 +103,12 @@ class CertificateTemplate extends Model
     {
         return match ($this->equipment_type) {
             'crane' => 'bg-blue-50 text-[#0E4DA4] border-blue-200',
-            'accessory' => 'bg-amber-50 text-amber-700 border-amber-200',
-            'general' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-            default => 'bg-purple-50 text-purple-700 border-purple-200',
+            'hoist', 'winch' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
+            'jack', 'forklift' => 'bg-amber-50 text-amber-800 border-amber-200',
+            'mewp', 'basket' => 'bg-cyan-50 text-cyan-800 border-cyan-200',
+            'sling', 'accessory', 'lashing' => 'bg-emerald-50 text-emerald-800 border-emerald-200',
+            'beam', 'clamp', 'magnet_vacuum', 'storage', 'container' => 'bg-purple-50 text-purple-700 border-purple-200',
+            default => 'bg-slate-50 text-slate-700 border-slate-200',
         };
     }
 

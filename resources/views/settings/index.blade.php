@@ -627,8 +627,178 @@
                             </div>
                         </div>
 
+                        <!-- 6. Favicon Icon (أيقونة المتصفح) -->
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-slate-900">أيقونة المتصفح (Favicon Icon)</span>
+                                <span class="text-[10px] text-slate-400 font-en">PNG, ICO, SVG</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-xl bg-white border border-slate-200 p-2 flex items-center justify-center shrink-0 shadow-2xs">
+                                    <img src="{{ asset(setting('favicon_path') ?: setting('logo_path', '/branding/safero_logo.jpg')) }}" alt="Favicon" class="max-h-10 max-w-full object-contain">
+                                </div>
+                                <div class="flex-1 space-y-1">
+                                    <input type="file" 
+                                           name="favicon_file" 
+                                           accept="image/*,.ico"
+                                           class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-[#714B67] file:text-white hover:file:bg-[#5b3c53] cursor-pointer">
+                                    <span class="text-[10px] text-slate-400 block">تظهر في علامات تبويب المتصفح وشريط العناوين.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 7. Mobile App Icon (أيقونة التطبيق للشاشة الرئيسية PWA) -->
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-slate-900">أيقونة تطبيق الموبايل (PWA App Icon)</span>
+                                <span class="text-[10px] text-slate-400 font-en">PNG, 512x512</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-xl bg-white border border-slate-200 p-2 flex items-center justify-center shrink-0 shadow-2xs">
+                                    <img src="{{ asset(setting('app_icon_path') ?: setting('favicon_path') ?: setting('logo_path', '/branding/safero_logo.jpg')) }}" alt="App Icon" class="max-h-10 max-w-full object-contain rounded-lg">
+                                </div>
+                                <div class="flex-1 space-y-1">
+                                    <input type="file" 
+                                           name="app_icon_file" 
+                                           accept="image/png,image/jpeg,image/webp"
+                                           class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-[#714B67] file:text-white hover:file:bg-[#5b3c53] cursor-pointer">
+                                    <span class="text-[10px] text-slate-400 block">الأيقونة التي تظهر على شاشة الهاتف عند التثبيت كـ App.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 8. Equipment Inspection Sticker Template (قالب استيكر / كارت فحص المعدة) -->
+                        <div class="md:col-span-2 p-4 rounded-xl border-2 border-emerald-200 bg-emerald-50/30 space-y-3">
+                            <div class="flex items-center justify-between flex-wrap gap-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+                                        🏷️
+                                    </div>
+                                    <div>
+                                        <span class="text-xs font-black text-slate-900 block">قالب استيكر / كارت فحص المعدة (Equipment Inspection Sticker Template)</span>
+                                        <span class="text-[11px] text-slate-500">خلفية كارت واستيكر فحص المعدات الميداني القابل للطباعة ووضع باركود الفحص (QR Code) وبيانات المعدة تلقائياً.</span>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono font-bold">Sticker Tag</span>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row items-center gap-4 pt-1">
+                                <div class="w-24 h-36 rounded-lg bg-white border border-slate-300 p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+                                    <img src="{{ asset(setting('sticker_template_path', '/branding/sticker_template.png')) }}" alt="Sticker Template" class="w-full h-full object-contain rounded">
+                                </div>
+                                <div class="flex-1 space-y-3 w-full">
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-slate-700 mb-1">رفع صورة أو قالب خلفية الاستيكر (PNG / JPG / WebP)</label>
+                                        <input type="file" 
+                                               name="sticker_template_file" 
+                                               accept="image/jpeg,image/png,image/webp,application/pdf"
+                                               class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-[#006837] file:text-white hover:file:bg-[#00502a] cursor-pointer">
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-700 mb-1">رقم هاتف الدعم والتواصل على الاستيكر</label>
+                                            <input type="text" 
+                                                   name="sticker_phone" 
+                                                   value="{{ setting('sticker_phone', '01508367666') }}"
+                                                   placeholder="01508367666"
+                                                   class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-mono focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none" dir="ltr">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-700 mb-1">الموقع الإلكتروني على الاستيكر</label>
+                                            <input type="text" 
+                                                   name="sticker_website" 
+                                                   value="{{ setting('sticker_website', 'www.safero-eg.com') }}"
+                                                   placeholder="www.safero-eg.com"
+                                                   class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-mono focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none" dir="ltr">
+                                        </div>
+                                    </div>
+
+                                    <p class="text-[11px] text-slate-500">
+                                        عند اكتمال فحص أي معدة أو إصدار شهادة، يتم توليد الاستيكر فورياً بحجم مناسب للطابعات الحرارية وطابعات الباركود A6 / 80x120mm مع كود التحقق QR.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ================= PWA Mobile App Card & Install Button ================= -->
+                    <div class="mt-6 pt-6 border-t border-slate-200 bg-gradient-to-br from-blue-50/60 to-purple-50/60 p-5 rounded-2xl border border-blue-200/80 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-[#0E4DA4] text-white flex items-center justify-center shrink-0 shadow-sm">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-sm font-black text-slate-900">تطبيق الهاتف الذكي </h3>
+                                    </div>
+                                    <p class="text-xs text-slate-600 mt-0.5">يمكنك تثبيت نظام Safero ERP مباشرة على هاتفك للعمل بشاشة كاملة وسرعة فائقة بدون الحاجة لمتجر التطبيقات.</p>
+                                </div>
+                            </div>
+
+                            <!-- Install App Action Button -->
+                            <button type="button" 
+                                    onclick="triggerPwaInstall()" 
+                                    id="installPwaActionBtn"
+                                    class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#0E4DA4] to-[#2563EB] hover:from-[#0b3b7e] hover:to-[#1e40af] text-white font-extrabold text-xs sm:text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 active:scale-95 shrink-0 cursor-pointer">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span> وتثبيت التطبيق </span>
+                            </button>
+                        </div>
+
+                        <!-- Step-by-step Quick Guide -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-[11px]">
+                            <!-- Android / Chrome -->
+                            <div class="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-1">
+                                <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                    <span>هواتف أندرويد (Google Chrome / Edge)</span>
+                                </div>
+                                <p class="text-slate-600 leading-relaxed">
+                                    اضغط على زر التثبيت الأزرق أعلاه، أو اضغط على قائمة المتصفح (⋮) في أعلى الشاشة ثم اختر <strong>"تثبيت التطبيق"</strong> أو <strong>"إضافة إلى الشاشة الرئيسية"</strong>.
+                                </p>
+                            </div>
+
+                            <!-- iOS / Apple Safari -->
+                            <div class="p-3 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-1">
+                                <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    <span>هواتف آيفون (Apple Safari)</span>
+                                </div>
+                                <p class="text-slate-600 leading-relaxed">
+                                    افتح الموقع في متصفح سفاري، ثم اضغط على زر المشاركة أسفل الشاشة <span class="font-bold text-blue-600">➦</span> ثم مرر لأسفل واختر <strong>"إضافة إلى الشاشة الرئيسية (Add to Home Screen)"</strong>.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <script>
+                    function triggerPwaInstall() {
+                        if (window.deferredPwaPrompt) {
+                            window.deferredPwaPrompt.prompt();
+                            window.deferredPwaPrompt.userChoice.then((choiceResult) => {
+                                if (choiceResult.outcome === 'accepted') {
+                                    alert('🎉 تم تثبيت تطبيق Safero ERP بنجاح على شاشة هاتفك الرئيسية!');
+                                }
+                                window.deferredPwaPrompt = null;
+                            });
+                        } else {
+                            // If prompt is not available or iOS
+                            alert('📱 لتثبيت التطبيق على هاتفك:\n\n• على هواتف أندرويد: افتح قائمة المتصفح (⋮) ثم اضغط "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية".\n\n• على هواتف آيفون (Safari): اضغط على زر المشاركة (➦) ثم اختر "إضافة إلى الشاشة الرئيسية (Add to Home Screen)".');
+                        }
+                    }
+
+                    // Auto-listen to PWA prompt availability
+                    window.addEventListener('pwa-prompt-ready', () => {
+                        const btn = document.getElementById('installPwaActionBtn');
+                        if (btn) {
+                            btn.classList.add('ring-4', 'ring-blue-300/60');
+                        }
+                    });
+                </script>
 
                 <!-- ================= TAB 4: Certificates & Accreditation Section ================= -->
                 <div x-show="activeTab === 'certificates'" 

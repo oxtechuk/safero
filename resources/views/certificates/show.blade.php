@@ -105,6 +105,15 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
+            <!-- Print Equipment Sticker Button -->
+            <a href="{{ route('certificates.sticker', $certificate) }}" 
+               target="_blank"
+               class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5"
+               title="طباعة كارت واستيكر فحص المعدة (Sticker Tag)">
+                <span>🏷️</span>
+                <span>استيكر المعدة (Sticker)</span>
+            </a>
+
             <!-- Download PDF Button -->
             <a href="{{ route('certificates.pdf', $certificate) }}" 
                target="_blank"

@@ -192,9 +192,13 @@ class SettingController extends Controller
             'saas_allow_registration' => 'nullable|boolean',
             'google_sheets_webhook_url' => 'nullable|url|max:500',
             'google_sheet_id' => 'nullable|string|max:200',
+            'sticker_phone' => 'nullable|string|max:50',
+            'sticker_website' => 'nullable|string|max:150',
+            'sticker_tagline' => 'nullable|string|max:255',
             'logo_file' => 'nullable|file|mimes:jpeg,png,jpg,svg,webp|max:5120',
             'stamp_file' => 'nullable|file|mimes:jpeg,png,jpg,svg,webp|max:5120',
             'letterhead_bg_file' => 'nullable|file|mimes:jpeg,png,jpg,webp|max:10240',
+            'sticker_template_file' => 'nullable|file|mimes:jpeg,png,jpg,webp,pdf|max:10240',
             'eng_sign_file' => 'nullable|file|mimes:jpeg,png,jpg,svg,webp|max:5120',
             'dir_sign_file' => 'nullable|file|mimes:jpeg,png,jpg,svg,webp|max:5120',
         ]);
@@ -203,6 +207,7 @@ class SettingController extends Controller
         $fields = [
             'company' => ['company_name_ar', 'company_name_en', 'company_tagline', 'company_address', 'company_phone', 'company_email', 'company_website', 'company_cr', 'company_tax_id'],
             'certificates' => ['accreditation_body', 'accreditation_number', 'certificate_prefix', 'certificate_validity_months', 'default_inspector_name', 'default_authenticator_name'],
+            'branding' => ['sticker_phone', 'sticker_website', 'sticker_tagline'],
             'localization' => ['app_locale', 'app_direction', 'app_timezone', 'app_currency'],
             'saas' => ['saas_enabled', 'saas_allow_registration'],
             'integrations' => ['google_sheets_webhook_url', 'google_sheet_id'],
@@ -260,6 +265,15 @@ class SettingController extends Controller
             Setting::set('letterhead_bg_path', '/branding/cert_inspect_bg.jpg', 'branding', 'image');
         }
 
+        // Equipment Inspection Sticker Template Background
+        if ($request->hasFile('sticker_template_file') && $request->file('sticker_template_file')->isValid()) {
+            $file = $request->file('sticker_template_file');
+            $ext = strtolower($file->getClientOriginalExtension() ?: 'png');
+            $filename = 'sticker_template_'.time().'.'.$ext;
+            $file->move($brandingDir, $filename);
+            Setting::set('sticker_template_path', '/branding/'.$filename, 'branding', 'image');
+        }
+
         // Engineer Signature
         if ($request->hasFile('eng_sign_file') && $request->file('eng_sign_file')->isValid()) {
             $file = $request->file('eng_sign_file');
@@ -276,6 +290,24 @@ class SettingController extends Controller
             $filename = 'director_signature_'.time().'.'.$ext;
             $file->move($brandingDir, $filename);
             Setting::set('director_signature_path', '/branding/'.$filename, 'branding', 'image');
+        }
+
+        // Favicon File
+        if ($request->hasFile('favicon_file') && $request->file('favicon_file')->isValid()) {
+            $file = $request->file('favicon_file');
+            $ext = $file->getClientOriginalExtension() ?: 'png';
+            $filename = 'favicon_'.time().'.'.$ext;
+            $file->move($brandingDir, $filename);
+            Setting::set('favicon_path', '/branding/'.$filename, 'branding', 'image');
+        }
+
+        // Mobile App PWA Icon
+        if ($request->hasFile('app_icon_file') && $request->file('app_icon_file')->isValid()) {
+            $file = $request->file('app_icon_file');
+            $ext = $file->getClientOriginalExtension() ?: 'png';
+            $filename = 'app_icon_'.time().'.'.$ext;
+            $file->move($brandingDir, $filename);
+            Setting::set('app_icon_path', '/branding/'.$filename, 'branding', 'image');
         }
 
         Setting::clearCache();

@@ -93,6 +93,10 @@
                 تم تحديد <span id="selectedCount" class="font-en text-amber-300 font-extrabold">0</span> سجل
             </span>
             <span class="text-slate-400">|</span>
+            <button type="button" onclick="batchPrintStickers()" class="hover:text-emerald-300 text-emerald-400 font-bold flex items-center gap-1.5 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                <span>طباعة استيكرات الباركود (4 في A4)</span>
+            </button>
             <button type="button" onclick="batchPrintPdf()" class="hover:text-blue-300 font-medium flex items-center gap-1 transition">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 <span>طباعة مجمعة</span>
@@ -246,6 +250,12 @@
                                         <svg class="w-3.5 h-3.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     </span>
                                     <!-- PDF Document Upload / Download -->
+                                    <a href="{{ route('certificates.sticker', $cert) }}" 
+                                       target="_blank"
+                                       class="p-1 rounded text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition" 
+                                       title="طباعة كارت واستيكر الباركود (فردي)">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                                    </a>
                                     <a href="{{ route('certificates.pdf', $cert) }}" 
                                        target="_blank"
                                        class="text-emerald-600 hover:text-emerald-700 p-0.5" 
@@ -287,6 +297,12 @@
                                        class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition" 
                                        title="معاينة الشهادة">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    </a>
+                                    <a href="{{ route('certificates.sticker', $cert) }}" 
+                                       target="_blank"
+                                       class="p-1 rounded text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition" 
+                                       title="طباعة كارت واستيكر الباركود (فردي)">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
                                     </a>
                                     <a href="{{ route('certificates.pdf', $cert) }}" 
                                        target="_blank"
@@ -378,6 +394,9 @@
                     </div>
 
                     <div class="flex items-center gap-1">
+                        <a href="{{ route('certificates.sticker', $cert) }}" target="_blank" class="p-1 rounded text-slate-400 hover:text-emerald-600 transition" title="استيكر باركود المعدة">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                        </a>
                         <a href="{{ route('certificates.pdf', $cert) }}" target="_blank" class="p-1 rounded text-slate-400 hover:text-red-600 transition" title="PDF">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                         </a>
@@ -429,6 +448,16 @@
         const master = document.getElementById('masterCheckbox');
         if (master) master.checked = false;
         updateBatchBar();
+    }
+
+    function batchPrintStickers() {
+        const checked = document.querySelectorAll('.cert-row-checkbox:checked');
+        if (checked.length === 0) {
+            alert('يرجى تحديد شهادة واحدة على الأقل');
+            return;
+        }
+        const ids = Array.from(checked).map(cb => cb.value).join(',');
+        window.open('{{ route('certificates.batch_stickers') }}?ids=' + ids, '_blank');
     }
 
     function batchPrintPdf() {

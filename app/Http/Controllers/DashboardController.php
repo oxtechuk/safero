@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificate;
 use App\Models\Customer;
+use App\Models\Inspection;
+use App\Models\Invoice;
 use App\Models\Trainee;
 use App\Models\TrainingCertificate;
 use Illuminate\View\View;
@@ -50,6 +52,9 @@ class DashboardController extends Controller
         return [
             'total_customers' => Customer::count(),
             'total_certificates' => Certificate::count(),
+            'total_inspections' => Inspection::count(),
+            'total_invoices' => Invoice::count(),
+            'total_revenue' => (float) Invoice::sum('total_amount'),
             'total_trainees' => Trainee::count(),
             'total_training_certificates' => TrainingCertificate::count(),
             'valid_certificates' => Certificate::where('status', 'issued')
@@ -69,6 +74,48 @@ class DashboardController extends Controller
     protected function getModulesList(array $stats): array
     {
         return [
+            [
+                'id' => 'start_inspection',
+                'name' => 'بدء فحص ميداني',
+                'name_en' => 'Start Inspection',
+                'description' => 'بدء فحص وتعبئة شيك ليست المعدات من الموبايل وإنشاء الشهادة تلقائياً',
+                'icon' => 'clipboard-document-check',
+                'color' => '#006837',
+                'bg_light' => '#E8F7EC',
+                'route' => route('inspections.start'),
+                'count' => $stats['total_inspections'],
+                'count_label' => 'فحص',
+                'active' => true,
+                'category' => 'actions',
+            ],
+            [
+                'id' => 'invoices',
+                'name' => 'الفواتير والحسابات',
+                'name_en' => 'Invoices & Billing',
+                'description' => 'إصدار فواتير الفحص للعملاء وتحديد الأسعار والخصومات والمدفوع والمتبقي',
+                'icon' => 'currency-dollar',
+                'color' => '#0E4DA4',
+                'bg_light' => '#E6F2FF',
+                'route' => route('invoices.index'),
+                'count' => $stats['total_invoices'],
+                'count_label' => 'فاتورة',
+                'active' => true,
+                'category' => 'financial',
+            ],
+            [
+                'id' => 'profit_reports',
+                'name' => 'تقرير وفهم الأرباح',
+                'name_en' => 'Profit Analytics',
+                'description' => 'مؤشرات الأداء المالي، الإيرادات المحصلة، المستحقات المعلقة، وتحليلات الفحص',
+                'icon' => 'chart-bar',
+                'color' => '#16a34a',
+                'bg_light' => '#ecfdf5',
+                'route' => route('reports.index'),
+                'count' => null,
+                'count_label' => 'تقارير فورية',
+                'active' => true,
+                'category' => 'analytics',
+            ],
             [
                 'id' => 'training_certificates',
                 'name' => 'شهادات التدريب',

@@ -7,13 +7,26 @@
 
     <title>{{ config('app.name', 'Safero ERP') }} - @yield('title', 'نظام الفحص والشهادات المعتمدة')</title>
 
+    @php
+        $favicon = setting('favicon_path') ?: setting('logo_path', '/branding/safero_logo.jpg');
+        $appIcon = setting('app_icon_path') ?: $favicon;
+    @endphp
+
+    <!-- Dynamic Favicon & Mobile App Icons from Settings -->
+    <link rel="icon" type="image/png" href="{{ asset($favicon) }}">
+    <link rel="shortcut icon" href="{{ asset($favicon) }}">
+    <link rel="apple-touch-icon" href="{{ asset($appIcon) }}">
+    <link rel="manifest" href="{{ route('pwa.manifest') }}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="{{ setting('company_name_en', 'Safero ERP') }}">
+    <meta name="theme-color" content="#0E4DA4">
+
     <!-- Google Fonts: Cairo & Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Alpine.js Core (High Reliability CDN + Local Build) -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 
     <!-- Styles & Scripts via Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -76,6 +89,21 @@
                                 <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-4 h-4 object-contain" alt="Settings">
                             </div>
                             <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">الإعدادات (Settings)</span>
+                        @elseif(request()->routeIs('inspections.*'))
+                            <div class="w-6 h-6 rounded bg-emerald-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-emerald-200">
+                                <img src="{{ asset('branding/odoo-icons/survey.svg') }}" class="w-4 h-4 object-contain" alt="Field Inspections">
+                            </div>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">بدء فحص ميداني</span>
+                        @elseif(request()->routeIs('invoices.*'))
+                            <div class="w-6 h-6 rounded bg-blue-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-blue-200">
+                                <img src="{{ asset('branding/odoo-icons/account.svg') }}" class="w-4 h-4 object-contain" alt="Invoices">
+                            </div>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">الفواتير والحسابات</span>
+                        @elseif(request()->routeIs('reports.*'))
+                            <div class="w-6 h-6 rounded bg-amber-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-amber-200">
+                                <img src="{{ asset('branding/odoo-icons/point_of_sale.svg') }}" class="w-4 h-4 object-contain" alt="Reports">
+                            </div>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">تقارير الأرباح</span>
                         @elseif(request()->routeIs('training-certificates.*') || request()->routeIs('trainees.*'))
                             <div class="w-6 h-6 rounded bg-emerald-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-emerald-200">
                                 <img src="{{ asset('branding/odoo-icons/industry_certification.svg') }}" class="w-4 h-4 object-contain" alt="Training">
@@ -107,8 +135,8 @@
                         @endif
                     </div>
 
-                    <!-- IsoOx Enterprise Submenu Navigation with Grouped Cascading Dropdowns -->
-                    <nav class="flex items-center gap-0.5 sm:gap-1 flex-wrap md:flex-nowrap" 
+                    <!-- IsoOx Enterprise Submenu Navigation with Grouped Cascading Dropdowns (Hidden on Mobile) -->
+                    <nav class="hidden md:flex items-center gap-0.5 sm:gap-1 flex-nowrap" 
                          x-data="{ 
                              activeMenu: null, 
                              timer: null, 
@@ -233,6 +261,25 @@
                                      style="min-width: 288px; width: 288px;">
                                     
                                     <div class="w-72 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5 divide-y divide-slate-100" style="min-width: 288px; width: 288px;">
+                                        <!-- Field Inspection (بدء فحص) Highlight -->
+                                        <div class="py-1 bg-emerald-50/40">
+                                            <div class="px-3 py-1 text-[10px] font-bold text-emerald-800 uppercase tracking-wider flex items-center justify-between">
+                                                <span>الفحص الميداني والشيك ليست</span>
+                                                <span class="text-[9px] bg-emerald-200 text-emerald-800 px-1.5 py-0.2 rounded font-bold">جديد</span>
+                                            </div>
+                                            <a href="{{ route('inspections.start') }}" 
+                                               class="flex items-center justify-between px-3.5 py-1.5 hover:bg-emerald-100/60 text-emerald-950 font-black transition text-xs">
+                                                <span class="flex items-center gap-1.5">
+                                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                                                    <span>بدء فحص ميداني جديد (شيك ليست)</span>
+                                                </span>
+                                            </a>
+                                            <a href="{{ route('inspections.index') }}" 
+                                               class="block px-3.5 py-1 text-slate-700 hover:text-emerald-800 text-[11px] font-semibold transition">
+                                                سجل الفحوصات الميدانية
+                                            </a>
+                                        </div>
+
                                         <!-- Tree Branch 1: نماذج الفحص المعتمدة -->
                                         <div class="py-1">
                                             <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
@@ -407,6 +454,49 @@
                                 </div>
                             </div>
 
+                            <!-- 3.5 Invoices & Accounts Dropdown (Requested Module) -->
+                            <div class="relative py-2 -my-2 menu-item-group" 
+                                 @mouseenter="enter('invoices')" 
+                                 @mouseleave="leave()">
+                                
+                                <button type="button" 
+                                        @click="activeMenu = (activeMenu === 'invoices' ? null : 'invoices')"
+                                        class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('invoices.*') ? 'bg-slate-100 text-[#006837]' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
+                                    <span>الفواتير والحسابات</span>
+                                    <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'invoices' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                </button>
+
+                                <div x-show="activeMenu === 'invoices'" 
+                                     x-cloak
+                                     x-transition:enter="transition ease-out duration-100"
+                                     x-transition:enter-start="opacity-0 translate-y-1"
+                                     x-transition:enter-end="opacity-100 translate-y-0"
+                                     x-transition:leave="transition ease-in duration-75"
+                                     x-transition:leave-start="opacity-100 translate-y-0"
+                                     x-transition:leave-end="opacity-0 translate-y-1"
+                                     class="menu-popup-box absolute right-0 top-full pt-1 z-50 text-xs"
+                                     style="min-width: 260px; width: 260px;">
+                                    
+                                    <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5" style="min-width: 260px; width: 260px;">
+                                        <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                                            فواتير الفحص والمعايرة
+                                        </div>
+                                        <a href="{{ route('invoices.create') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition font-bold {{ request()->routeIs('invoices.create') ? 'bg-emerald-50/60 text-[#006837]' : '' }}">
+                                            + إنشاء فاتورة جديدة للعميل
+                                        </a>
+                                        <a href="{{ route('invoices.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-[#006837] transition {{ request()->routeIs('invoices.index') && !request('status') ? 'bg-emerald-50/60 font-bold text-[#006837]' : '' }}">
+                                            سجل الفواتير الصادرة
+                                        </a>
+                                        <a href="{{ route('invoices.index', ['status' => 'unpaid']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-red-600 transition font-bold">
+                                            الفواتير غير المدفوعة / المعلقة
+                                        </a>
+                                        <a href="{{ route('reports.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-emerald-700 transition">
+                                            تقرير الأرباح والتحصيل السريع
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- 4. Reporting Dropdown -->
                             <div class="relative py-2 -my-2 menu-item-group" 
                                  @mouseenter="enter('reporting')" 
@@ -414,7 +504,7 @@
                                 
                                 <button type="button" 
                                         @click="activeMenu = (activeMenu === 'reporting' ? null : 'reporting')"
-                                        class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('dashboard') ? 'bg-slate-100 text-amber-600' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
+                                        class="px-2.5 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 {{ request()->routeIs('dashboard') || request()->routeIs('reports.*') ? 'bg-slate-100 text-amber-600' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
                                     <span>التقارير </span>
                                     <svg class="w-3 h-3 text-slate-400 transition-transform duration-150" :class="{ 'rotate-180': activeMenu === 'reporting' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
@@ -432,8 +522,11 @@
                                     
                                     <div class="w-64 bg-white border border-slate-200 rounded-lg shadow-2xl py-1.5" style="min-width: 260px; width: 260px;">
                                         <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                            التحليلات والمؤشرات
+                                            التحليلات والمؤشرات والأرباح
                                         </div>
+                                        <a href="{{ route('reports.index') }}" class="block px-3.5 py-1.5 hover:bg-emerald-50 text-slate-900 hover:text-emerald-700 font-extrabold transition {{ request()->routeIs('reports.index') ? 'bg-emerald-50 text-emerald-800' : '' }}">
+                                             تقرير الفحص
+                                        </a>
                                         <a href="{{ route('dashboard') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-amber-600 transition {{ request()->routeIs('dashboard') ? 'bg-amber-50/60 font-bold text-amber-600' : '' }}">
                                             لوحة المؤشرات الشاملة
                                         </a>
@@ -572,75 +665,121 @@
             </div>
         </div>
 
-        <!-- Mobile Drawer Navigation -->
+        <!-- Mobile Drawer Navigation (Slide-down with High-Density IsoOx Categorization) -->
         <div x-show="mobileMenuOpen" 
              x-cloak 
              @click.away="mobileMenuOpen = false" 
-             class="lg:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-2 text-xs shadow-lg"
-             style="display: none;">
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-2"
+             class="md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-md px-4 py-4 space-y-3 text-xs shadow-xl max-h-[80vh] overflow-y-auto">
             
-            <div class="font-bold text-slate-400 uppercase text-[10px]">شهادات الفحص</div>
-            <div class="grid grid-cols-2 gap-1.5">
-                <a href="{{ route('certificates.create', ['type' => 'crane']) }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
-                    <span>فحص أوناش</span>
-                </a>
-                <a href="{{ route('certificates.create', ['type' => 'accessory']) }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
-                    <span>مهمات رفع</span>
-                </a>
-                <a href="{{ route('certificates.create', ['type' => 'general']) }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
-                    <span>معدات عامة</span>
-                </a>
-                <a href="{{ route('certificates.index') }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
-                    <span>سجل الشهادات</span>
-                </a>
+            <!-- Quick Action: Start Inspection Button on Mobile Drawer -->
+            <a href="{{ route('inspections.start') }}" class="flex items-center justify-between p-3 rounded-xl bg-[#006837] hover:bg-[#00502a] text-white font-extrabold shadow-sm active:scale-98 transition">
+                <span class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    <span>بدء فحص ميداني جديد (شيك ليست)</span>
+                </span>
+                <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-mono">Mobile First</span>
+            </a>
+
+            <!-- Section 1: الفحص والشهادات -->
+            <div class="space-y-1.5">
+                <div class="font-bold text-slate-400 uppercase text-[10px] tracking-wider flex items-center justify-between">
+                    <span>الفحص والشهادات المعتمدة</span>
+                    <span class="text-[#0E4DA4] font-mono">ISO 17020</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 font-bold">
+                    <a href="{{ route('inspections.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
+                        <img src="{{ asset('branding/IsoOx-icons/survey.svg') }}" class="w-4 h-4">
+                        <span>سجل الفحوصات</span>
+                    </a>
+                    <a href="{{ route('certificates.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
+                        <img src="{{ asset('branding/IsoOx-icons/quality_control.svg') }}" class="w-4 h-4">
+                        <span>سجل الشهادات</span>
+                    </a>
+                    <a href="{{ route('certificate-templates.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
+                        <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-4 h-4">
+                        <span>القوالب الـ 28</span>
+                    </a>
+                    <a href="{{ route('certificates.verify.lookup') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
+                        <img src="{{ asset('branding/IsoOx-icons/approvals.svg') }}" class="w-4 h-4">
+                        <span>فحص QR Code</span>
+                    </a>
+                </div>
             </div>
 
-            <div class="font-bold text-slate-400 uppercase text-[10px] pt-2 border-t border-slate-100">شهادات التدريب</div>
-            <div class="grid grid-cols-2 gap-1.5">
-                <a href="{{ route('training-certificates.create') }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
-                    <span>إصدار تدريب</span>
-                </a>
-                <a href="{{ route('trainees.index') }}" class="p-2 rounded bg-slate-50 font-bold text-slate-700 text-center">
-                    <span>المتدربين</span>
-                </a>
+            <!-- Section 2: الفواتير والحسابات + الأرباح -->
+            <div class="space-y-1.5 pt-2 border-t border-slate-100">
+                <div class="font-bold text-slate-400 uppercase text-[10px] tracking-wider">الحسابات والمالية</div>
+                <div class="grid grid-cols-2 gap-2 font-bold">
+                    <a href="{{ route('invoices.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
+                        <img src="{{ asset('branding/IsoOx-icons/account.svg') }}" class="w-4 h-4">
+                        <span>الفواتير والتحصيل</span>
+                    </a>
+                    <a href="{{ route('invoices.create') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-[#0E4DA4] transition flex items-center gap-2 shadow-2xs">
+                        <svg class="w-4 h-4 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        <span>إنشاء فاتورة</span>
+                    </a>
+                    <a href="{{ route('reports.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
+                        <img src="{{ asset('branding/IsoOx-icons/point_of_sale.svg') }}" class="w-4 h-4">
+                        <span>تقرير الأرباح</span>
+                    </a>
+                    <a href="{{ route('customers.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
+                        <img src="{{ asset('branding/IsoOx-icons/crm.svg') }}" class="w-4 h-4">
+                        <span>دليل العملاء</span>
+                    </a>
+                </div>
             </div>
 
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
-                <a href="{{ route('customers.index') }}" class="font-bold text-slate-700">دليل العملاء</a>
-                <a href="{{ route('dashboard') }}" class="font-bold text-amber-600">لوحة المؤشرات</a>
-                <a href="{{ route('apps') }}" class="font-bold text-[#0E4DA4]">جميع التطبيقات</a>
+            <!-- Section 3: الإعدادات وتثبيت التطبيق -->
+            <div class="pt-2 border-t border-slate-100 space-y-1.5">
+                <div class="font-bold text-slate-400 uppercase text-[10px] tracking-wider">النظام والتطبيق</div>
+                <div class="grid grid-cols-2 gap-2 font-bold">
+                    <a href="{{ route('settings.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
+                        <img src="{{ asset('branding/IsoOx-icons/settings.svg') }}" class="w-4 h-4">
+                        <span>الإعدادات العامة</span>
+                    </a>
+                    <a href="{{ route('settings.index', ['tab' => 'branding']) }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-[#0E4DA4] transition flex items-center gap-2 shadow-2xs">
+                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span>تثبيت التطبيق</span>
+                    </a>
+                </div>
             </div>
         </div>
     </header>
 
-    @if((request()->routeIs('certificates.*') || request()->routeIs('certificate-templates.*')) && !request()->routeIs('certificates.verify.*'))
-        <div class="bg-white border-b border-slate-200 shadow-2xs">
+    @if((request()->routeIs('certificates.*') || request()->routeIs('certificate-templates.*')) && !request()->routeIs('certificates.verify.*') && !request()->routeIs('certificates.sticker') && !request()->routeIs('certificates.batch_stickers') && !request()->routeIs('inspections.sticker'))
+        <div class="print:hidden bg-white border-b border-slate-200 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-10 gap-3 text-xs">
                     <!-- Left: Subheader Navigation -->
-                    <div class="flex items-center gap-1.5 overflow-x-auto py-1">
+                    <div class="flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none">
                         <a href="{{ route('certificates.index') }}" 
-                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition {{ (request()->routeIs('certificates.index') && !request('status')) ? 'bg-blue-50 text-[#0E4DA4] border border-blue-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition shrink-0 whitespace-nowrap {{ (request()->routeIs('certificates.index') && !request('status')) ? 'bg-blue-50 text-[#0E4DA4] border border-blue-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <img src="{{ asset('branding/IsoOx-icons/documents.svg') }}" class="w-3.5 h-3.5">
                             <span>سجل الشهادات</span>
                         </a>
 
                         <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
-                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition {{ request('status') === 'issued' ? 'bg-blue-50 text-[#0E4DA4] font-bold border border-blue-200/80' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition shrink-0 whitespace-nowrap {{ request('status') === 'issued' ? 'bg-blue-50 text-[#0E4DA4] font-bold border border-blue-200/80' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                             <span>السارية</span>
                         </a>
 
                         <a href="{{ route('certificates.expiring') }}" 
-                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition {{ request()->routeIs('certificates.expiring') ? 'bg-blue-50 text-[#0E4DA4] font-bold border border-blue-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition shrink-0 whitespace-nowrap {{ request()->routeIs('certificates.expiring') ? 'bg-blue-50 text-[#0E4DA4] font-bold border border-blue-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <img src="{{ asset('branding/IsoOx-icons/timer.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
                             <span>قريبة من الانتهاء</span>
                         </a>
 
-                        <span class="text-slate-300">|</span>
+                        <span class="text-slate-300 shrink-0">|</span>
 
                         <a href="{{ route('certificate-templates.index') }}" 
-                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-bold transition {{ request()->routeIs('certificate-templates.*') ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
+                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-bold transition shrink-0 whitespace-nowrap {{ request()->routeIs('certificate-templates.*') ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
                             <span>ستوديو قوالب الفحص</span>
                         </a>
@@ -904,9 +1043,63 @@
     </div>
 
     <!-- Main View Content -->
-    <main class="flex-1 pb-10">
+    <main class="flex-1 pb-20 md:pb-10">
         @yield('content')
     </main>
+
+    <!-- Mobile Quick-Access Floating Bottom Bar (IsoOx Mobile Ergonomic Pattern) -->
+    @unless(View::hasSection('hide_bottom_nav'))
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-3 py-1.5 shadow-2xl flex items-center justify-around text-slate-500 transition-all select-none">
+        <!-- 1. Apps Home -->
+        <a href="{{ route('apps') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('apps') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
+            <img src="{{ asset('branding/IsoOx-icons/apps.svg') }}" class="w-5 h-5 object-contain" alt="Apps">
+            <span class="text-[10px]">الرئيسية</span>
+        </a>
+
+        <!-- 2. Start Field Inspection (Highlighted Center Action) -->
+        <a href="{{ route('inspections.start') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition group">
+            <div class="w-9 h-9 -mt-4 rounded-full bg-[#006837] text-white shadow-md flex items-center justify-center border-2 border-white transform active:scale-95 transition group-hover:bg-[#00502a]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+            </div>
+            <span class="text-[10px] font-bold text-slate-800">بدء فحص</span>
+        </a>
+
+        <!-- 3. Certificates -->
+        <a href="{{ route('certificates.index') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('certificates.*') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
+            <img src="{{ asset('branding/IsoOx-icons/quality_control.svg') }}" class="w-5 h-5 object-contain" alt="Certificates">
+            <span class="text-[10px]">الشهادات</span>
+        </a>
+
+        <!-- 4. Invoices -->
+        <a href="{{ route('invoices.index') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('invoices.*') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
+            <img src="{{ asset('branding/IsoOx-icons/account.svg') }}" class="w-5 h-5 object-contain" alt="Invoices">
+            <span class="text-[10px]">الفواتير</span>
+        </a>
+
+        <!-- 5. Reports & Profits -->
+        <a href="{{ route('reports.index') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('reports.*') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
+            <img src="{{ asset('branding/IsoOx-icons/point_of_sale.svg') }}" class="w-5 h-5 object-contain" alt="Reports">
+            <span class="text-[10px]">الأرباح</span>
+        </a>
+
+        <!-- 6. Settings -->
+        <a href="{{ route('settings.index') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('settings.*') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
+            <img src="{{ asset('branding/IsoOx-icons/settings.svg') }}" class="w-5 h-5 object-contain" alt="Settings">
+            <span class="text-[10px]">الإعدادات</span>
+        </a>
+    </nav>
+    @endunless
+
+    <!-- Global PWA Service Worker & Install Listener -->
+    <script>
+        // Track PWA install prompt globally
+        window.deferredPwaPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            window.deferredPwaPrompt = e;
+            window.dispatchEvent(new CustomEvent('pwa-prompt-ready'));
+        });
+    </script>
 
 </body>
 </html>

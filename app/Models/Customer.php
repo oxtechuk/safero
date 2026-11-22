@@ -29,4 +29,20 @@ class Customer extends Model
     {
         return $this->hasMany(Certificate::class);
     }
+
+    /**
+     * @return HasMany<Inspection, $this>
+     */
+    public function inspections(): HasMany
+    {
+        return $this->hasMany(Inspection::class);
+    }
+
+    /**
+     * @return HasMany<Invoice, $this>
+     */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

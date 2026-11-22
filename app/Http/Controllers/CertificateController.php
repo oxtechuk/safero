@@ -174,7 +174,7 @@ class CertificateController extends Controller
             'thorough_examination_date' => ['required', 'date'],
             'next_examination_due_date' => ['required', 'date', 'after_or_equal:thorough_examination_date'],
             'reference_standard' => ['required', 'string', 'max:100'],
-            'equipment_type' => ['nullable', 'string', 'in:crane,accessory,general'],
+            'equipment_type' => ['nullable', 'string', 'max:50'],
             'equipment_description' => ['required', 'string', 'max:500'],
             'equipment_id_range' => ['nullable', 'string', 'max:100'],
             'date_of_manufacture' => ['nullable', 'string', 'max:50'],
@@ -251,6 +251,93 @@ class CertificateController extends Controller
         return view('certificates.show', compact('certificate', 'qrCodeSvg', 'verifyUrl'));
     }
 
+    /**
+     * Printable Equipment Inspection Sticker Tag.
+     */
+    public function sticker(Certificate $certificate): View
+    {
+        $certificate->load(['customer', 'inspection']);
+        $verifyUrl = $certificate->verification_url;
+        $qrCodeSvg = base64_encode(QrCode::format('svg')->size(220)->margin(0)->generate($verifyUrl));
+
+        $inspection = $certificate->inspection;
+
+        return view('inspections.sticker', compact('certificate', 'inspection', 'qrCodeSvg', 'verifyUrl'));
+    }
+
+    /**
+     * Batch Printable Stickers for Multiple Selected Certificates (Grouped 4 per A4 sheet 2x2).
+     */
+    public function batchStickers(Request $request): View|RedirectResponse
+    {
+        $rawIds = $request->input('ids', '');
+        $ids = array_filter(array_map('intval', explode(',', (string) $rawIds)));
+
+        if (empty($ids)) {
+            return redirect()->route('certificates.index')
+                ->with('error', 'يرجى تحديد شهادة واحدة على الأقل لطباعة الاستيكرات.');
+        }
+
+        $certificates = Certificate::with(['customer', 'inspection'])
+            ->whereIn('id', $ids)
+            ->get();
+
+        if ($certificates->isEmpty()) {
+            return redirect()->route('certificates.index')
+                ->with('error', 'لم يتم العثور على الشهادات المحددة.');
+        }
+
+        // Prepare each certificate with its own dynamic data and QR Code
+        $stickers = $certificates->map(function ($cert) {
+            $verifyUrl = $cert->verification_url;
+            $qrCodeSvg = base64_encode(QrCode::format('svg')->size(220)->margin(0)->generate($verifyUrl));
+
+            $equipmentId = $cert->doc_number
+                ?? ($cert->equipment_id_range
+                ?? ($cert->chassis_no
+                ?? ($cert->serial_no
+                ?? ($cert->certificate_number ?? 'EQ-001'))));
+
+            $equipmentType = $cert->equipment_name
+                ?? ($cert->equipment_type
+                ?? ($cert->equipment_description ?? 'Lifting Equipment'));
+
+            $inspectionDate = $cert->thorough_examination_date
+                ? Carbon::parse($cert->thorough_examination_date)->format('d/m/Y')
+                : ($cert->examination_date ? Carbon::parse($cert->examination_date)->format('d/m/Y') : date('d/m/Y'));
+
+            $nextDate = $cert->next_examination_due_date
+                ? Carbon::parse($cert->next_examination_due_date)->format('d/m/Y')
+                : date('d/m/Y', strtotime('+1 year'));
+
+            $isSafe = $cert->is_safe_to_operate ?? true;
+            $resultText = $isSafe ? 'PASS' : 'FAIL';
+            $resultColor = $isSafe ? 'text-[#16A34A]' : 'text-[#DC2626]';
+
+            return [
+                'cert' => $cert,
+                'equipmentId' => $equipmentId,
+                'equipmentType' => $equipmentType,
+                'inspectionDate' => $inspectionDate,
+                'nextDate' => $nextDate,
+                'isSafe' => $isSafe,
+                'resultText' => $resultText,
+                'resultColor' => $resultColor,
+                'qrCodeSvg' => $qrCodeSvg,
+                'verifyUrl' => $verifyUrl,
+            ];
+        });
+
+        // Group into sheets of 4 stickers each (A4 2x2 layout)
+        $sheets = $stickers->chunk(4);
+
+        $phone = setting('sticker_phone', setting('company_phone', '01508367666'));
+        $website = setting('sticker_website', setting('company_website', 'www.safero-eg.com'));
+        $templateImg = setting('sticker_template_path', '/branding/sticker_template.png');
+
+        return view('certificates.batch_stickers', compact('stickers', 'sheets', 'phone', 'website', 'templateImg'));
+    }
+
     public function edit(Certificate $certificate): View
     {
         $customers = Customer::orderBy('name')->get();
@@ -269,7 +356,7 @@ class CertificateController extends Controller
             'thorough_examination_date' => ['required', 'date'],
             'next_examination_due_date' => ['required', 'date'],
             'reference_standard' => ['required', 'string', 'max:100'],
-            'equipment_type' => ['nullable', 'string', 'in:crane,accessory,general'],
+            'equipment_type' => ['nullable', 'string', 'max:50'],
             'equipment_description' => ['required', 'string', 'max:500'],
             'equipment_id_range' => ['nullable', 'string', 'max:100'],
             'date_of_manufacture' => ['nullable', 'string', 'max:50'],
