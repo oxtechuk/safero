@@ -58,29 +58,29 @@
                 <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ request('status') === 'issued' ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">
                     <span class="w-2 h-2 rounded-full {{ request('status') === 'issued' ? 'bg-white' : 'bg-emerald-500' }}"></span>
-                    <span>السارية المعتمدة</span>
+                    <span>{{ __('السارية') }}</span>
                 </a>
                 <a href="{{ route('certificates.index', ['status' => 'draft']) }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 {{ request('status') === 'draft' ? 'bg-[#0E4DA4] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">
                     <span class="w-2 h-2 rounded-full {{ request('status') === 'draft' ? 'bg-white' : 'bg-slate-400' }}"></span>
-                    <span>المسودات</span>
+                    <span>{{ __('المسودات') }}</span>
                 </a>
                 <a href="{{ route('certificates.expiring') }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:bg-slate-100">
                     <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                    <span>الشهادات القريبة من الانتهاء</span>
+                    <span>{{ __('الشهادات القريبة من الانتهاء') }}</span>
                 </a>
                 <a href="{{ route('certificate-templates.index') }}" 
                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:bg-slate-100">
                     <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-4 h-4">
-                    <span>ستوديو قوالب الفحص</span>
+                    <span>{{ __('ستوديو قوالب الفحص') }}</span>
                 </a>
             </div>
 
             <div class="flex items-center gap-2">
                 <a href="{{ route('certificates.create') }}" 
                    class="px-3 py-1.5 rounded-lg bg-[#0E4DA4] hover:bg-blue-800 text-white text-xs font-bold transition flex items-center gap-1 shadow-2xs">
-                    <span>+ شهادة فحص جديدة</span>
+                    <span>{{ __('+ شهادة فحص جديدة') }}</span>
                 </a>
             </div>
         </div>
@@ -90,24 +90,24 @@
         <div class="flex items-center gap-3">
             <span class="font-bold flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                تم تحديد <span id="selectedCount" class="font-en text-amber-300 font-extrabold">0</span> سجل
+                {{ __('تم تحديد') }} <span id="selectedCount" class="font-en text-amber-300 font-extrabold">0</span> {{ __('سجل') }}
             </span>
             <span class="text-slate-400">|</span>
             <button type="button" onclick="batchPrintStickers()" class="hover:text-emerald-300 text-emerald-400 font-bold flex items-center gap-1.5 transition">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                <span>طباعة استيكرات الباركود (4 في A4)</span>
+                <span>{{ __('طباعة استيكرات الباركود (4 في A4)') }}</span>
             </button>
             <button type="button" onclick="batchPrintPdf()" class="hover:text-blue-300 font-medium flex items-center gap-1 transition">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                <span>طباعة مجمعة</span>
+                <span>{{ __('طباعة مجمعة') }}</span>
             </button>
             <button type="button" onclick="batchExportCsv()" class="hover:text-sky-300 font-medium flex items-center gap-1 transition">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                <span>تصدير Excel</span>
+                <span>{{ __('تصدير Excel') }}</span>
             </button>
         </div>
         <button type="button" onclick="clearAllSelections()" class="text-slate-400 hover:text-white transition">
-            إلغاء التحديد ✕
+            {{ __('إلغاء التحديد ✕') }}
         </button>
     </div>
 
@@ -145,17 +145,17 @@
                                    onchange="toggleSelectAll(this)" 
                                    class="rounded border-slate-300 text-[#0E4DA4] focus:ring-[#0E4DA4] w-3.5 h-3.5 cursor-pointer">
                         </th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Number</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Customer</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Equipment / Standard</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">SWL</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Number') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Customer') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Equipment / Standard') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('SWL') }}</th>
                         <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 whitespace-nowrap">
-                            <span>Next Exam</span>
+                            <span>{{ __('Next Exam') }}</span>
                             <span class="text-slate-400 font-mono text-[10px]">^</span>
                         </th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">Inspector</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Activities</th>
-                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">Status</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700">{{ __('Inspector') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('Activities') }}</th>
+                        <th class="px-3 py-2.5 font-bold tracking-tight text-slate-700 text-center">{{ __('Status') }}</th>
                         <th class="w-16 px-3 py-2.5 text-center text-slate-400">
                             <!-- Column Config Icon (Image 1 match) -->
                             <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -70,7 +70,7 @@
 <!-- Breadcrumb & Top Bar -->
 <div class="mb-4 no-print">
     <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
-        <a href="{{ route('certificates.index') }}" class="hover:text-[#0E4DA4]">شهادات الفحص</a>
+        <a href="{{ route('certificates.index') }}" class="hover:text-[#0E4DA4]">{{ __('شهادات الفحص') }}</a>
         <span>/</span>
         <span class="text-slate-800 font-bold font-en">{{ $certificate->certificate_number }}</span>
     </div>
@@ -83,15 +83,9 @@
         <div class="flex items-center gap-3">
             <span class="w-3 h-3 rounded-full {{ $certificate->is_safe_to_operate ? 'bg-[#22A447]' : 'bg-red-500' }}"></span>
             <div>
-                <span class="text-xs text-slate-400 block font-en uppercase tracking-wider">CERTIFICATE NUMBER</span>
+                <span class="text-xs text-slate-400 block font-en uppercase tracking-wider">{{ __('رقم الشهادة') }}</span>
                 <span class="text-lg font-black text-[#0E4DA4] font-en">{{ $certificate->certificate_number }}</span>
             </div>
-            @if($certificate->is_safe_to_operate)
-                <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#E8F7EC] text-[#22A447] mr-2">
-               صالح للاستخداممدةيل
-                </span>
-            @endif
-          
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
@@ -99,8 +93,8 @@
             <a href="{{ route('certificates.sticker', $certificate) }}" 
                target="_blank"
                class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5"
-               title="طباعة كارت واستيكر فحص المعدة (Sticker Tag)">
-                <span>استيكر المعدة (Sticker)</span>
+               title="{{ __('طباعة استيكر الباركود فردي') }}">
+                <span>{{ __('استيكر المعدة') }}</span>
             </a>
 
             <!-- Download PDF Button -->
@@ -108,7 +102,7 @@
                target="_blank"
                class="px-4 py-2.5 rounded-xl bg-[#0E4DA4] hover:bg-[#0a3a7d] text-white font-bold text-xs sm:text-sm shadow-md shadow-[#0E4DA4]/20 transition flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                <span>تحميل PDF المعتمد (ثيم Safero)</span>
+                <span>{{ __('تحميل PDF') }}</span>
             </a>
 
             <!-- Print Button -->
@@ -116,22 +110,22 @@
                     onclick="window.print()"
                     class="px-3.5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                <span>طباعة</span>
+                <span>{{ __('طباعة') }}</span>
             </button>
 
             <!-- Public Verification Link -->
             <a href="{{ route('certificates.verify', $certificate->uuid) }}" 
                target="_blank"
                class="px-3.5 py-2.5 rounded-xl border border-[#22A447]/30 bg-[#E8F7EC] hover:bg-[#22A447] text-[#22A447] hover:text-white font-bold text-xs sm:text-sm transition flex items-center gap-1.5"
-               title="رابط التحقق العام عبر الـ QR">
+               title="{{ __('رابط التحقق العام عبر الـ QR') }}">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                <span>صفحة التحقق (QR)</span>
+                <span>{{ __('صفحة التحقق (QR)') }}</span>
             </a>
 
             <!-- Edit Button -->
             <a href="{{ route('certificates.edit', $certificate) }}" 
                class="px-3 py-2.5 rounded-xl border border-slate-200 hover:bg-amber-50 text-slate-700 hover:text-amber-600 font-semibold text-xs sm:text-sm transition">
-                تعديل
+                {{ __('تعديل') }}
             </a>
         </div>
     </div>

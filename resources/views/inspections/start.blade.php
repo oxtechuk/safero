@@ -17,15 +17,15 @@
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-200 font-mono">
                             {{ $nextNumber }}
                         </span>
-                        <h1 class="text-base sm:text-lg font-black text-slate-900">بدء فحص ميداني جديد (Start Inspection)</h1>
+                        <h1 class="text-base sm:text-lg font-black text-slate-900">{{ __('بدء فحص ميداني جديد (Start Inspection)') }}</h1>
                     </div>
-                    <p class="text-xs text-slate-500 mt-0.5">الخطوة 1: اختيار العميل ونوع المعدة / القالب لتجهيز شيك ليست الفحص الميداني</p>
+                    <p class="text-xs text-slate-500 mt-0.5">{{ __('الخطوة 1: اختيار العميل ونوع المعدة / القالب لتجهيز شيك ليست الفحص الميداني') }}</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2">
                 <a href="{{ route('inspections.index') }}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-bold transition">
-                    إلغاء
+                    {{ __('إلغاء') }}
                 </a>
             </div>
         </div>
@@ -41,8 +41,8 @@
                     <div class="flex items-center gap-2.5">
                         <div class="w-7 h-7 rounded-lg bg-[#0E4DA4] text-white flex items-center justify-center font-bold text-xs shadow-xs">1</div>
                         <div>
-                            <h2 class="text-sm font-extrabold text-slate-900">العميل ونموذج الفحص (Client & Template)</h2>
-                            <p class="text-[11px] text-slate-500">اختر العميل المعني ونوع المعدة لتحميل بنود الفحص والمعايير المعتمدة تلقائياً</p>
+                            <h2 class="text-sm font-extrabold text-slate-900">{{ __('العميل ونموذج الفحص') }}</h2>
+                            <p class="text-[11px] text-slate-500">{{ __('اختر العميل المعني ونوع المعدة لتحميل بنود الفحص والمعايير المعتمدة تلقائياً') }}</p>
                         </div>
                     </div>
                 </div>
@@ -51,10 +51,10 @@
                     <!-- Customer Selector -->
                     <div>
                         <label for="customer_id" class="block text-xs font-bold text-slate-700 mb-1.5">
-                            العميل (Client / Customer) <span class="text-red-500">*</span>
+                            {{ __('العميل') }} <span class="text-red-500">*</span>
                         </label>
                         <select name="customer_id" id="customer_id" required class="w-full text-xs font-semibold rounded-lg border-slate-300 focus:border-[#0E4DA4] focus:ring-[#0E4DA4] py-2.5 bg-white">
-                            <option value="">-- اختر العميل من القائمة --</option>
+                            <option value="">-- {{ __('العميل') }} --</option>
                             @foreach($customers as $customer)
                                 <option value="{{ $customer->id }}" {{ (old('customer_id', $selectedCustomerId) == $customer->id) ? 'selected' : '' }} data-address="{{ $customer->address }}">
                                     {{ $customer->name }} {{ $customer->phone ? '('.$customer->phone.')' : '' }}
@@ -69,10 +69,10 @@
                     <!-- Template Selector (All 28 Sheets) -->
                     <div>
                         <label for="certificate_template_id" class="block text-xs font-bold text-slate-700 mb-1.5">
-                            قالب الفحص / نوع المعدة (Inspection Template) <span class="text-red-500">*</span>
+                            {{ __('قالب الفحص / نوع المعدة') }} <span class="text-red-500">*</span>
                         </label>
                         <select name="certificate_template_id" id="certificate_template_id" required class="w-full text-xs font-semibold rounded-lg border-slate-300 focus:border-[#0E4DA4] focus:ring-[#0E4DA4] py-2.5 bg-white">
-                            <option value="">-- اختر قالب الفحص ونوع المعدة (28 قالب معتمد) --</option>
+                            <option value="">-- {{ __('قالب الفحص / نوع المعدة') }} (28) --</option>
                             @foreach($templates as $tpl)
                                 <option value="{{ $tpl->id }}" 
                                     {{ (old('certificate_template_id', $selectedTemplate?->id) == $tpl->id) ? 'selected' : '' }}

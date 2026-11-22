@@ -7,50 +7,50 @@
 
     <!-- IsoOx Enterprise Control Panel -->
     <x-odoo-control-panel 
-        title="ستوديو قوالب شهادات الفحص"
+        :title="__('ستوديو قوالب شهادات الفحص')"
         new-url="{{ route('certificate-templates.create') }}"
-        new-text="إنشاء قالب جديد"
+        :new-text="__('إنشاء قالب جديد')"
         new-color="bg-[#0E4DA4]"
         search-action="{{ route('certificate-templates.index') }}"
         search-value="{{ request('search') }}"
-        search-placeholder="البحث باسم القالب، نوع المعدة، المواصفة المرجعية..."
+        :search-placeholder="__('البحث باسم القالب، نوع المعدة، المواصفة المرجعية...')"
         :paginator="$templates"
     >
         <!-- Filter Popover Content -->
         <div class="space-y-3">
             <div>
-                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">نوع المعدة (Equipment Type)</span>
+                <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{{ __('قالب الفحص / نوع المعدة') }}</span>
                 <div class="flex flex-wrap gap-1.5">
                     <a href="{{ route('certificate-templates.index') }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ !request('type') ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        الكل (28+ قالب)
+                        {{ __('الكل (28+ قالب)') }}
                     </a>
                     <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'crane'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'crane' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        الأوناش (Cranes)
+                        {{ __('الأوناش (Cranes)') }}
                     </a>
                     <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'hoist'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'hoist' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        روافع وسلاسل (Hoists & Winches)
+                        {{ __('روافع وسلاسل (Hoists & Winches)') }}
                     </a>
                     <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'accessory'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'accessory' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        مهمات الرفع والحبال (Accessories & Slings)
+                        {{ __('مهمات الرفع والحبال (Accessories & Slings)') }}
                     </a>
                     <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'mewp_forklift'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'mewp_forklift' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        شوكات ومان ليفت (Forklifts & MEWPs)
+                        {{ __('شوكات ومان ليفت (Forklifts & MEWPs)') }}
                     </a>
                     <a href="{{ route('certificate-templates.index', array_merge(request()->except(['type', 'page']), ['type' => 'general'])) }}" 
                        class="px-2.5 py-1 rounded text-xs font-semibold transition {{ request('type') === 'general' ? 'bg-[#0E4DA4] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700' }}">
-                        كمرات وكلابات وتخزين (Beams & Storage)
+                        {{ __('كمرات وكلابات وتخزين (Beams & Storage)') }}
                     </a>
                 </div>
             </div>
 
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <a href="{{ route('certificate-templates.index') }}" class="text-[11px] text-slate-500 hover:text-slate-800 underline">
-                    إعادة ضبط الفلاتر
+                    {{ __('إعادة ضبط الفلاتر') }}
                 </a>
             </div>
         </div>

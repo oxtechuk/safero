@@ -140,23 +140,23 @@ function inspectionInspectorApp() {
                 <button type="button" @click="filter = 'all'" 
                         :class="filter === 'all' ? 'bg-slate-900 text-white shadow-xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'"
                         class="px-3 py-1.5 rounded-lg transition shadow-2xs cursor-pointer">
-                    الكل (<span x-text="items.length"></span>)
+                    {{ __('الكل') }} (<span x-text="items.length"></span>)
                 </button>
                 <button type="button" @click="filter = 'fail'" 
                         :class="filter === 'fail' ? 'bg-rose-600 text-white shadow-xs' : 'bg-white border border-rose-200 text-rose-700 hover:bg-rose-50'"
                         class="px-3 py-1.5 rounded-lg transition shadow-2xs flex items-center gap-1 cursor-pointer">
-                    <span>العيوب / مرفوض</span>
+                    <span>{{ __('العيوب / مرفوض') }}</span>
                     <span class="w-4 h-4 rounded-full bg-rose-100 text-rose-800 text-[10px] flex items-center justify-center font-mono font-bold" x-text="failCount"></span>
                 </button>
                 <button type="button" @click="filter = 'pass'" 
                         :class="filter === 'pass' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white border border-emerald-200 text-emerald-700 hover:bg-emerald-50'"
                         class="px-3 py-1.5 rounded-lg transition shadow-2xs cursor-pointer">
-                    مقبول (<span x-text="passCount"></span>)
+                    {{ __('مقبول') }} (<span x-text="passCount"></span>)
                 </button>
                 <button type="button" @click="filter = 'na'" 
                         :class="filter === 'na' ? 'bg-slate-700 text-white shadow-xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'"
                         class="px-3 py-1.5 rounded-lg transition shadow-2xs cursor-pointer">
-                    N/A (<span x-text="naCount"></span>)
+                    {{ __('غير منطبق') }} (<span x-text="naCount"></span>)
                 </button>
             </div>
 
@@ -349,13 +349,13 @@ function inspectionInspectorApp() {
                         <!-- Save Draft Button -->
                         <button type="submit" name="status" value="draft"
                                 class="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition shadow-2xs text-center cursor-pointer active:scale-95">
-                            حفظ كمسودة
+                            {{ __('حفظ كمسودة') }}
                         </button>
 
                         <!-- Save Completed Button -->
                         <button type="submit" name="status" value="completed"
                                 class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-2xs text-center cursor-pointer active:scale-95">
-                            إتمام وحفظ الفحص
+                            {{ __('إتمام وحفظ الفحص') }}
                         </button>
                     </div>
 
@@ -363,7 +363,7 @@ function inspectionInspectorApp() {
                     <button type="submit" name="convert_to_certificate" value="1"
                             class="w-full sm:w-auto flex-1 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#006837] to-[#22A447] hover:from-[#00522c] hover:to-[#1b8439] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 active:scale-98 cursor-pointer">
                         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span>المرحلة 2: إنشاء شهادة الفحص المعتمدة فوراً</span>
+                        <span>{{ __('المرحلة 2: إنشاء شهادة الفحص المعتمدة فوراً') }}</span>
                     </button>
                 </div>
             </div>

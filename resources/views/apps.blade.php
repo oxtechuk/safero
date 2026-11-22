@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'en' ? 'ltr' : 'rtl' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -116,12 +116,24 @@
                 </div>
             </div>
 
-            <!-- Right: Quick Dashboard link, User Info & Logout -->
+            <!-- Right: Language Switcher, Quick Dashboard link, User Info & Logout -->
             <div class="flex items-center gap-3">
+                <!-- Language Switcher Capsule -->
+                <div class="flex items-center p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-bold font-mono">
+                    <a href="{{ route('lang.switch', 'ar') }}" 
+                       class="px-2 py-0.5 rounded-md transition {{ app()->getLocale() === 'ar' ? 'bg-white text-[#0E4DA4] shadow-2xs font-black' : 'text-slate-500 hover:text-slate-800' }}">
+                        عربي
+                    </a>
+                    <a href="{{ route('lang.switch', 'en') }}" 
+                       class="px-2 py-0.5 rounded-md transition {{ app()->getLocale() === 'en' ? 'bg-white text-[#0E4DA4] shadow-2xs font-black' : 'text-slate-500 hover:text-slate-800' }}">
+                        EN
+                    </a>
+                </div>
+
                 <a href="{{ route('dashboard') }}" 
                    class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:border-[#0E4DA4] hover:bg-[#E6F2FF] text-slate-700 hover:text-[#0E4DA4] text-xs font-bold transition">
                     <svg class="w-4 h-4 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                    <span>لوحة التقارير</span>
+                    <span>{{ __('تقارير الأرباح') }}</span>
                 </a>
 
                 <div class="flex items-center gap-2 pr-2 border-r border-slate-200">

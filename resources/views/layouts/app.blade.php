@@ -88,47 +88,47 @@
                             <div class="w-6 h-6 rounded bg-purple-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-purple-200">
                                 <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-4 h-4 object-contain" alt="Settings">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">الإعدادات (Settings)</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('الإعدادات') }}</span>
                         @elseif(request()->routeIs('inspections.*'))
                             <div class="w-6 h-6 rounded bg-emerald-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-emerald-200">
                                 <img src="{{ asset('branding/odoo-icons/survey.svg') }}" class="w-4 h-4 object-contain" alt="Field Inspections">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">بدء فحص ميداني</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('بدء فحص ميداني') }}</span>
                         @elseif(request()->routeIs('invoices.*'))
                             <div class="w-6 h-6 rounded bg-blue-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-blue-200">
                                 <img src="{{ asset('branding/odoo-icons/account.svg') }}" class="w-4 h-4 object-contain" alt="Invoices">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">الفواتير والحسابات</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('الفواتير والحسابات') }}</span>
                         @elseif(request()->routeIs('reports.*'))
                             <div class="w-6 h-6 rounded bg-amber-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-amber-200">
                                 <img src="{{ asset('branding/odoo-icons/point_of_sale.svg') }}" class="w-4 h-4 object-contain" alt="Reports">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">تقارير الأرباح</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('تقارير الأرباح') }}</span>
                         @elseif(request()->routeIs('training-certificates.*') || request()->routeIs('trainees.*'))
                             <div class="w-6 h-6 rounded bg-emerald-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-emerald-200">
                                 <img src="{{ asset('branding/odoo-icons/industry_certification.svg') }}" class="w-4 h-4 object-contain" alt="Training">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">شهادات التدريب</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('شهادات التدريب') }}</span>
                         @elseif(request()->routeIs('certificates.*') || request()->routeIs('certificate-templates.*'))
                             <div class="w-6 h-6 rounded bg-blue-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-blue-200">
                                 <img src="{{ asset('branding/odoo-icons/quality_control.svg') }}" class="w-4 h-4 object-contain" alt="Inspection">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">شهادات الفحص</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('شهادات الفحص') }}</span>
                         @elseif(request()->routeIs('customers.*'))
                             <div class="w-6 h-6 rounded bg-amber-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-amber-200">
                                 <img src="{{ asset('branding/odoo-icons/crm.svg') }}" class="w-4 h-4 object-contain" alt="Customers">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">العملاء </span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('العملاء') }}</span>
                         @elseif(request()->routeIs('users.*') || request()->routeIs('roles.*'))
                             <div class="w-6 h-6 rounded bg-purple-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-purple-200">
                                 <img src="{{ asset('branding/odoo-icons/hr.svg') }}" class="w-4 h-4 object-contain" alt="Users">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">المستخدمون</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('المستخدمون') }}</span>
                         @elseif(request()->routeIs('tasks.*'))
                             <div class="w-6 h-6 rounded bg-blue-50 text-white flex items-center justify-center p-0.5 shadow-2xs border border-blue-200">
                                 <img src="{{ asset('branding/odoo-icons/timer.svg') }}" class="w-4 h-4 object-contain" alt="Tasks">
                             </div>
-                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">مهام الفحص </span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ __('مهام الفحص') }}</span>
                         @else
                             <img src="{{ asset(setting('logo_path', '/branding/safero_logo.jpg')) }}" alt="{{ setting('company_name_en', 'Safero') }}" class="h-5 w-auto object-contain">
                             <span class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">{{ setting('company_name_en', 'Safero ERP') }}</span>
@@ -713,7 +713,7 @@
             <a href="{{ route('inspections.start') }}" class="flex items-center justify-between p-3 rounded-xl bg-[#006837] hover:bg-[#00502a] text-white font-extrabold shadow-sm active:scale-98 transition">
                 <span class="flex items-center gap-2">
                     <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                    <span>بدء فحص ميداني جديد (شيك ليست)</span>
+                    <span>{{ __('بدء فحص ميداني جديد (شيك ليست)') }}</span>
                 </span>
                 <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-mono">Mobile First</span>
             </a>
@@ -721,63 +721,63 @@
             <!-- Section 1: الفحص والشهادات -->
             <div class="space-y-1.5">
                 <div class="font-bold text-slate-400 uppercase text-[10px] tracking-wider flex items-center justify-between">
-                    <span>الفحص والشهادات المعتمدة</span>
+                    <span>{{ __('شهادات الفحص') }}</span>
                     <span class="text-[#0E4DA4] font-mono">ISO 17020</span>
                 </div>
                 <div class="grid grid-cols-2 gap-2 font-bold">
                     <a href="{{ route('inspections.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/survey.svg') }}" class="w-4 h-4">
-                        <span>سجل الفحوصات</span>
+                        <span>{{ __('سجل الفحوصات') }}</span>
                     </a>
                     <a href="{{ route('certificates.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/quality_control.svg') }}" class="w-4 h-4">
-                        <span>سجل الشهادات</span>
+                        <span>{{ __('سجل الشهادات') }}</span>
                     </a>
                     <a href="{{ route('certificate-templates.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-4 h-4">
-                        <span>القوالب الـ 28</span>
+                        <span>{{ __('القوالب الـ 28') }}</span>
                     </a>
                     <a href="{{ route('certificates.verify.lookup') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/approvals.svg') }}" class="w-4 h-4">
-                        <span>فحص QR Code</span>
+                        <span>{{ __('فحص QR Code') }}</span>
                     </a>
                 </div>
             </div>
 
             <!-- Section 2: الفواتير والحسابات + الأرباح -->
             <div class="space-y-1.5 pt-2 border-t border-slate-100">
-                <div class="font-bold text-slate-400 uppercase text-[10px] tracking-wider">الحسابات والمالية</div>
+                <div class="font-bold text-slate-400 uppercase text-[10px] tracking-wider">{{ __('الفواتير والحسابات') }}</div>
                 <div class="grid grid-cols-2 gap-2 font-bold">
                     <a href="{{ route('invoices.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/account.svg') }}" class="w-4 h-4">
-                        <span>الفواتير والتحصيل</span>
+                        <span>{{ __('الفواتير والتحصيل') }}</span>
                     </a>
                     <a href="{{ route('invoices.create') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-[#0E4DA4] transition flex items-center gap-2 shadow-2xs">
                         <svg class="w-4 h-4 text-[#0E4DA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                        <span>إنشاء فاتورة</span>
+                        <span>{{ __('إنشاء فاتورة') }}</span>
                     </a>
                     <a href="{{ route('reports.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/point_of_sale.svg') }}" class="w-4 h-4">
-                        <span>تقرير الأرباح</span>
+                        <span>{{ __('تقرير الأرباح') }}</span>
                     </a>
                     <a href="{{ route('customers.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/crm.svg') }}" class="w-4 h-4">
-                        <span>دليل العملاء</span>
+                        <span>{{ __('دليل العملاء') }}</span>
                     </a>
                 </div>
             </div>
 
             <!-- Section 3: الإعدادات وتثبيت التطبيق -->
             <div class="pt-2 border-t border-slate-100 space-y-1.5">
-                <div class="font-bold text-slate-400 uppercase text-[10px] tracking-wider">النظام والتطبيق</div>
+                <div class="font-bold text-slate-400 uppercase text-[10px] tracking-wider">{{ __('الإعدادات') }}</div>
                 <div class="grid grid-cols-2 gap-2 font-bold">
                     <a href="{{ route('settings.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/settings.svg') }}" class="w-4 h-4">
-                        <span>الإعدادات العامة</span>
+                        <span>{{ __('الإعدادات العامة') }}</span>
                     </a>
                     <a href="{{ route('settings.index', ['tab' => 'branding']) }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-[#0E4DA4] transition flex items-center gap-2 shadow-2xs">
                         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        <span>تثبيت التطبيق</span>
+                        <span>{{ __('تثبيت التطبيق') }}</span>
                     </a>
                 </div>
             </div>
@@ -793,19 +793,19 @@
                         <a href="{{ route('certificates.index') }}" 
                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition shrink-0 whitespace-nowrap {{ (request()->routeIs('certificates.index') && !request('status')) ? 'bg-blue-50 text-[#0E4DA4] border border-blue-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <img src="{{ asset('branding/IsoOx-icons/documents.svg') }}" class="w-3.5 h-3.5">
-                            <span>سجل الشهادات</span>
+                            <span>{{ __('سجل الشهادات') }}</span>
                         </a>
 
                         <a href="{{ route('certificates.index', ['status' => 'issued']) }}" 
                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition shrink-0 whitespace-nowrap {{ request('status') === 'issued' ? 'bg-blue-50 text-[#0E4DA4] font-bold border border-blue-200/80' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                            <span>السارية</span>
+                            <span>{{ __('السارية') }}</span>
                         </a>
 
                         <a href="{{ route('certificates.expiring') }}" 
                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition shrink-0 whitespace-nowrap {{ request()->routeIs('certificates.expiring') ? 'bg-blue-50 text-[#0E4DA4] font-bold border border-blue-200/80 shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <img src="{{ asset('branding/IsoOx-icons/timer.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
-                            <span>قريبة من الانتهاء</span>
+                            <span>{{ __('قريبة من الانتهاء') }}</span>
                         </a>
 
                         <span class="text-slate-300 shrink-0">|</span>
@@ -813,7 +813,7 @@
                         <a href="{{ route('certificate-templates.index') }}" 
                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-bold transition shrink-0 whitespace-nowrap {{ request()->routeIs('certificate-templates.*') ? 'bg-[#0E4DA4] text-white shadow-2xs' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100' }}">
                             <img src="{{ asset('branding/IsoOx-icons/web_studio.svg') }}" class="w-3.5 h-3.5 object-contain" alt="">
-                            <span>ستوديو قوالب الفحص</span>
+                            <span>{{ __('ستوديو قوالب الفحص') }}</span>
                         </a>
                     </div>
 
@@ -821,13 +821,13 @@
                     <div class="hidden md:flex items-center gap-2.5 text-slate-500 text-[11px]">
                         <a href="{{ route('certificates.create') }}" 
                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#0E4DA4] hover:bg-blue-800 text-white font-bold transition shadow-2xs">
-                            <span>+ إصدار شهادة</span>
+                            <span>{{ __('+ إصدار شهادة') }}</span>
                         </a>
                         <span class="text-slate-300">|</span>
                         <a href="{{ route('certificates.verify.lookup') }}" 
                            class="hover:text-purple-700 transition flex items-center gap-1 text-slate-500 hover:underline">
                             <svg class="w-3 h-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-                            <span>فحص QR</span>
+                            <span>{{ __('فحص QR') }}</span>
                         </a>
                     </div>
                 </div>
@@ -1085,7 +1085,7 @@
         <!-- 1. Apps Home -->
         <a href="{{ route('apps') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('apps') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <img src="{{ asset('branding/IsoOx-icons/apps.svg') }}" class="w-5 h-5 object-contain" alt="Apps">
-            <span class="text-[10px]">الرئيسية</span>
+            <span class="text-[10px]">{{ __('الرئيسية') }}</span>
         </a>
 
         <!-- 2. Start Field Inspection (Highlighted Center Action) -->
@@ -1093,31 +1093,31 @@
             <div class="w-9 h-9 -mt-4 rounded-full bg-[#006837] text-white shadow-md flex items-center justify-center border-2 border-white transform active:scale-95 transition group-hover:bg-[#00502a]">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
             </div>
-            <span class="text-[10px] font-bold text-slate-800">بدء فحص</span>
+            <span class="text-[10px] font-bold text-slate-800">{{ __('بدء فحص') }}</span>
         </a>
 
         <!-- 3. Certificates -->
         <a href="{{ route('certificates.index') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('certificates.*') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <img src="{{ asset('branding/IsoOx-icons/quality_control.svg') }}" class="w-5 h-5 object-contain" alt="Certificates">
-            <span class="text-[10px]">الشهادات</span>
+            <span class="text-[10px]">{{ __('الشهادات') }}</span>
         </a>
 
         <!-- 4. Invoices -->
         <a href="{{ route('invoices.index') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('invoices.*') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <img src="{{ asset('branding/IsoOx-icons/account.svg') }}" class="w-5 h-5 object-contain" alt="Invoices">
-            <span class="text-[10px]">الفواتير</span>
+            <span class="text-[10px]">{{ __('الفواتير') }}</span>
         </a>
 
         <!-- 5. Reports & Profits -->
         <a href="{{ route('reports.index') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('reports.*') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <img src="{{ asset('branding/IsoOx-icons/point_of_sale.svg') }}" class="w-5 h-5 object-contain" alt="Reports">
-            <span class="text-[10px]">الأرباح</span>
+            <span class="text-[10px]">{{ __('الأرباح') }}</span>
         </a>
 
         <!-- 6. Settings -->
         <a href="{{ route('settings.index') }}" class="flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg transition {{ request()->routeIs('settings.*') ? 'text-[#0E4DA4] font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <img src="{{ asset('branding/IsoOx-icons/settings.svg') }}" class="w-5 h-5 object-contain" alt="Settings">
-            <span class="text-[10px]">الإعدادات</span>
+            <span class="text-[10px]">{{ __('الإعدادات') }}</span>
         </a>
     </nav>
     @endunless

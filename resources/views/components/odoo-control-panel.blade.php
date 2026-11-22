@@ -37,7 +37,7 @@
                 <!-- Settings Cog (IsoOx style) -->
                 <button type="button" 
                         class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition" 
-                        title="إعدادات العرض والحقول">
+                        title="{{ __('إعدادات العرض والحقول') }}">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
                     </svg>
@@ -75,7 +75,7 @@
                         <button type="button" 
                                 onclick="toggleIsoOxFilterMenu()" 
                                 class="absolute inset-y-0 left-0 pl-2.5 pr-1.5 flex items-center text-slate-400 hover:text-slate-700 transition" 
-                                title="خيارات التصفية والتجميع (Filters &amp; Group By)">
+                                title="{{ __('خيارات التصفية والتجميع') }}">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
                             </svg>
@@ -103,21 +103,21 @@
                     <div class="inline-flex rounded border border-slate-300 overflow-hidden bg-white shadow-2xs">
                         @if($paginator->onFirstPage())
                             <span class="px-2 py-1 text-slate-300 cursor-not-allowed bg-slate-50">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                <svg class="w-3.5 h-3.5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                             </span>
                         @else
-                            <a href="{{ $paginator->previousPageUrl() }}" class="px-2 py-1 text-slate-600 hover:bg-slate-100 transition" title="الصفحة السابقة">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            <a href="{{ $paginator->previousPageUrl() }}" class="px-2 py-1 text-slate-600 hover:bg-slate-100 transition" title="{{ __('الصفحة السابقة') }}">
+                                <svg class="w-3.5 h-3.5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                             </a>
                         @endif
 
                         @if($paginator->hasMorePages())
-                            <a href="{{ $paginator->nextPageUrl() }}" class="px-2 py-1 text-slate-600 hover:bg-slate-100 transition border-r border-slate-200" title="الصفحة التالية">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            <a href="{{ $paginator->nextPageUrl() }}" class="px-2 py-1 text-slate-600 hover:bg-slate-100 transition border-r border-slate-200" title="{{ __('الصفحة التالية') }}">
+                                <svg class="w-3.5 h-3.5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                             </a>
                         @else
                             <span class="px-2 py-1 text-slate-300 cursor-not-allowed bg-slate-50 border-r border-slate-200">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                <svg class="w-3.5 h-3.5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                             </span>
                         @endif
                     </div>
@@ -131,7 +131,7 @@
                         onclick="switchIsoOxView('list')" 
                         id="viewBtnList"
                         class="p-1.5 rounded transition text-slate-700 bg-slate-100 border border-slate-300/80 shadow-2xs font-bold" 
-                        title="عرض القائمة (List View)">
+                        title="{{ __('عرض القائمة') }}">
                     <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
                     </svg>
@@ -142,7 +142,7 @@
                         onclick="switchIsoOxView('kanban')" 
                         id="viewBtnKanban"
                         class="p-1.5 rounded transition text-slate-500 hover:text-slate-800 hover:bg-slate-50" 
-                        title="عرض البطاقات (Kanban View)">
+                        title="{{ __('عرض البطاقات') }}">
                     <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M4 4h7v16H4zm9 0h7v10h-7z"/>
                     </svg>
@@ -151,7 +151,7 @@
                 <!-- Activity / Clock View Button -->
                 <button type="button" 
                         class="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition hidden sm:inline-flex" 
-                        title="عرض الأنشطة والمهام (Activity View)">
+                        title="{{ __('عرض الأنشطة والمهام') }}">
                     <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                     </svg>
@@ -160,7 +160,7 @@
                 <!-- Column Settings / Toggle -->
                 <button type="button" 
                         class="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition border-r border-slate-200" 
-                        title="تخصيص الأعمدة">
+                        title="{{ __('تخصيص الأعمدة') }}">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
                     </svg>

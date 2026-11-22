@@ -14,27 +14,27 @@
             <div>
            
                 <h1 class="text-2xl sm:text-3xl font-black text-white">
-                    مرحباً بك، {{ Auth::user()->name }} 👋
+                    {{ __('مرحباً بك،') }} {{ Auth::user()->name }} 👋
                 </h1>
                 <p class="text-blue-100 text-sm mt-1 max-w-xl">
-                    نظام شركة سافيرو (Safero) المتكامل لإصدار تقارير الفحص الشامل لمعدات الرفع، وإصدار شهادات الدورات التدريبية المعتمدة للمتدربين مع الربط التلقائي بأكواد الـ QR وإطار التضمين بموقع الشركة.
+                    {{ __('نظام شركة سافيرو (Safero) المتكامل لإصدار تقارير الفحص الشامل لمعدات الرفع، وإصدار شهادات الدورات التدريبية المعتمدة للمتدربين مع الربط التلقائي بأكواد الـ QR وإطار التضمين بموقع الشركة.') }}
                 </p>
             </div>
             <div class="flex items-center flex-wrap gap-2.5 shrink-0">
                 <a href="{{ route('training-certificates.create') }}" 
                    class="px-4 py-2.5 rounded-xl bg-[#006837] hover:bg-[#00522c] text-white font-bold text-xs sm:text-sm shadow-lg transition duration-200 flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span>إصدار شهادة تدريب</span>
+                    <span>{{ __('إصدار شهادة تدريب') }}</span>
                 </a>
                 <a href="{{ route('certificates.create') }}" 
                    class="px-4 py-2.5 rounded-xl bg-[#22A447] hover:bg-[#1b8539] text-white font-bold text-xs sm:text-sm shadow-lg transition duration-200 flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span>إصدار شهادة فحص</span>
+                    <span>{{ __('إصدار شهادة فحص') }}</span>
                 </a>
                 <a href="{{ route('trainees.create') }}" 
                    class="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm transition flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
-                    <span>متدرب جديد</span>
+                    <span>{{ __('متدرب جديد') }}</span>
                 </a>
             </div>
         </div>
@@ -46,12 +46,12 @@
             <div>
                 <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
                     <span class="w-2.5 h-6 bg-[#0E4DA4] rounded-full inline-block"></span>
-                    مديولات النظام (IsoOx-Style Apps)
+                    {{ __('مديولات النظام (IsoOx-Style Apps)') }}
                 </h2>
-                <p class="text-xs text-slate-500 mt-0.5">انقر على أي مديول للبدء في إدارة وتتبع عملياته</p>
+                <p class="text-xs text-slate-500 mt-0.5">{{ __('انقر على أي مديول للبدء في إدارة وتتبع عملياته') }}</p>
             </div>
             <span class="text-xs font-bold text-slate-400 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
-                {{ count($modules) }} مديولات
+                {{ count($modules) }} {{ __('مديولات') }}
             </span>
         </div>
 
@@ -93,9 +93,9 @@
 
                     <!-- Module Title -->
                     <h3 class="font-bold text-slate-800 text-xs sm:text-sm line-clamp-1 group-hover:text-[#0E4DA4] transition">
-                        {{ $module['name'] }}
+                        {{ app()->getLocale() === 'en' ? ($module['name_en'] ?? __($module['name'])) : $module['name'] }}
                     </h3>
-                    <span class="text-[11px] text-slate-400 font-en block mt-0.5">{{ $module['name_en'] }}</span>
+                    <span class="text-[11px] text-slate-400 font-en block mt-0.5">{{ app()->getLocale() === 'en' ? $module['name'] : $module['name_en'] }}</span>
 
                     <!-- Badge / Count -->
                     @if($module['count'] !== null)

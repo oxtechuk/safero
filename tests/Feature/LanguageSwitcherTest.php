@@ -62,4 +62,31 @@ class LanguageSwitcherTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHas('locale', 'ar');
     }
+
+    public function test_pages_render_correct_bilingual_strings(): void
+    {
+        $this->actingAs($this->user);
+
+        // English session on Invoices
+        $invoicesEn = $this->withSession(['locale' => 'en'])->get(route('invoices.index'));
+        $invoicesEn->assertStatus(200);
+        $invoicesEn->assertSee('dir="ltr"', false);
+        $invoicesEn->assertSee('Invoices &amp; Billing Accounts', false);
+
+        // Arabic session on Invoices
+        $invoicesAr = $this->withSession(['locale' => 'ar'])->get(route('invoices.index'));
+        $invoicesAr->assertStatus(200);
+        $invoicesAr->assertSee('dir="rtl"', false);
+        $invoicesAr->assertSee('فواتير وحسابات الفحص');
+
+        // English session on Reports
+        $reportsEn = $this->withSession(['locale' => 'en'])->get(route('reports.index'));
+        $reportsEn->assertStatus(200);
+        $reportsEn->assertSee('Inspection &amp; Profit Analytics Dashboard', false);
+
+        // English session on Customers
+        $customersEn = $this->withSession(['locale' => 'en'])->get(route('customers.index'));
+        $customersEn->assertStatus(200);
+        $customersEn->assertSee('Customers &amp; Companies', false);
+    }
 }
