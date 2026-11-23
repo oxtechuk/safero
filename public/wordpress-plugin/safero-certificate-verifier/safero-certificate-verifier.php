@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Safero Certificate Verifier (التحقق من شهادات الفحص والتدريب - سافيرو)
+ * Plugin Name: Safero Certificate Verifier
  * Plugin URI: https://safero-eg.com
  * Description: الإضافة الرسمية الموحدة لشركة سافيرو (Safero Services & Consultations) للتحقق الفوري من شهادات فحص معدات الرفع وشهادات التدريب المعتمدة، مع إمكانية عرض معاينة الـ PDF المباشرة وتحميل النسخة الرسمية عبر شورت كود واحد فقط [safero_certificate_verifier].
  * Version: 2.5.0
