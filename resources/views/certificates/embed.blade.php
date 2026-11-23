@@ -204,21 +204,21 @@
                 <div class="p-2 border-r border-slate-400 flex flex-col justify-between h-32">
                     <span class="text-[10px] font-bold text-slate-600">Name and Signature of the person issue this certificate</span>
                     <div class="my-auto">
-                        <img src="{{ asset('branding/eng_signature.svg') }}" alt="Engineer Signature" class="h-10 mx-auto object-contain">
+                        <img src="{{ asset(setting('engineer_signature_path', 'branding/eng_signature.svg')) }}" alt="Engineer Signature" class="h-10 mx-auto object-contain">
                     </div>
                     <span class="font-bold text-xs text-slate-900">{{ $certificate->issuer_name }}</span>
                 </div>
 
                 <!-- Safero Stamp -->
                 <div class="p-1 border-r border-slate-400 flex flex-col items-center justify-center relative">
-                    <img src="{{ asset('branding/stamp.svg') }}" alt="Safero Stamp" class="h-24 w-24 object-contain">
+                    <img src="{{ asset(setting('stamp_path', 'branding/stamp.svg')) }}" alt="Safero Stamp" class="h-24 w-24 object-contain">
                 </div>
 
                 <!-- Authenticator -->
                 <div class="p-2 flex flex-col justify-between h-32">
                     <span class="text-[10px] font-bold text-slate-600">Name and Signature of the person authenticating this certificate</span>
                     <div class="my-auto">
-                        <img src="{{ asset('branding/director_signature.svg') }}" alt="Director Signature" class="h-10 mx-auto object-contain">
+                        <img src="{{ asset(setting('director_signature_path', 'branding/director_signature.svg')) }}" alt="Director Signature" class="h-10 mx-auto object-contain">
                     </div>
                     <span class="font-bold text-xs text-slate-900">{{ $certificate->authenticator_name }}</span>
                 </div>

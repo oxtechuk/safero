@@ -9,7 +9,7 @@
             margin: 0;
         }
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'DejaVu Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: #1a1a1a;
             margin: 0;
             padding: 28px 45px 25px 45px;
@@ -323,12 +323,12 @@
 
         <!-- Trainee Name -->
         <div class="trainee-wrapper">
-            <div class="trainee-name">{{ $certificate->trainee_name }}</div>
+            <div class="trainee-name">{{ arabic_pdf($certificate->trainee_name) }}</div>
         </div>
 
         <!-- Course Statement -->
         <div class="course-label">Who has successfully completed the course of</div>
-        <div class="course-title">{{ $certificate->program_title }}</div>
+        <div class="course-title">{{ arabic_pdf($certificate->program_title) }}</div>
 
         <!-- Dates -->
         <table class="dates-table">
@@ -349,7 +349,16 @@
             <tr>
                 <!-- Left: Instructor & Accreditation -->
                 <td class="col-instructor">
-                    <div class="sign-name">{{ $certificate->instructor_name }}</div>
+                    <div class="sign-name">{{ arabic_pdf($certificate->instructor_name) }}</div>
+                    @if(!empty($engSignDataUri))
+                        <div style="height: 36px; text-align: left; margin-bottom: 2px;">
+                            <img src="{{ $engSignDataUri }}" style="max-height: 36px; max-width: 140px;" alt="Signature">
+                        </div>
+                    @elseif(!empty($engSignBase64))
+                        <div style="height: 36px; text-align: left; margin-bottom: 2px;">
+                            <img src="data:{{ $engSignMime ?? 'image/jpeg' }};base64,{{ $engSignBase64 }}" style="max-height: 36px; max-width: 140px;" alt="Signature">
+                        </div>
+                    @endif
                     <div class="sign-line">
                         <span class="sign-title">Instructor Signature</span>
                     </div>
@@ -375,12 +384,22 @@
                 <!-- Right: Training Manager & Stamp -->
                 <td class="col-manager">
                     <div style="display: inline-block; text-align: center;">
-                        <div class="stamp-box">
-                            <div style="font-style: italic; font-size: 10px;">{{ $certificate->training_manager_name }}</div>
-                            <div style="border-top: 1px solid #0E4DA4; margin: 2px 0;"></div>
-                            <div>SAFERO</div>
-                            <div style="font-size: 7.5px;">Training Manager</div>
-                        </div>
+                        @if(!empty($stampDataUri))
+                            <div style="margin-bottom: 4px; text-align: center;">
+                                <img src="{{ $stampDataUri }}" style="max-height: 65px; max-width: 90px; display: inline-block;" alt="Stamp">
+                            </div>
+                        @elseif(!empty($stampBase64))
+                            <div style="margin-bottom: 4px; text-align: center;">
+                                <img src="data:{{ $stampMime ?? 'image/jpeg' }};base64,{{ $stampBase64 }}" style="max-height: 65px; max-width: 90px; display: inline-block;" alt="Stamp">
+                            </div>
+                        @else
+                            <div class="stamp-box">
+                                <div style="font-style: italic; font-size: 10px;">{{ arabic_pdf($certificate->training_manager_name) }}</div>
+                                <div style="border-top: 1px solid #0E4DA4; margin: 2px 0;"></div>
+                                <div>SAFERO</div>
+                                <div style="font-size: 7.5px;">Training Manager</div>
+                            </div>
+                        @endif
                         <div class="sign-line" style="margin-left: auto;">
                             <span class="sign-title">Training Manager</span>
                         </div>

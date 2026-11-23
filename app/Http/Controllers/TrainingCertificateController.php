@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Trainee;
 use App\Models\TrainingCertificate;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -42,17 +44,123 @@ class TrainingCertificateController extends Controller
     {
         $trainees = Trainee::orderBy('name')->get();
         $selectedTraineeId = $request->input('trainee_id');
+        $mode = $request->input('mode', 'single');
 
         $today = Carbon::today();
         $expiryDate = Carbon::today()->addYears(2)->subDay();
 
         $defaultSerial = TrainingCertificate::generateNextSerial($today->toDateString());
+        $instructors = TrainingCertificate::defaultInstructors();
+        $users = User::where('is_active', true)->orderBy('name')->get();
 
-        return view('training-certificates.create', compact('trainees', 'selectedTraineeId', 'today', 'expiryDate', 'defaultSerial'));
+        return view('training-certificates.create', compact(
+            'trainees',
+            'selectedTraineeId',
+            'today',
+            'expiryDate',
+            'defaultSerial',
+            'instructors',
+            'users',
+            'mode'
+        ));
     }
 
     public function store(Request $request): RedirectResponse
     {
+        $mode = $request->input('mode', 'single');
+
+        // BATCH ISSUANCE MODE (إصدار عدة شهادات دفعة واحدة)
+        if ($mode === 'batch') {
+            $validated = $request->validate([
+                'training_scope' => ['required', 'string', 'max:255'],
+                'program_title' => ['required', 'string', 'max:255'],
+                'hours' => ['required', 'integer', 'min:1', 'max:1000'],
+                'issue_date' => ['required', 'date'],
+                'expiry_date' => ['nullable', 'date', 'after_or_equal:issue_date'],
+                'instructor_name' => ['required', 'string', 'max:255'],
+                'instructor_id' => ['nullable', 'exists:users,id'],
+                'training_manager_name' => ['required', 'string', 'max:255'],
+                'accreditation_text' => ['nullable', 'string'],
+                'status' => ['required', 'in:issued,draft,revoked'],
+                'batch_trainee_ids' => ['nullable', 'array'],
+                'batch_trainee_ids.*' => ['exists:trainees,id'],
+                'raw_trainee_names' => ['nullable', 'string'],
+            ]);
+
+            // Collect all trainee targets
+            $traineesList = collect();
+
+            // 1. From selected existing trainees
+            if (! empty($validated['batch_trainee_ids'])) {
+                $existing = Trainee::whereIn('id', $validated['batch_trainee_ids'])->get();
+                foreach ($existing as $t) {
+                    $traineesList->push([
+                        'id' => $t->id,
+                        'name' => $t->name,
+                    ]);
+                }
+            }
+
+            // 2. From raw text names (one per line)
+            if (! empty($validated['raw_trainee_names'])) {
+                $lines = explode("\n", str_replace("\r", '', $validated['raw_trainee_names']));
+                foreach ($lines as $line) {
+                    $cleanName = trim($line);
+                    if ($cleanName !== '') {
+                        $traineesList->push([
+                            'id' => null,
+                            'name' => $cleanName,
+                        ]);
+                    }
+                }
+            }
+
+            if ($traineesList->isEmpty()) {
+                return back()->withInput()->withErrors([
+                    'batch_trainee_ids' => 'يرجى اختيار متدرب واحد على الأقل أو كتابة أسماء المتدربين لإصدار الشهادات الجماعية.',
+                ]);
+            }
+
+            $createdCount = 0;
+            $firstSerial = null;
+            $lastSerial = null;
+
+            DB::transaction(function () use ($traineesList, $validated, &$createdCount, &$firstSerial, &$lastSerial) {
+                foreach ($traineesList as $target) {
+                    $serial = TrainingCertificate::generateNextSerial($validated['issue_date']);
+
+                    if (! $firstSerial) {
+                        $firstSerial = $serial;
+                    }
+                    $lastSerial = $serial;
+
+                    TrainingCertificate::create([
+                        'uuid' => (string) Str::uuid(),
+                        'certificate_serial' => $serial,
+                        'trainee_id' => $target['id'],
+                        'trainee_name' => $target['name'],
+                        'training_scope' => $validated['training_scope'],
+                        'program_title' => $validated['program_title'],
+                        'hours' => $validated['hours'],
+                        'issue_date' => $validated['issue_date'],
+                        'expiry_date' => $validated['expiry_date'] ?? null,
+                        'instructor_name' => $validated['instructor_name'],
+                        'instructor_id' => $validated['instructor_id'] ?? null,
+                        'training_manager_name' => $validated['training_manager_name'],
+                        'accreditation_text' => $validated['accreditation_text'] ?? null,
+                        'status' => $validated['status'],
+                        'created_by' => Auth::id(),
+                    ]);
+
+                    $createdCount++;
+                }
+            });
+
+            return redirect()->route('training-certificates.index')
+                ->with('success', "تم بنجاح إصدار عدد {$createdCount} شهادات تدريب معتمدة من الرقم {$firstSerial} إلى {$lastSerial}.");
+        }
+
+        // SINGLE ISSUANCE MODE (شهادة فردية)
         $validated = $request->validate([
             'trainee_id' => ['nullable', 'exists:trainees,id'],
             'trainee_name' => ['required', 'string', 'max:255'],
@@ -63,6 +171,7 @@ class TrainingCertificateController extends Controller
             'issue_date' => ['required', 'date'],
             'expiry_date' => ['nullable', 'date', 'after_or_equal:issue_date'],
             'instructor_name' => ['required', 'string', 'max:255'],
+            'instructor_id' => ['nullable', 'exists:users,id'],
             'training_manager_name' => ['required', 'string', 'max:255'],
             'accreditation_text' => ['nullable', 'string'],
             'status' => ['required', 'in:issued,draft,revoked'],
@@ -97,8 +206,10 @@ class TrainingCertificateController extends Controller
     public function edit(TrainingCertificate $trainingCertificate): View
     {
         $trainees = Trainee::orderBy('name')->get();
+        $instructors = TrainingCertificate::defaultInstructors();
+        $users = User::where('is_active', true)->orderBy('name')->get();
 
-        return view('training-certificates.edit', compact('trainingCertificate', 'trainees'));
+        return view('training-certificates.edit', compact('trainingCertificate', 'trainees', 'instructors', 'users'));
     }
 
     public function update(Request $request, TrainingCertificate $trainingCertificate): RedirectResponse
@@ -113,6 +224,7 @@ class TrainingCertificateController extends Controller
             'issue_date' => ['required', 'date'],
             'expiry_date' => ['nullable', 'date', 'after_or_equal:issue_date'],
             'instructor_name' => ['required', 'string', 'max:255'],
+            'instructor_id' => ['nullable', 'exists:users,id'],
             'training_manager_name' => ['required', 'string', 'max:255'],
             'accreditation_text' => ['nullable', 'string'],
             'status' => ['required', 'in:issued,draft,revoked'],
@@ -158,26 +270,64 @@ class TrainingCertificateController extends Controller
         $verifyUrl = $trainingCertificate->verification_url;
         $qrCodeSvg = base64_encode(QrCode::format('svg')->size(130)->margin(0)->generate($verifyUrl));
 
-        $logoPath = public_path('branding/safero_logo.jpg');
-        $logoBase64 = file_exists($logoPath) ? base64_encode(file_get_contents($logoPath)) : '';
+        $resolveDataUri = function (?string $settingKey, string $defaultRelPath): array {
+            $path = null;
+            $configured = $settingKey ? setting($settingKey) : null;
+            if ($configured) {
+                $candidate = public_path(ltrim($configured, '/\\'));
+                if (file_exists($candidate)) {
+                    $path = $candidate;
+                }
+            }
+            if (! $path) {
+                $candidate = public_path(ltrim($defaultRelPath, '/\\'));
+                if (file_exists($candidate)) {
+                    $path = $candidate;
+                }
+            }
 
-        $stampPath = public_path('branding/stamp.svg');
-        $stampBase64 = file_exists($stampPath) ? base64_encode(file_get_contents($stampPath)) : '';
+            if ($path && file_exists($path)) {
+                $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                $mime = match ($ext) {
+                    'svg' => 'image/svg+xml',
+                    'png' => 'image/png',
+                    'jpg', 'jpeg' => 'image/jpeg',
+                    'webp' => 'image/webp',
+                    default => 'image/jpeg',
+                };
+                $content = file_get_contents($path);
+                $b64 = base64_encode($content);
 
-        $engSignPath = public_path('branding/eng_signature.svg');
-        $engSignBase64 = file_exists($engSignPath) ? base64_encode(file_get_contents($engSignPath)) : '';
+                return [
+                    'uri' => 'data:'.$mime.';base64,'.$b64,
+                    'base64' => $b64,
+                    'mime' => $mime,
+                ];
+            }
 
-        $dirSignPath = public_path('branding/director_signature.svg');
-        $dirSignBase64 = file_exists($dirSignPath) ? base64_encode(file_get_contents($dirSignPath)) : '';
+            return ['uri' => '', 'base64' => '', 'mime' => ''];
+        };
+
+        $logoInfo = $resolveDataUri('logo_path', 'branding/safero_logo.jpg');
+        $stampInfo = $resolveDataUri('stamp_path', 'branding/stamp.svg');
+        $engSignInfo = $resolveDataUri('engineer_signature_path', 'branding/eng_signature.svg');
+        $dirSignInfo = $resolveDataUri('director_signature_path', 'branding/director_signature.svg');
 
         $pdf = Pdf::loadView('training-certificates.pdf', [
             'certificate' => $trainingCertificate,
             'qrCodeSvg' => $qrCodeSvg,
             'verifyUrl' => $verifyUrl,
-            'logoBase64' => $logoBase64,
-            'stampBase64' => $stampBase64,
-            'engSignBase64' => $engSignBase64,
-            'dirSignBase64' => $dirSignBase64,
+            'logoDataUri' => $logoInfo['uri'],
+            'logoBase64' => $logoInfo['base64'],
+            'stampDataUri' => $stampInfo['uri'],
+            'stampBase64' => $stampInfo['base64'],
+            'stampMime' => $stampInfo['mime'],
+            'engSignDataUri' => $engSignInfo['uri'],
+            'engSignBase64' => $engSignInfo['base64'],
+            'engSignMime' => $engSignInfo['mime'],
+            'dirSignDataUri' => $dirSignInfo['uri'],
+            'dirSignBase64' => $dirSignInfo['base64'],
+            'dirSignMime' => $dirSignInfo['mime'],
         ])->setPaper('a4', 'landscape')
             ->setOption('isRemoteEnabled', true)
             ->setOption('isHtml5ParserEnabled', true);

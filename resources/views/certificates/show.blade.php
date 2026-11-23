@@ -5,6 +5,10 @@
 @section('content')
 <!-- Print & Certificate Sheet Stylesheet -->
 <style>
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
     .cert-paper-sheet {
         position: relative;
         width: 100%;
@@ -18,51 +22,65 @@
         border-radius: 12px;
         box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.05);
         border: 1px solid #cbd5e1;
-        padding-top: 135px;
-        padding-bottom: 90px;
+        padding-top: 154px;
+        padding-bottom: 35px;
         padding-left: 36px;
         padding-right: 36px;
-        min-height: 1216px;
+        min-height: 1120px;
         box-sizing: border-box;
     }
     @media (max-width: 640px) {
         .cert-paper-sheet {
-            padding-top: 95px;
-            padding-bottom: 65px;
+            padding-top: 110px;
+            padding-bottom: 25px;
             padding-left: 12px;
             padding-right: 12px;
             min-height: auto;
         }
     }
     @media print {
+        *, *::before, *::after {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            box-sizing: border-box !important;
+        }
         header, nav, aside, footer, .no-print {
             display: none !important;
         }
-        body {
-            background: #fff !important;
-            padding: 0 !important;
+        html, body {
             margin: 0 !important;
+            padding: 0 !important;
+            background: #fff !important;
+            width: 210mm !important;
         }
         .cert-paper-sheet {
             box-shadow: none !important;
             border: none !important;
             border-radius: 0 !important;
-            padding-top: 135px !important;
-            padding-bottom: 90px !important;
-            padding-left: 32px !important;
-            padding-right: 32px !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            min-height: 100vh !important;
-            page-break-after: always;
+            padding-top: 154px !important;
+            padding-bottom: 25px !important;
+            padding-left: 28px !important;
+            padding-right: 28px !important;
+            width: 210mm !important;
+            max-width: 210mm !important;
+            height: 297mm !important;
+            max-height: 297mm !important;
+            min-height: 297mm !important;
+            margin: 0 !important;
+            page-break-after: always !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            overflow: hidden !important;
             background-image: url('{{ asset(file_exists(public_path("build/assets/cert-inspect.pdf.jpg")) ? "build/assets/cert-inspect.pdf.jpg" : "branding/cert_inspect_bg.jpg") }}') !important;
             background-size: 100% 100% !important;
             background-repeat: no-repeat !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
         }
-        .page-break {
-            page-break-before: always;
+        .cert-paper-sheet:last-of-type {
+            page-break-after: avoid !important;
+        }
+        table, tr, td, th, div, .printable-block {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
         }
     }
 </style>
@@ -105,9 +123,9 @@
                 <span>{{ __('تحميل PDF') }}</span>
             </a>
 
-            <!-- Print Button -->
+            <!-- Print Official PDF Button -->
             <button type="button" 
-                    onclick="window.print()"
+                    onclick="printOfficialPdf('{{ route('certificates.pdf', $certificate) }}')"
                     class="px-3.5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 <span>{{ __('طباعة') }}</span>
@@ -133,114 +151,88 @@
     <!-- ================= PAGE 1: Thorough Examination Report ================= -->
     <div class="cert-paper-sheet printable-sheet" dir="ltr">
         
-        <!-- Header Strip: QR Code & Certificate Badge -->
-        <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-300/80">
-            <div>
-                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">OFFICIAL CERTIFICATE</span>
-                <span class="text-sm sm:text-base font-black text-[#0E4DA4] font-mono tracking-wider">{{ $certificate->certificate_number }}</span>
-                <span class="block text-[10px] text-slate-500 font-medium">Standard: {{ $certificate->reference_standard }}</span>
-            </div>
-
-            <!-- Dynamic QR Code -->
-            <div class="text-center">
-                <div class="p-1 bg-white border border-slate-300 rounded shadow-xs inline-block">
-                    <img src="data:image/svg+xml;base64,{{ $qrCodeSvg }}" alt="QR Code" class="w-16 h-16 sm:w-20 sm:h-20">
-                </div>
-                <span class="block text-[8px] font-bold text-slate-500 font-en tracking-wider mt-0.5">SCAN TO VERIFY</span>
-            </div>
-        </div>
         <!-- Official Report Title -->
-        <div class="text-center my-4">
-            <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-wide uppercase font-en underline decoration-[#0E4DA4] decoration-2">
+        <div class="text-center mb-3">
+            <h1 class="text-base sm:text-lg font-black text-[#0E4DA4] tracking-wide uppercase font-en">
                 REPORT THOROUGH EXAMINATION OF LIFTING EQUIPMENT
             </h1>
-            <p class="text-[11px] text-slate-600 font-en italic mt-1">
+            <p class="text-[10px] text-slate-600 font-en italic mt-0.5">
                 This report complies with the requirements of the Lifting Operations and Lifting Equipment Regulations 1998
             </p>
         </div>
 
         <!-- Metadata Table (Exact match to Word / PDF document) -->
-        <div class="border border-slate-400 text-xs font-en text-slate-900">
+        <div class="border-2 border-slate-800 text-xs font-en text-slate-900">
             
             <!-- Row 1: Certificate Meta -->
-            <div class="grid grid-cols-4 border-b border-slate-400 bg-slate-50">
-                <div class="p-2 border-r border-slate-400 font-bold">Thorough Examination Date</div>
-                <div class="p-2 border-r border-slate-400 font-bold">Certificate Number</div>
-                <div class="p-2 border-r border-slate-400 font-bold">Next Examination Due Date</div>
-                <div class="p-2 font-bold">Order No</div>
+            <div class="grid grid-cols-4 border-b border-slate-700 bg-[#E2EEFB] text-[#0A3778]">
+                <div class="p-1.5 border-r border-slate-700 font-bold">Thorough Examination Date</div>
+                <div class="p-1.5 border-r border-slate-700 font-bold">Certificate Number</div>
+                <div class="p-1.5 border-r border-slate-700 font-bold">Next Examination Due Date</div>
+                <div class="p-1.5 font-bold">Order No</div>
             </div>
-            <div class="grid grid-cols-4 border-b border-slate-400">
-                <div class="p-2 border-r border-slate-400">{{ $certificate->thorough_examination_date->format('d/m/Y') }}</div>
-                <div class="p-2 border-r border-slate-400 font-black text-[#0E4DA4]">{{ $certificate->certificate_number }}</div>
-                <div class="p-2 border-r border-slate-400 font-bold">{{ $certificate->next_examination_due_date->format('d/m/Y') }}</div>
-                <div class="p-2">{{ $certificate->order_no ?? '—' }}</div>
+            <div class="grid grid-cols-4 border-b border-slate-700 bg-white">
+                <div class="p-1.5 border-r border-slate-700 font-bold">{{ $certificate->thorough_examination_date?->format('d/m/Y') }}</div>
+                <div class="p-1.5 border-r border-slate-700 font-black text-[#0E4DA4]">{{ $certificate->certificate_number }}</div>
+                <div class="p-1.5 border-r border-slate-700 font-bold {{ $certificate->next_examination_due_date?->isPast() ? 'text-red-600' : '' }}">
+                    {{ $certificate->next_examination_due_date?->format('d/m/Y') }}
+                </div>
+                <div class="p-1.5">{{ $certificate->order_no ?? '—' }}</div>
             </div>
 
             <!-- Row 2: Customer & Standard -->
-            <div class="grid grid-cols-4 border-b border-slate-400 bg-slate-50">
-                <div class="p-2 border-r border-slate-400 font-bold">Name and address of Customer</div>
-                <div class="p-2 border-r border-slate-400 font-bold">Examination Address</div>
-                <div class="p-2 border-r border-slate-400 font-bold">
+            <div class="grid grid-cols-4 border-b border-slate-700 bg-[#E2EEFB] text-[#0A3778]">
+                <div class="p-1.5 border-r border-slate-700 font-bold">Name and address of Customer</div>
+                <div class="p-1.5 border-r border-slate-700 font-bold">Examination Address</div>
+                <div class="p-1.5 border-r border-slate-700 font-bold">
                     @if($certificate->equipment_type === 'accessory')
                         Manufacturer
                     @else
                         Date of Manufacture
                     @endif
                 </div>
-                <div class="p-2 font-bold">Reference Standard</div>
+                <div class="p-1.5 font-bold">Reference Standard</div>
             </div>
-            <div class="grid grid-cols-4 border-b border-slate-400">
-                <div class="p-2 border-r border-slate-400">
+            <div class="grid grid-cols-4 border-b border-slate-700 bg-white">
+                <div class="p-1.5 border-r border-slate-700">
                     <p class="font-bold text-slate-900">{{ $certificate->customer?->name }}</p>
                     @if($certificate->customer?->address && $certificate->customer->address !== $certificate->examination_address)
                         <p class="text-[10px] text-slate-500">{{ $certificate->customer->address }}</p>
                     @endif
                 </div>
-                <div class="p-2 border-r border-slate-400">{{ $certificate->examination_address ?: 'Owner Yard' }}</div>
-                <div class="p-2 border-r border-slate-400">
+                <div class="p-1.5 border-r border-slate-700">{{ $certificate->examination_address ?: 'Owner Yard' }}</div>
+                <div class="p-1.5 border-r border-slate-700">
                     @if($certificate->equipment_type === 'accessory')
                         {{ $certificate->manufacturer ?: 'Lifting safety' }}
                     @else
                         {{ $certificate->date_of_manufacture ?? '—' }}
                     @endif
                 </div>
-                <div class="p-2 font-semibold">{{ $certificate->reference_standard }}</div>
+                <div class="p-1.5 font-bold">{{ $certificate->reference_standard }}</div>
             </div>
 
             <!-- Row 3: Equipment Details -->
-            <div class="grid grid-cols-4 border-b border-slate-400 bg-slate-50">
-                <div class="col-span-3 p-2 border-r border-slate-400 font-bold">Description and identification of the Equipment</div>
-                <div class="p-2 font-bold text-center">Equipment ID</div>
+            <div class="grid grid-cols-4 border-b border-slate-700 bg-[#E2EEFB] text-[#0A3778]">
+                <div class="col-span-3 p-1.5 border-r border-slate-700 font-bold">Description and identification of the Equipment</div>
+                <div class="p-1.5 font-bold text-center">Equipment ID</div>
             </div>
-            <div class="grid grid-cols-4 border-b border-slate-400">
-                <div class="col-span-3 p-3 border-r border-slate-400">
-                    <p class="font-bold text-sm text-slate-900 mb-1.5">{{ $certificate->equipment_description }}</p>
+            <div class="grid grid-cols-4 border-b border-slate-700 bg-white">
+                <div class="col-span-3 p-2 border-r border-slate-700">
+                    <p class="font-bold text-sm text-slate-900 mb-1">{{ $certificate->equipment_description }}</p>
 
                     @if($certificate->equipment_type === 'crane')
-                        <!-- Crane Specifications Breakdown -->
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-1 text-xs text-slate-700 bg-slate-50/70 p-2.5 rounded-lg border border-slate-200">
-                            @if($certificate->manufacturer)
-                                <div><strong class="text-slate-900">Manufacturer:</strong> {{ $certificate->manufacturer }}</div>
-                            @endif
-                            @if($certificate->model)
-                                <div><strong class="text-slate-900">Model:</strong> {{ $certificate->model }}</div>
-                            @endif
-                            @if($certificate->capacity)
-                                <div><strong class="text-slate-900">Capacity:</strong> {{ $certificate->capacity }}</div>
-                            @endif
-                            @if($certificate->chassis_no)
-                                <div><strong class="text-slate-900">Chassis No.:</strong> <span class="font-bold text-[#0E4DA4]">{{ $certificate->chassis_no }}</span></div>
-                            @endif
-                            @if($certificate->main_wire)
-                                <div><strong class="text-slate-900">Main Wire:</strong> {{ $certificate->main_wire }}</div>
-                            @endif
-                            @if($certificate->hook_block)
-                                <div><strong class="text-slate-900">Hook Block:</strong> {{ $certificate->hook_block }}</div>
-                            @endif
+                        <!-- Crane Specifications Compact Grid -->
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs text-slate-700 bg-slate-50 p-2 rounded border border-slate-300">
+                            <div><strong class="text-slate-900">Manufacturer:</strong> {{ $certificate->manufacturer ?: '—' }}</div>
+                            <div><strong class="text-slate-900">Model:</strong> {{ $certificate->model ?: '—' }}</div>
+                            <div><strong class="text-slate-900">Capacity:</strong> {{ $certificate->capacity ?: '—' }}</div>
+                            <div><strong class="text-slate-900">Chassis No.:</strong> <span class="font-bold text-[#0E4DA4]">{{ $certificate->chassis_no ?: '—' }}</span></div>
+                            <div><strong class="text-slate-900">Main Wire:</strong> {{ $certificate->main_wire ?: '—' }}</div>
+                            <div><strong class="text-slate-900">Hook Block:</strong> {{ $certificate->hook_block ?: '—' }}</div>
                         </div>
                     @elseif($certificate->equipment_type === 'accessory')
                         <!-- Lifting Accessories Breakdown -->
-                        <div class="flex flex-wrap items-center gap-4 text-xs text-slate-700 bg-slate-50/70 p-2.5 rounded-lg border border-slate-200">
+                        <div class="flex flex-wrap items-center gap-4 text-xs text-slate-700 bg-slate-50 p-1.5 rounded border border-slate-300">
                             <div><strong class="text-slate-900">SWL:</strong> <span class="font-bold text-[#0E4DA4]">{{ $certificate->swl }}</span></div>
                             <div><strong class="text-slate-900">Quantity:</strong> {{ $certificate->quantity }}</div>
                             @if($certificate->length)
@@ -254,185 +246,207 @@
                         <!-- General / Pallets / CCUs -->
                         <div class="text-xs text-slate-700">
                             @if($certificate->dimensions)
-                                <p class="mb-1"><strong class="text-slate-900">Dimensions:</strong> {{ $certificate->dimensions }}</p>
+                                <p class="mb-0.5"><strong class="text-slate-900">Dimensions:</strong> {{ $certificate->dimensions }}</p>
                             @endif
-                            <p class="font-black text-[#0E4DA4]">SWL : {{ $certificate->swl }} &nbsp;&nbsp;|&nbsp;&nbsp; Quantity : {{ sprintf('%02d', $certificate->quantity) }}</p>
+                            <p class="font-bold text-[#0E4DA4]">SWL : {{ $certificate->swl }} &nbsp;&nbsp;|&nbsp;&nbsp; Quantity : {{ sprintf('%02d', $certificate->quantity) }}</p>
                         </div>
                     @endif
                 </div>
 
-                <div class="p-3 font-semibold flex items-center justify-center text-center">
+                <div class="p-2 font-semibold flex items-center justify-center text-center">
                     <span class="font-bold text-xs text-[#0E4DA4] tracking-wider">{{ $certificate->equipment_id_range ?? '—' }}</span>
                 </div>
             </div>
 
             <!-- Optional Row: Load Test Details (For Cranes or when load test data is present) -->
             @if($certificate->equipment_type === 'crane' || $certificate->load_test_cert_no || $certificate->date_of_load_test)
-                <div class="grid grid-cols-4 border-b border-slate-400 bg-slate-50">
-                    <div class="p-2 border-r border-slate-400 font-bold">Load Test Certificate Number</div>
-                    <div class="p-2 border-r border-slate-400 font-bold">Date of Load Test</div>
-                    <div class="p-2 border-r border-slate-400 font-bold">Safe Working Load</div>
-                    <div class="p-2 font-bold">Date of Last thorough examination</div>
+                <div class="grid grid-cols-4 border-b border-slate-700 bg-[#E2EEFB] text-[#0A3778]">
+                    <div class="p-1.5 border-r border-slate-700 font-bold">Load Test Certificate Number</div>
+                    <div class="p-1.5 border-r border-slate-700 font-bold">Date of Load Test</div>
+                    <div class="p-1.5 border-r border-slate-700 font-bold">Safe Working Load</div>
+                    <div class="p-1.5 font-bold">Date of Last thorough examination</div>
                 </div>
-                <div class="grid grid-cols-4 border-b border-slate-400">
-                    <div class="p-2 border-r border-slate-400 font-semibold">{{ $certificate->load_test_cert_no ?: 'NONE' }}</div>
-                    <div class="p-2 border-r border-slate-400">{{ $certificate->date_of_load_test?->format('d/m/Y') ?: '—' }}</div>
-                    <div class="p-2 border-r border-slate-400 font-bold text-[#0E4DA4]">{{ $certificate->swl }}</div>
-                    <div class="p-2">{{ $certificate->last_examination_date?->format('d/m/Y') ?: '—' }}</div>
+                <div class="grid grid-cols-4 border-b border-slate-700 bg-white">
+                    <div class="p-1.5 border-r border-slate-700 font-semibold">{{ $certificate->load_test_cert_no ?: 'NONE' }}</div>
+                    <div class="p-1.5 border-r border-slate-700">{{ $certificate->date_of_load_test?->format('d/m/Y') ?: '—' }}</div>
+                    <div class="p-1.5 border-r border-slate-700 font-bold text-[#0E4DA4]">{{ $certificate->swl }}</div>
+                    <div class="p-1.5">{{ $certificate->last_examination_date?->format('d/m/Y') ?: '—' }}</div>
                 </div>
             @endif
 
             <!-- Questions Checklist Table -->
-            <div class="grid grid-cols-2 border-b border-slate-400">
-                <div class="p-2 border-r border-slate-400 flex justify-between items-center">
+            <div class="grid grid-cols-2 border-b border-slate-700">
+                <div class="p-1.5 border-r border-slate-700 flex justify-between items-center bg-white">
                     <span>Is this first examination after installation?</span>
                     <span class="font-bold px-2">{{ $certificate->is_first_examination_after_installation ? 'Yes' : 'No' }}</span>
                 </div>
-                <div class="p-2 flex justify-between items-center">
+                <div class="p-1.5 flex justify-between items-center bg-white">
                     <span>Was the examination carried out within 6 months?</span>
                     <span class="font-bold px-2 text-[#22A447]">{{ $certificate->was_examination_within_6_months ? 'Yes' : 'No' }}</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 border-b border-slate-400">
-                <div class="p-2 border-r border-slate-400 flex justify-between items-center">
+            <div class="grid grid-cols-2 border-b border-slate-700">
+                <div class="p-1.5 border-r border-slate-700 flex justify-between items-center bg-white">
                     <span>Has the Equipment been installed correctly?</span>
                     <span class="font-bold px-2 text-[#22A447]">{{ $certificate->has_equipment_installed_correctly ? 'Yes' : 'No' }}</span>
                 </div>
-                <div class="p-2 flex justify-between items-center">
+                <div class="p-1.5 flex justify-between items-center bg-white">
                     <span>Was the examination carried out within 12 months?</span>
                     <span class="font-bold px-2">{{ $certificate->was_examination_within_12_months ? 'Yes' : 'No' }}</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 border-b border-slate-400">
-                <div class="p-2 border-r border-slate-400 flex justify-between items-center">
+            <div class="grid grid-cols-2 border-b border-slate-700">
+                <div class="p-1.5 border-r border-slate-700 flex justify-between items-center bg-white">
                     <span>In Accordance with examination scheme?</span>
                     <span class="font-bold px-2 text-[#22A447]">{{ $certificate->in_accordance_with_scheme ? 'Yes' : 'No' }}</span>
                 </div>
-                <div class="p-2 flex justify-between items-center">
+                <div class="p-1.5 flex justify-between items-center bg-white">
                     <span>After the occurrence of exceptional circumstances?</span>
                     <span class="font-bold px-2">{{ $certificate->after_exceptional_circumstances ? 'Yes' : 'No' }}</span>
                 </div>
             </div>
 
-            <!-- Defects & Danger -->
-            <div class="grid grid-cols-2 border-b border-slate-400">
-                <div class="p-2 border-r border-slate-400">
-                    <span class="font-bold block text-slate-600 mb-0.5">Identification of any part found to have defect:</span>
-                    <span class="font-bold text-slate-800">{{ $certificate->defect_identification ?? 'NONE' }}</span>
+            <!-- Defects / Alterations -->
+            <div class="grid grid-cols-4 border-b border-slate-700 bg-[#E2EEFB] text-[#0A3778]">
+                <div class="col-span-3 p-1.5 border-r border-slate-700 font-bold">Identification of any part found to have defect</div>
+                <div class="p-1.5 font-bold text-center">Is the defect danger to process</div>
+            </div>
+            <div class="grid grid-cols-4 border-b border-slate-700 bg-white">
+                <div class="col-span-3 p-1.5 border-r border-slate-700">
+                    {{ $certificate->defect_identification ?? 'None observed at time of inspection.' }}
                 </div>
-                <div class="p-2">
-                    <span class="font-bold block text-slate-600 mb-0.5">Is the defect danger to process:</span>
-                    <span class="font-bold text-slate-800">{{ $certificate->is_defect_danger_to_process ? 'Yes' : 'No' }}</span>
+                <div class="p-1.5 text-center font-bold {{ $certificate->is_defect_danger_to_process ? 'text-red-600' : 'text-[#22A447]' }}">
+                    {{ $certificate->is_defect_danger_to_process ? 'YES' : 'NO' }}
                 </div>
             </div>
 
-            <!-- Repairs -->
-            <div class="border-b border-slate-400 p-2">
-                <span class="font-bold block text-slate-600 mb-0.5">Particulars of any repair, renewal or alteration required to remedy the defect identified above:</span>
-                <span class="font-bold text-slate-800">{{ $certificate->repair_particulars ?? 'NONE' }}</span>
+            <div class="p-1.5 border-b border-slate-700 bg-[#E2EEFB] text-[#0A3778] font-bold">
+                Particulars of any repair, renewal or alteration required to remedy the defect identified above
+            </div>
+            <div class="p-1.5 border-b border-slate-700 bg-white">
+                {{ $certificate->repair_particulars ?? 'None required.' }}
             </div>
 
-            <!-- Tests Carried Out & Test Point -->
-            <div class="border-b border-slate-400 p-2">
-                <span class="font-bold block text-slate-600 mb-0.5">Particulars of any tests are carried out as part of thorough examination, And standard applied:</span>
+            <!-- Particulars of Tests -->
+            <div class="p-1.5 border-b border-slate-700 bg-[#E2EEFB] text-[#0A3778] font-bold">
+                Particulars of any tests are carried out as part of thorough examination. And standard applied
+            </div>
+            <div class="p-1.5 border-b border-slate-700 bg-white">
                 <p class="font-bold text-slate-900">{{ $certificate->tests_carried_out }}</p>
                 @if($certificate->test_point)
-                    <p class="text-[11px] text-slate-600 mt-1 font-semibold">Test Point: {{ $certificate->test_point }}</p>
+                    <p class="text-[11px] text-slate-600 mt-0.5 font-semibold">Test Point: {{ $certificate->test_point }}</p>
                 @endif
             </div>
 
             <!-- Is Safe to Operate Decision -->
-            <div class="grid grid-cols-4 border-b border-slate-400 bg-slate-50 p-2 items-center">
-                <div class="col-span-3 font-bold text-sm text-slate-900">
+            <div class="grid grid-cols-4 border-b border-slate-700 bg-slate-50 p-1.5 items-center">
+                <div class="col-span-3 font-bold text-xs text-slate-900">
                     Is the Equipment Safe to Operate
                 </div>
-                <div class="font-black text-sm text-center {{ $certificate->is_safe_to_operate ? 'text-[#22A447]' : 'text-red-600' }}">
+                <div class="font-black text-xs text-center {{ $certificate->is_safe_to_operate ? 'text-[#22A447]' : 'text-red-600' }}">
                     {{ $certificate->is_safe_to_operate ? 'YES' : 'NO' }}
                 </div>
             </div>
 
-            <!-- Signatures and Stamp Section -->
-            <div class="grid grid-cols-3 border-b border-slate-400 text-center">
+            <!-- Signatures, Stamp and QR Row (4 Columns matching PDF) -->
+            <div class="grid grid-cols-12 border-b border-slate-700 text-center bg-white">
                 <!-- Inspector -->
-                <div class="p-3 border-r border-slate-400 flex flex-col justify-between h-36">
-                    <span class="text-[11px] font-bold text-slate-600">Name and Signature of the person issue this certificate</span>
+                <div class="col-span-4 p-2 border-r border-slate-700 flex flex-col justify-between h-28">
+                    <span class="text-[9.5px] font-bold text-slate-600">Name and Signature of the person issue this certificate</span>
                     <div class="my-auto">
-                        <img src="{{ asset('branding/eng_signature.svg') }}" alt="Engineer Signature" class="h-12 mx-auto object-contain">
+                        @php
+                            $engSign = setting('engineer_signature_path');
+                            $engSignPath = $engSign ? ltrim($engSign, '/\\') : null;
+                        @endphp
+                        @if($engSignPath && file_exists(public_path($engSignPath)))
+                            <img src="{{ asset($engSignPath) }}" alt="Engineer Signature" class="h-10 mx-auto object-contain">
+                        @else
+                            <img src="{{ asset('branding/eng_signature.svg') }}" alt="Engineer Signature" class="h-10 mx-auto object-contain">
+                        @endif
                     </div>
                     <span class="font-bold text-xs text-slate-900">{{ $certificate->issuer_name }}</span>
                 </div>
 
                 <!-- Safero Stamp -->
-                <div class="p-2 border-r border-slate-400 flex flex-col items-center justify-center relative">
-                    <span class="text-[10px] font-bold text-slate-400 mb-1">OFFICIAL STAMP</span>
-                    <img src="{{ asset('branding/stamp.svg') }}" alt="Safero Stamp" class="h-28 w-28 object-contain">
+                <div class="col-span-3 p-1.5 border-r border-slate-700 flex flex-col items-center justify-center">
+                    <span class="text-[9px] font-bold text-slate-400 mb-0.5">STAMP</span>
+                    @php
+                        $stamp = setting('stamp_path');
+                        $stampPath = $stamp ? ltrim($stamp, '/\\') : null;
+                    @endphp
+                    @if($stampPath && file_exists(public_path($stampPath)))
+                        <img src="{{ asset($stampPath) }}" alt="Safero Stamp" class="h-16 w-16 object-contain">
+                    @else
+                        <img src="{{ asset('branding/stamp.svg') }}" alt="Safero Stamp" class="h-16 w-16 object-contain">
+                    @endif
                 </div>
 
                 <!-- Authenticator -->
-                <div class="p-3 flex flex-col justify-between h-36">
-                    <span class="text-[11px] font-bold text-slate-600">Name and Signature of the person authenticating this certificate</span>
+                <div class="col-span-3 p-2 border-r border-slate-700 flex flex-col justify-between h-28">
+                    <span class="text-[9.5px] font-bold text-slate-600">Name and Signature of person authenticating this certificate</span>
                     <div class="my-auto">
-                        <img src="{{ asset('branding/director_signature.svg') }}" alt="Director Signature" class="h-12 mx-auto object-contain">
+                        @php
+                            $dirSign = setting('director_signature_path');
+                            $dirSignPath = $dirSign ? ltrim($dirSign, '/\\') : null;
+                        @endphp
+                        @if($dirSignPath && file_exists(public_path($dirSignPath)))
+                            <img src="{{ asset($dirSignPath) }}" alt="Director Signature" class="h-10 mx-auto object-contain">
+                        @else
+                            <img src="{{ asset('branding/director_signature.svg') }}" alt="Director Signature" class="h-10 mx-auto object-contain">
+                        @endif
                     </div>
                     <span class="font-bold text-xs text-slate-900">{{ $certificate->authenticator_name }}</span>
+                </div>
+
+                <!-- QR Code -->
+                <div class="col-span-2 p-1.5 flex flex-col items-center justify-center">
+                    <div class="p-0.5 bg-white border border-slate-300 rounded shadow-xs inline-block">
+                        <img src="data:image/svg+xml;base64,{{ $qrCodeSvg }}" alt="QR Code" class="w-14 h-14">
+                    </div>
+                    <span class="block text-[7.5px] font-bold text-slate-500 font-en tracking-wider mt-0.5">SCAN TO VERIFY</span>
                 </div>
             </div>
 
             <!-- Conditions & Disclaimer Paragraph -->
-            <div class="p-2.5 text-[9.5px] leading-tight text-slate-600 text-justify">
+            <div class="p-2 text-[8.5px] leading-tight text-slate-600 text-justify bg-white">
                 This certificate is granted subject to the condition that it is understood and agreed that nothing herein contained shall be deemed to relieve any designer, manufacturer, seller, repairer or operator of any warranty, expressed or implied and Safero liability shall be limited to the willful negligence or deliberate omissions of its employees. Under no circumstances shall Safero be liable for any injury or damage to any person occurring by reason of negligent operation or any defect in materials, machinery, equipment or other items other than those defects ascertainable by normally accepted testing standards and only those items actually inspected by Safero and which are covered by this certificate.
             </div>
 
         </div>
 
-        <!-- Verification URL info footer -->
-        <div class="mt-4 pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-en">
-            <div>
-                Official digital verification URL: 
-                <a href="{{ $verifyUrl }}" target="_blank" class="text-[#0E4DA4] font-bold underline">{{ $verifyUrl }}</a>
-            </div>
-            <div>
-                UUID: {{ $certificate->uuid }}
-            </div>
-        </div>
-
     </div>
 
     <!-- ================= PAGE 2: Crane Inspection Checklist (When Applicable) ================= -->
-    @if($certificate->equipment_type === 'crane' || !empty($certificate->checklist_items))
+    @if($certificate->equipment_type === 'crane' || (!empty($certificate->checklist_items) && count($certificate->checklist_items) > 0))
+        @php
+            $page2Title = $certificate->equipment_type === 'crane' 
+                ? 'MOBILE CRANE INSPECTION CHECKLIST' 
+                : 'EQUIPMENT INSPECTION CHECKLIST';
+        @endphp
         <div class="cert-paper-sheet printable-sheet page-break" dir="ltr">
             
-            <!-- Header Strip Page 2 -->
-            <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-300/80">
-                <div>
-                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">ATTACHMENT TO CERTIFICATE</span>
-                    <span class="text-sm sm:text-base font-black text-[#0E4DA4] font-mono">{{ $certificate->certificate_number }}</span>
-                </div>
-                <div class="text-right text-xs font-en font-bold text-slate-600">
-                    <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-bold">Page 2 of 2</span>
-                </div>
-            </div>
             <!-- Page 2 Title -->
-            <div class="text-center my-4">
-                <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-wide uppercase font-en underline decoration-[#0E4DA4] decoration-2">
-                    MOBILE CRANE INSPECTION CHECKLIST
+            <div class="text-center mb-3">
+                <h2 class="text-base sm:text-lg font-black text-[#0E4DA4] tracking-wide uppercase font-en underline decoration-[#0E4DA4] decoration-2">
+                    {{ $page2Title }}
                 </h2>
-                <p class="text-xs text-slate-600 font-en mt-1 font-semibold">
-                    Crane: {{ $certificate->equipment_description }} &bull; Model: {{ $certificate->model ?? '—' }} &bull; Chassis No: {{ $certificate->chassis_no ?? '—' }}
+                <p class="text-xs text-slate-600 font-en mt-0.5 font-semibold">
+                    Certificate No: <span class="font-bold text-[#0E4DA4] font-mono">{{ $certificate->certificate_number }}</span> &bull; 
+                    Date: {{ $certificate->thorough_examination_date?->format('d F Y') }}
                 </p>
             </div>
 
-            <!-- 27-Point Checklist Table -->
-            <div class="border border-slate-400 text-xs font-en text-slate-900 overflow-hidden">
+            <!-- Checklist Table -->
+            <div class="border-2 border-slate-800 text-xs font-en text-slate-900 overflow-hidden">
                 <table class="w-full text-left border-collapse">
-                    <thead class="bg-slate-100 border-b border-slate-400 font-bold">
+                    <thead class="bg-[#E2EEFB] text-[#0A3778] border-b border-slate-700 font-bold">
                         <tr>
-                            <th class="p-2 w-10 text-center border-r border-slate-400">#</th>
-                            <th class="p-2 border-r border-slate-400">Inspection Item</th>
-                            <th class="p-2 w-28 text-center border-r border-slate-400">Status</th>
-                            <th class="p-2 w-72">Remarks / Observations</th>
+                            <th class="p-1.5 w-10 text-center border-r border-slate-700">#</th>
+                            <th class="p-1.5 border-r border-slate-700">Inspection Item</th>
+                            <th class="p-1.5 w-28 text-center border-r border-slate-700">Status</th>
+                            <th class="p-1.5 w-72">Remarks / Observations</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-300">
@@ -444,19 +458,19 @@
                             @if($lastCategory !== ($chk['category'] ?? ''))
                                 @php $lastCategory = $chk['category'] ?? ''; @endphp
                                 <tr class="bg-blue-50/80 font-bold text-[#0E4DA4]">
-                                    <td colspan="4" class="p-2 border-b border-slate-400 uppercase tracking-wider text-[11px]">
+                                    <td colspan="4" class="p-1.5 border-b border-slate-400 uppercase tracking-wider text-[11px]">
                                         {{ $lastCategory }}
                                     </td>
                                 </tr>
                             @endif
-                            <tr class="hover:bg-slate-50">
-                                <td class="p-1.5 text-center font-bold text-slate-600 border-r border-slate-300">
+                            <tr class="hover:bg-slate-50 bg-white">
+                                <td class="p-1 text-center font-bold text-slate-600 border-r border-slate-300">
                                     {{ $chk['no'] ?? $loop->iteration }}
                                 </td>
-                                <td class="p-1.5 border-r border-slate-300 font-medium">
+                                <td class="p-1 border-r border-slate-300 font-medium">
                                     {{ $chk['item'] ?? $chk['question'] ?? '—' }}
                                 </td>
-                                <td class="p-1.5 text-center border-r border-slate-300">
+                                <td class="p-1 text-center border-r border-slate-300">
                                     @php 
                                         $st = $chk['status'] ?? $chk['check'] ?? 'Pass'; 
                                     @endphp
@@ -468,7 +482,7 @@
                                         <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600">{{ strtoupper($st) }}</span>
                                     @endif
                                 </td>
-                                <td class="p-1.5 text-slate-700">
+                                <td class="p-1 text-slate-700">
                                     {{ $chk['remarks'] ?? $chk['comment'] ?? 'Good condition' }}
                                 </td>
                             </tr>
@@ -477,20 +491,32 @@
                 </table>
             </div>
 
-            <!-- Page 2 Signatures -->
-            <div class="grid grid-cols-3 border border-t-0 border-slate-400 text-center text-xs font-en">
-                <div class="p-3 border-r border-slate-400 flex flex-col justify-between h-28">
-                    <span class="text-[10px] font-bold text-slate-600">Inspector Signature</span>
-                    <img src="{{ asset('branding/eng_signature.svg') }}" alt="Signature" class="h-9 mx-auto object-contain">
-                    <span class="font-bold text-[11px] text-slate-900">{{ $certificate->issuer_name }}</span>
+            <!-- Page 2 Signatures & Stamp -->
+            <div class="grid grid-cols-3 border border-t-0 border-slate-800 text-center text-xs font-en bg-white">
+                <div class="p-2 border-r border-slate-800 flex flex-col justify-between h-24">
+                    <span class="text-[9.5px] font-bold text-slate-600">Inspector Signature</span>
+                    @if($engSignPath && file_exists(public_path($engSignPath)))
+                        <img src="{{ asset($engSignPath) }}" alt="Signature" class="h-8 mx-auto object-contain">
+                    @else
+                        <img src="{{ asset('branding/eng_signature.svg') }}" alt="Signature" class="h-8 mx-auto object-contain">
+                    @endif
+                    <span class="font-bold text-[10px] text-slate-900">{{ $certificate->issuer_name }}</span>
                 </div>
-                <div class="p-2 border-r border-slate-400 flex flex-col items-center justify-center">
-                    <img src="{{ asset('branding/stamp.svg') }}" alt="Stamp" class="h-20 w-20 object-contain">
+                <div class="p-1.5 border-r border-slate-800 flex flex-col items-center justify-center">
+                    @if($stampPath && file_exists(public_path($stampPath)))
+                        <img src="{{ asset($stampPath) }}" alt="Stamp" class="h-16 w-16 object-contain">
+                    @else
+                        <img src="{{ asset('branding/stamp.svg') }}" alt="Stamp" class="h-16 w-16 object-contain">
+                    @endif
                 </div>
-                <div class="p-3 flex flex-col justify-between h-28">
-                    <span class="text-[10px] font-bold text-slate-600">Managing Director Signature</span>
-                    <img src="{{ asset('branding/director_signature.svg') }}" alt="Signature" class="h-9 mx-auto object-contain">
-                    <span class="font-bold text-[11px] text-slate-900">{{ $certificate->authenticator_name }}</span>
+                <div class="p-2 flex flex-col justify-between h-24">
+                    <span class="text-[9.5px] font-bold text-slate-600">Managing Director Signature</span>
+                    @if($dirSignPath && file_exists(public_path($dirSignPath)))
+                        <img src="{{ asset($dirSignPath) }}" alt="Signature" class="h-8 mx-auto object-contain">
+                    @else
+                        <img src="{{ asset('branding/director_signature.svg') }}" alt="Signature" class="h-8 mx-auto object-contain">
+                    @endif
+                    <span class="font-bold text-[10px] text-slate-900">{{ $certificate->authenticator_name }}</span>
                 </div>
             </div>
 
@@ -498,4 +524,27 @@
     @endif
 
 </div>
+
+<!-- Print Official PDF Script -->
+<script>
+function printOfficialPdf(url) {
+    const printFrame = document.createElement('iframe');
+    printFrame.style.position = 'fixed';
+    printFrame.style.right = '0';
+    printFrame.style.bottom = '0';
+    printFrame.style.width = '0';
+    printFrame.style.height = '0';
+    printFrame.style.border = '0';
+    printFrame.src = url;
+    document.body.appendChild(printFrame);
+    printFrame.onload = function() {
+        try {
+            printFrame.contentWindow.focus();
+            printFrame.contentWindow.print();
+        } catch (e) {
+            window.open(url, '_blank');
+        }
+    };
+}
+</script>
 @endsection

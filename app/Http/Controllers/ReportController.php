@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificate;
 use App\Models\Customer;
+use App\Models\Expense;
 use App\Models\Inspection;
 use App\Models\Invoice;
 use Carbon\Carbon;
@@ -48,6 +49,31 @@ class ReportController extends Controller
         $invoicesCount = $invoiceQuery->count();
 
         $collectionRate = $totalInvoiced > 0 ? (int) round(($totalPaid / $totalInvoiced) * 100) : 0;
+
+        // 1.1 Expenses & Real Profit Calculation (حساب المصاريف والأرباح الحقيقية)
+        $expenseQuery = Expense::query();
+        if ($fromDate) {
+            $expenseQuery->whereDate('expense_date', '>=', $fromDate);
+        }
+        if ($toDate) {
+            $expenseQuery->whereDate('expense_date', '<=', $toDate);
+        }
+
+        $totalExpenses = (float) $expenseQuery->sum('amount');
+        $expensesCount = $expenseQuery->count();
+
+        // Real Net Profit = Collected Cash - Operational Expenses
+        $realNetProfit = $totalPaid - $totalExpenses;
+        $projectedNetProfit = $totalInvoiced - $totalExpenses;
+        $profitMargin = $totalPaid > 0 ? round(($realNetProfit / $totalPaid) * 100, 1) : 0;
+
+        $expensesByCategory = DB::table('expenses')
+            ->select('category', DB::raw('SUM(amount) as total_amount'), DB::raw('COUNT(*) as count'))
+            ->when($fromDate, fn ($q) => $q->whereDate('expense_date', '>=', $fromDate))
+            ->when($toDate, fn ($q) => $q->whereDate('expense_date', '<=', $toDate))
+            ->groupBy('category')
+            ->orderByDesc('total_amount')
+            ->get();
 
         // 2. Inspections & Certificates Query
         $inspectionQuery = Inspection::query();
@@ -119,12 +145,15 @@ class ReportController extends Controller
 
             $monthInvoiced = (float) Invoice::whereBetween('invoice_date', [$monthStart, $monthEnd])->sum('total_amount');
             $monthPaid = (float) Invoice::whereBetween('invoice_date', [$monthStart, $monthEnd])->sum('paid_amount');
+            $monthExpenses = (float) Expense::whereBetween('expense_date', [$monthStart, $monthEnd])->sum('amount');
             $monthInspections = Inspection::whereBetween('inspection_date', [$monthStart, $monthEnd])->count();
 
             $monthlyTrends[] = [
                 'month' => $monthLabel,
                 'invoiced' => $monthInvoiced,
                 'paid' => $monthPaid,
+                'expenses' => $monthExpenses,
+                'real_profit' => $monthPaid - $monthExpenses,
                 'inspections' => $monthInspections,
             ];
         }
@@ -137,6 +166,12 @@ class ReportController extends Controller
             'totalPaid',
             'totalRemaining',
             'totalDiscount',
+            'totalExpenses',
+            'expensesCount',
+            'realNetProfit',
+            'projectedNetProfit',
+            'profitMargin',
+            'expensesByCategory',
             'invoicesCount',
             'collectionRate',
             'totalInspections',

@@ -5,6 +5,7 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CertificateTemplateController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\InspectionTaskController;
 use App\Http\Controllers\InvoiceController;
@@ -88,7 +89,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers/{customer}/certificates-json', [InvoiceController::class, 'customerCertificates'])->name('customers.certificates_json');
     Route::resource('invoices', InvoiceController::class);
 
-    // Business Reports & Profit Analytics (/reports)
+    // Operational Expenses & Cost Tracking (/expenses)
+    Route::resource('expenses', ExpenseController::class);
+
+    // Business Reports & Real Profit Analytics (/reports)
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
     // User & Permission Management (Odoo Enterprise RBAC)

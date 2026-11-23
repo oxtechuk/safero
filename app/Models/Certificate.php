@@ -57,6 +57,7 @@ class Certificate extends Model
         'tests_carried_out',
         'is_safe_to_operate',
         'issuer_name',
+        'inspector_id',
         'authenticator_name',
         'status',
         'created_by',
@@ -180,6 +181,11 @@ class Certificate extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function inspector(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'inspector_id');
     }
 
     public function inspection(): HasOne

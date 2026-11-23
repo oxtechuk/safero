@@ -6,6 +6,7 @@ use App\Models\Certificate;
 use App\Models\CertificateTemplate;
 use App\Models\Customer;
 use App\Models\InspectionTask;
+use App\Models\User;
 use App\Services\GoogleSheetsSyncService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
@@ -83,6 +84,7 @@ class CertificateController extends Controller
         }
 
         $templates = CertificateTemplate::active()->orderBy('name')->get();
+        $inspectors = User::where('is_active', true)->orderBy('name')->get();
 
         return view('certificates.create', compact(
             'customers',
@@ -94,7 +96,8 @@ class CertificateController extends Controller
             'type',
             'templates',
             'activeTemplate',
-            'renewCertificate'
+            'renewCertificate',
+            'inspectors'
         ));
     }
 
@@ -166,6 +169,10 @@ class CertificateController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        if ($request->input('equipment_type') === 'crane' || ! $request->filled('quantity')) {
+            $request->merge(['quantity' => $request->input('quantity', 1) ?: 1]);
+        }
+
         $validated = $request->validate([
             'certificate_number' => ['required', 'string', 'max:50', 'unique:certificates,certificate_number'],
             'order_no' => ['nullable', 'string', 'max:50'],
@@ -180,7 +187,7 @@ class CertificateController extends Controller
             'date_of_manufacture' => ['nullable', 'string', 'max:50'],
             'dimensions' => ['nullable', 'string', 'max:255'],
             'swl' => ['required', 'string', 'max:100'],
-            'quantity' => ['required', 'integer', 'min:1'],
+            'quantity' => ['nullable', 'integer', 'min:1'],
             'manufacturer' => ['nullable', 'string', 'max:255'],
             'model' => ['nullable', 'string', 'max:255'],
             'capacity' => ['nullable', 'string', 'max:255'],
@@ -205,6 +212,7 @@ class CertificateController extends Controller
             'repair_particulars' => ['nullable', 'string'],
             'tests_carried_out' => ['required', 'string'],
             'is_safe_to_operate' => ['boolean'],
+            'inspector_id' => ['nullable', 'exists:users,id'],
             'issuer_name' => ['required', 'string', 'max:255'],
             'authenticator_name' => ['required', 'string', 'max:255'],
             'status' => ['required', 'in:issued,draft,revoked'],
@@ -212,6 +220,7 @@ class CertificateController extends Controller
 
         $validated['uuid'] = (string) Str::uuid();
         $validated['created_by'] = Auth::id();
+        $validated['quantity'] = (int) ($validated['quantity'] ?? 1);
         $validated['defect_identification'] = $validated['defect_identification'] ?? 'NONE';
         $validated['repair_particulars'] = $validated['repair_particulars'] ?? 'NONE';
         $validated['equipment_type'] = $validated['equipment_type'] ?? 'general';
@@ -342,12 +351,17 @@ class CertificateController extends Controller
     {
         $customers = Customer::orderBy('name')->get();
         $craneChecklist = $certificate->checklist_items ?: Certificate::defaultCraneChecklist();
+        $inspectors = User::where('is_active', true)->orderBy('name')->get();
 
-        return view('certificates.edit', compact('certificate', 'customers', 'craneChecklist'));
+        return view('certificates.edit', compact('certificate', 'customers', 'craneChecklist', 'inspectors'));
     }
 
     public function update(Request $request, Certificate $certificate): RedirectResponse
     {
+        if ($request->input('equipment_type') === 'crane' || ! $request->filled('quantity')) {
+            $request->merge(['quantity' => $request->input('quantity', $certificate->quantity ?: 1) ?: 1]);
+        }
+
         $validated = $request->validate([
             'certificate_number' => ['required', 'string', 'max:50', 'unique:certificates,certificate_number,'.$certificate->id],
             'order_no' => ['nullable', 'string', 'max:50'],
@@ -362,7 +376,7 @@ class CertificateController extends Controller
             'date_of_manufacture' => ['nullable', 'string', 'max:50'],
             'dimensions' => ['nullable', 'string', 'max:255'],
             'swl' => ['required', 'string', 'max:100'],
-            'quantity' => ['required', 'integer', 'min:1'],
+            'quantity' => ['nullable', 'integer', 'min:1'],
             'manufacturer' => ['nullable', 'string', 'max:255'],
             'model' => ['nullable', 'string', 'max:255'],
             'capacity' => ['nullable', 'string', 'max:255'],
@@ -387,6 +401,7 @@ class CertificateController extends Controller
             'repair_particulars' => ['nullable', 'string'],
             'tests_carried_out' => ['required', 'string'],
             'is_safe_to_operate' => ['boolean'],
+            'inspector_id' => ['nullable', 'exists:users,id'],
             'issuer_name' => ['required', 'string', 'max:255'],
             'authenticator_name' => ['required', 'string', 'max:255'],
             'status' => ['required', 'in:issued,draft,revoked'],
@@ -438,32 +453,67 @@ class CertificateController extends Controller
         $verifyUrl = $certificate->verification_url;
         $qrCodeSvg = base64_encode(QrCode::format('svg')->size(130)->margin(0)->generate($verifyUrl));
 
-        $bgPath = file_exists(public_path('build/assets/cert-inspect.pdf.jpg'))
-            ? public_path('build/assets/cert-inspect.pdf.jpg')
-            : public_path('branding/cert_inspect_bg.jpg');
-        $bgBase64 = file_exists($bgPath) ? base64_encode(file_get_contents($bgPath)) : '';
+        $resolveDataUri = function (?string $settingKey, string $defaultRelPath): array {
+            $path = null;
+            $configured = $settingKey ? setting($settingKey) : null;
+            if ($configured) {
+                $candidate = public_path(ltrim($configured, '/\\'));
+                if (file_exists($candidate)) {
+                    $path = $candidate;
+                }
+            }
+            if (! $path) {
+                $candidate = public_path(ltrim($defaultRelPath, '/\\'));
+                if (file_exists($candidate)) {
+                    $path = $candidate;
+                }
+            }
 
-        $logoPath = public_path('branding/safero_logo.jpg');
-        $logoBase64 = file_exists($logoPath) ? base64_encode(file_get_contents($logoPath)) : '';
+            if ($path && file_exists($path)) {
+                $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+                $mime = match ($ext) {
+                    'svg' => 'image/svg+xml',
+                    'png' => 'image/png',
+                    'jpg', 'jpeg' => 'image/jpeg',
+                    'webp' => 'image/webp',
+                    default => 'image/jpeg',
+                };
+                $content = file_get_contents($path);
+                $b64 = base64_encode($content);
 
-        $stampPath = public_path('branding/stamp.svg');
-        $stampBase64 = file_exists($stampPath) ? base64_encode(file_get_contents($stampPath)) : '';
+                return [
+                    'uri' => 'data:'.$mime.';base64,'.$b64,
+                    'base64' => $b64,
+                    'mime' => $mime,
+                ];
+            }
 
-        $engSignPath = public_path('branding/eng_signature.svg');
-        $engSignBase64 = file_exists($engSignPath) ? base64_encode(file_get_contents($engSignPath)) : '';
+            return ['uri' => '', 'base64' => '', 'mime' => ''];
+        };
 
-        $dirSignPath = public_path('branding/director_signature.svg');
-        $dirSignBase64 = file_exists($dirSignPath) ? base64_encode(file_get_contents($dirSignPath)) : '';
+        $bgInfo = $resolveDataUri('letterhead_bg_path', 'branding/cert_inspect_bg.jpg');
+        $logoInfo = $resolveDataUri('logo_path', 'branding/safero_logo.jpg');
+        $stampInfo = $resolveDataUri('stamp_path', 'branding/stamp.svg');
+        $engSignInfo = $resolveDataUri('engineer_signature_path', 'branding/eng_signature.svg');
+        $dirSignInfo = $resolveDataUri('director_signature_path', 'branding/director_signature.svg');
 
         $pdf = Pdf::loadView('certificates.pdf', [
             'certificate' => $certificate,
             'qrCodeSvg' => $qrCodeSvg,
             'verifyUrl' => $verifyUrl,
-            'bgBase64' => $bgBase64,
-            'logoBase64' => $logoBase64,
-            'stampBase64' => $stampBase64,
-            'engSignBase64' => $engSignBase64,
-            'dirSignBase64' => $dirSignBase64,
+            'bgDataUri' => $bgInfo['uri'],
+            'bgBase64' => $bgInfo['base64'],
+            'logoDataUri' => $logoInfo['uri'],
+            'logoBase64' => $logoInfo['base64'],
+            'stampDataUri' => $stampInfo['uri'],
+            'stampBase64' => $stampInfo['base64'],
+            'stampMime' => $stampInfo['mime'],
+            'engSignDataUri' => $engSignInfo['uri'],
+            'engSignBase64' => $engSignInfo['base64'],
+            'engSignMime' => $engSignInfo['mime'],
+            'dirSignDataUri' => $dirSignInfo['uri'],
+            'dirSignBase64' => $dirSignInfo['base64'],
+            'dirSignMime' => $dirSignInfo['mime'],
         ])->setPaper('a4', 'portrait')
             ->setOption('isRemoteEnabled', true)
             ->setOption('isHtml5ParserEnabled', true);

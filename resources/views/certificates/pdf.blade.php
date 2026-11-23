@@ -12,22 +12,31 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: #111827;
+            font-family: 'DejaVu Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #0f172a;
             font-size: 8.5px;
-            line-height: 1.2;
+            line-height: 1.25;
             margin: 0;
             padding: 0;
             background-color: #ffffff;
+        }
+        /* Strict page break rules */
+        table, tr, td, th, thead, tbody, 
+        .cert-table, .sign-area-table, .checklist-table, 
+        .disclaimer-box, .title-block {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
         }
         .page-container {
             position: relative;
             width: 100%;
             height: 100%;
-            page-break-after: always;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            page-break-after: always !important;
         }
         .page-container:last-child {
-            page-break-after: avoid;
+            page-break-after: avoid !important;
         }
         .letterhead-bg {
             position: absolute;
@@ -40,14 +49,14 @@
         .content-area {
             position: relative;
             z-index: 10;
-            padding-top: 125px;
+            padding-top: 154px;
             padding-left: 28px;
             padding-right: 28px;
-            padding-bottom: 65px;
+            padding-bottom: 25px;
         }
         .title-block {
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .main-heading {
             font-size: 13px;
@@ -66,45 +75,43 @@
         .cert-table {
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid #1f2937;
-            margin-bottom: 6px;
-            font-size: 8.2px;
+            border: 1.5px solid #0f172a;
+            margin-bottom: 5px;
+            font-size: 8.5px;
         }
         .cert-table th, .cert-table td {
-            border: 1px solid #1f2937;
+            border: 1px solid #1e293b;
             padding: 3px 5px;
-            vertical-align: top;
+            vertical-align: middle;
         }
         .th-cell {
-            background-color: #F1F5F9;
+            background-color: #E2EEFB;
             font-weight: bold;
-            color: #0f172a;
-            font-size: 8px;
+            color: #0A3778;
+            font-size: 8.5px;
         }
         .bold-val {
             font-weight: bold;
             color: #000000;
         }
         .safe-decision-box {
-            background-color: #ffffff;
             font-weight: 900;
-            font-size: 9.5px;
+            font-size: 10.5px;
             text-align: center;
-            color: #000000;
         }
         .sign-area-table {
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid #1f2937;
+            border: 1.5px solid #0f172a;
             margin-bottom: 4px;
         }
         .sign-area-table td {
-            border: 1px solid #1f2937;
+            border: 1px solid #1e293b;
             vertical-align: top;
-            padding: 3px 5px;
+            padding: 2.5px 4px;
         }
         .sign-title {
-            font-size: 7.5px;
+            font-size: 7.8px;
             font-weight: bold;
             color: #0f172a;
             text-align: center;
@@ -116,6 +123,7 @@
             font-weight: bold;
             text-align: center;
             display: block;
+            color: #000000;
         }
         .sign-graphic-box {
             height: 38px;
@@ -123,36 +131,38 @@
             vertical-align: middle;
         }
         .sign-img {
-            max-height: 34px;
+            max-height: 36px;
+            max-width: 130px;
             display: inline-block;
         }
         .stamp-img {
-            max-height: 65px;
+            max-height: 58px;
+            max-width: 85px;
             display: inline-block;
         }
         .qr-img {
-            width: 58px;
-            height: 58px;
+            width: 55px;
+            height: 55px;
             display: inline-block;
         }
         .disclaimer-box {
-            font-size: 6.5px;
+            font-size: 6.8px;
             color: #374151;
             text-align: justify;
-            line-height: 1.15;
-            border: 1px solid #1f2937;
-            padding: 4px 5px;
+            line-height: 1.2;
+            border: 1px solid #1e293b;
+            padding: 3px 5px;
             background-color: #ffffff;
         }
         /* Page 2: Checklist Table */
         .checklist-table {
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid #1f2937;
-            font-size: 7.5px;
+            border: 1.5px solid #0f172a;
+            font-size: 8px;
         }
         .checklist-table th, .checklist-table td {
-            border: 1px solid #1f2937;
+            border: 1px solid #1e293b;
             padding: 2.2px 4px;
             vertical-align: middle;
         }
@@ -163,7 +173,9 @@
     <!-- ================= PAGE 1: Thorough Examination Report ================= -->
     <div class="page-container">
         <!-- Official Safero Letterhead Background Image (300 DPI) -->
-        @if(!empty($bgBase64))
+        @if(!empty($bgDataUri))
+            <img src="{{ $bgDataUri }}" class="letterhead-bg" alt="Official Safero Letterhead">
+        @elseif(!empty($bgBase64))
             <img src="data:image/jpeg;base64,{{ $bgBase64 }}" class="letterhead-bg" alt="Official Safero Letterhead">
         @endif
 
@@ -205,15 +217,15 @@
                 </tr>
                 <tr>
                     <td>
-                        <strong style="color: #000;">{{ $certificate->customer?->name }}</strong>
+                        <strong style="color: #000;">{{ arabic_pdf($certificate->customer?->name) }}</strong>
                         @if($certificate->customer?->address && $certificate->customer->address !== $certificate->examination_address)
-                            <br><span style="font-size: 7.5px; color: #4b5563;">{{ $certificate->customer->address }}</span>
+                            <br><span style="font-size: 7.5px; color: #4b5563;">{{ arabic_pdf($certificate->customer->address) }}</span>
                         @endif
                     </td>
-                    <td>{{ $certificate->examination_address ?: 'Owner Yard' }}</td>
+                    <td>{{ arabic_pdf($certificate->examination_address ?: 'Owner Yard') }}</td>
                     <td>
                         @if($certificate->equipment_type === 'accessory')
-                            {{ $certificate->manufacturer ?: 'Lifting safety' }}
+                            {{ arabic_pdf($certificate->manufacturer ?: 'Lifting safety') }}
                         @else
                             {{ $certificate->date_of_manufacture ?: '—' }}
                         @endif
@@ -225,37 +237,43 @@
             <!-- Table 2: Equipment Description & ID -->
             <table class="cert-table">
                 <tr>
-                    <td class="th-cell" style="width: 65%;">Description and identification of the Equipment</td>
-                    <td class="th-cell" style="width: 35%;">Equipment ID</td>
+                    <td class="th-cell" style="width: 68%;">Description and identification of the Equipment</td>
+                    <td class="th-cell" style="width: 32%;">Equipment ID</td>
                 </tr>
                 <tr>
-                    <td style="min-height: 80px;">
+                    <td style="min-height: 55px; vertical-align: top;">
                         <strong style="font-size: 9.5px; color: #000; display: block; margin-bottom: 2px;">
-                            {{ $certificate->equipment_description }}
+                            {{ arabic_pdf($certificate->equipment_description) }}
                         </strong>
 
                         @if($certificate->equipment_type === 'crane')
-                            <!-- Crane Specifications -->
-                            <div style="font-size: 8px; line-height: 1.3;">
-                                @if($certificate->manufacturer)
-                                    <div><strong>Manufacturer:</strong> {{ $certificate->manufacturer }}</div>
-                                @endif
-                                @if($certificate->model)
-                                    <div><strong>Model:</strong> {{ $certificate->model }}</div>
-                                @endif
-                                @if($certificate->capacity)
-                                    <div><strong>Capacity:</strong> {{ $certificate->capacity }}</div>
-                                @endif
-                                @if($certificate->chassis_no)
-                                    <div><strong>Chassis No.:</strong> {{ $certificate->chassis_no }}</div>
-                                @endif
-                                @if($certificate->main_wire)
-                                    <div><strong>Main Wire:</strong> {{ $certificate->main_wire }}</div>
-                                @endif
-                                @if($certificate->hook_block)
-                                    <div><strong>Main Hook Block:</strong> {{ $certificate->hook_block }}</div>
-                                @endif
-                            </div>
+                            <!-- Crane Specifications (Compact 2-Column Table to save height) -->
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 2px; font-size: 7.8px;">
+                                <tr>
+                                    <td style="border: none; padding: 1px 2px; width: 50%;">
+                                        <strong>Manufacturer:</strong> {{ arabic_pdf($certificate->manufacturer ?: '—') }}
+                                    </td>
+                                    <td style="border: none; padding: 1px 2px; width: 50%;">
+                                        <strong>Model:</strong> {{ arabic_pdf($certificate->model ?: '—') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: none; padding: 1px 2px;">
+                                        <strong>Capacity:</strong> {{ $certificate->capacity ?: '—' }}
+                                    </td>
+                                    <td style="border: none; padding: 1px 2px;">
+                                        <strong>Chassis No.:</strong> <span style="color: #0E4DA4; font-weight: bold;">{{ $certificate->chassis_no ?: '—' }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: none; padding: 1px 2px;">
+                                        <strong>Main Wire:</strong> {{ $certificate->main_wire ?: '—' }}
+                                    </td>
+                                    <td style="border: none; padding: 1px 2px;">
+                                        <strong>Main Hook Block:</strong> {{ $certificate->hook_block ?: '—' }}
+                                    </td>
+                                </tr>
+                            </table>
                         @elseif($certificate->equipment_type === 'accessory')
                             <!-- Lifting Accessories / Slings Specifications -->
                             <div style="font-size: 8px; line-height: 1.3;">
@@ -271,7 +289,7 @@
                             <!-- General / Pallets / Beams -->
                             <div style="font-size: 8px; line-height: 1.3;">
                                 @if($certificate->dimensions)
-                                    <div><strong>Dimensions:</strong> {{ $certificate->dimensions }}</div>
+                                    <div><strong>Dimensions:</strong> {{ arabic_pdf($certificate->dimensions) }}</div>
                                 @endif
                                 <div><strong>SWL :</strong> {{ $certificate->swl }}</div>
                                 <div><strong>Quantity :-</strong> {{ sprintf('%02d', $certificate->quantity) }}</div>
@@ -331,14 +349,14 @@
                     <td class="th-cell" style="width: 30%;">Is the defect danger to process</td>
                 </tr>
                 <tr>
-                    <td>{{ $certificate->defect_identification ?: 'NONE' }}</td>
+                    <td>{{ arabic_pdf($certificate->defect_identification ?: 'NONE') }}</td>
                     <td class="bold-val" style="text-align: center;">{{ $certificate->is_defect_danger_to_process ? 'Yes' : 'No' }}</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="th-cell">Particulars of any repair, renewal or alteration required to remedy the defect identified above</td>
                 </tr>
                 <tr>
-                    <td colspan="2">{{ $certificate->repair_particulars ?: 'NONE' }}</td>
+                    <td colspan="2">{{ arabic_pdf($certificate->repair_particulars ?: 'NONE') }}</td>
                 </tr>
             </table>
 
@@ -349,7 +367,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <div style="white-space: pre-line; line-height: 1.25;">{{ $certificate->tests_carried_out }}</div>
+                        <div style="white-space: pre-line; line-height: 1.25;">{!! nl2br(e(arabic_pdf($certificate->tests_carried_out))) !!}</div>
                     </td>
                 </tr>
             </table>
@@ -357,8 +375,8 @@
             <!-- Table 6: Statutory Safety Decision -->
             <table class="cert-table">
                 <tr>
-                    <td style="width: 82%; font-weight: bold; font-size: 9px; vertical-align: middle;">Is the Equipment Safe to Operate</td>
-                    <td class="safe-decision-box" style="width: 18%;">
+                    <td style="width: 80%; font-weight: bold; font-size: 9px; vertical-align: middle;">Is the Equipment Safe to Operate</td>
+                    <td class="safe-decision-box" style="width: 20%; {{ $certificate->is_safe_to_operate ? 'background-color: #EAF5EA; color: #15803d;' : 'background-color: #FEE2E2; color: #B91C1C;' }}">
                         {{ $certificate->is_safe_to_operate ? 'Yes' : 'No' }}
                     </td>
                 </tr>
@@ -369,10 +387,12 @@
                 <tr>
                     <td style="width: 34%; text-align: center;">
                         <span class="sign-title">Name and Signature of the person issue this certificate</span>
-                        <div class="sign-person-name">{{ $certificate->issuer_name }}</div>
+                        <div class="sign-person-name">{{ arabic_pdf($certificate->issuer_name) }}</div>
                         <div class="sign-graphic-box">
-                            @if(!empty($engSignBase64))
-                                <img src="data:image/svg+xml;base64,{{ $engSignBase64 }}" class="sign-img" alt="Signature">
+                            @if(!empty($engSignDataUri))
+                                <img src="{{ $engSignDataUri }}" class="sign-img" alt="Signature">
+                            @elseif(!empty($engSignBase64))
+                                <img src="data:{{ $engSignMime ?? 'image/jpeg' }};base64,{{ $engSignBase64 }}" class="sign-img" alt="Signature">
                             @endif
                         </div>
                     </td>
@@ -380,24 +400,28 @@
                     <td style="width: 22%; text-align: center; vertical-align: middle;">
                         <span class="sign-title">Stamp</span>
                         <div style="height: 58px; text-align: center;">
-                            @if(!empty($stampBase64))
-                                <img src="data:image/svg+xml;base64,{{ $stampBase64 }}" class="stamp-img" alt="Safero Stamp">
+                            @if(!empty($stampDataUri))
+                                <img src="{{ $stampDataUri }}" class="stamp-img" alt="Safero Stamp">
+                            @elseif(!empty($stampBase64))
+                                <img src="data:{{ $stampMime ?? 'image/jpeg' }};base64,{{ $stampBase64 }}" class="stamp-img" alt="Safero Stamp">
                             @endif
                         </div>
                     </td>
 
                     <td style="width: 32%; text-align: center;">
                         <span class="sign-title">Name and Signature of the person authenticating this certificate</span>
-                        <div class="sign-person-name">{{ $certificate->authenticator_name }}</div>
+                        <div class="sign-person-name">{{ arabic_pdf($certificate->authenticator_name) }}</div>
                         <div class="sign-graphic-box">
-                            @if(!empty($dirSignBase64))
-                                <img src="data:image/svg+xml;base64,{{ $dirSignBase64 }}" class="sign-img" alt="Authenticator Signature">
+                            @if(!empty($dirSignDataUri))
+                                <img src="{{ $dirSignDataUri }}" class="sign-img" alt="Authenticator Signature">
+                            @elseif(!empty($dirSignBase64))
+                                <img src="data:{{ $dirSignMime ?? 'image/jpeg' }};base64,{{ $dirSignBase64 }}" class="sign-img" alt="Authenticator Signature">
                             @endif
                         </div>
                     </td>
 
                     <td style="width: 12%; text-align: center; vertical-align: middle;">
-                        <div style="height: 60px; text-align: center;">
+                        <div style="height: 55px; text-align: center;">
                             <img src="data:image/svg+xml;base64,{{ $qrCodeSvg }}" class="qr-img" alt="QR Code">
                         </div>
                     </td>
@@ -412,26 +436,31 @@
         </div>
     </div>
 
-    <!-- ================= PAGE 2: Mobile Crane Inspection Checklist (Only for Cranes) ================= -->
-    @if($certificate->equipment_type === 'crane' || !empty($certificate->checklist_items))
+    <!-- ================= PAGE 2: Inspection Checklist (Only when checklist items exist) ================= -->
+    @if($certificate->equipment_type === 'crane' || (!empty($certificate->checklist_items) && count($certificate->checklist_items) > 0))
         @php
             $checklist = $certificate->checklist_items ?: \App\Models\Certificate::defaultCraneChecklist();
+            $page2Title = $certificate->equipment_type === 'crane' 
+                ? 'MOBILE CRANE INSPECTION CHECKLIST' 
+                : 'EQUIPMENT INSPECTION CHECKLIST';
         @endphp
         <div class="page-container">
             <!-- Official Safero Letterhead Background Image (300 DPI) -->
-            @if(!empty($bgBase64))
+            @if(!empty($bgDataUri))
+                <img src="{{ $bgDataUri }}" class="letterhead-bg" alt="Official Safero Letterhead">
+            @elseif(!empty($bgBase64))
                 <img src="data:image/jpeg;base64,{{ $bgBase64 }}" class="letterhead-bg" alt="Official Safero Letterhead">
             @endif
 
             <div class="content-area">
                 
                 <!-- Page 2 Title -->
-                <div class="title-block" style="margin-bottom: 10px;">
-                    <h2 class="main-heading" style="font-size: 13px; text-decoration: underline;">MOBILE CRANE INSPECTION CHECKLIST</h2>
+                <div class="title-block" style="margin-bottom: 8px;">
+                    <h2 class="main-heading" style="font-size: 13px; text-decoration: underline;">{{ $page2Title }}</h2>
                 </div>
 
                 <!-- Meta Row -->
-                <table style="width: 100%; margin-bottom: 6px; font-size: 8px;">
+                <table style="width: 100%; margin-bottom: 5px; font-size: 8px;">
                     <tr>
                         <td style="width: 50%; font-weight: bold;">
                             Certificate No: <span style="color: #0E4DA4; font-family: monospace;">{{ $certificate->certificate_number }}</span>
@@ -442,13 +471,13 @@
                     </tr>
                 </table>
 
-                <!-- 27-Point Inspection Checklist Table -->
+                <!-- Inspection Checklist Table -->
                 <table class="checklist-table">
                     <thead>
-                        <tr style="background-color: #F1F5F9;">
-                            <th style="width: 55%; text-align: left; font-size: 8px;">Questions</th>
-                            <th style="width: 20%; text-align: center; font-size: 8px;">Check</th>
-                            <th style="width: 25%; text-align: center; font-size: 8px;">Comment</th>
+                        <tr style="background-color: #E2EEFB; color: #0A3778;">
+                            <th style="width: 55%; text-align: left; font-size: 8.5px; font-weight: bold;">Questions</th>
+                            <th style="width: 20%; text-align: center; font-size: 8.5px; font-weight: bold;">Check</th>
+                            <th style="width: 25%; text-align: center; font-size: 8.5px; font-weight: bold;">Comment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -460,24 +489,28 @@
                                 $isDefect = in_array(strtolower($cStatus), ['defect', 'fail', 'rejected']);
                             @endphp
                             <tr>
-                                <td>{{ $qText }}</td>
+                                <td>{{ arabic_pdf($qText) }}</td>
                                 <td style="text-align: center; font-weight: bold; color: {{ $isDefect ? '#dc2626' : '#000000' }};">
-                                    {{ $cStatus }}
+                                    {{ arabic_pdf($cStatus) }}
                                 </td>
-                                <td style="font-size: 7px; color: #4b5563;">{{ $cNote }}</td>
+                                <td style="font-size: 7.5px; color: #4b5563;">{{ arabic_pdf($cNote) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
 
                 <!-- Signature & Stamp Block for Page 2 -->
-                <div style="margin-top: 8px; position: relative;">
+                <div style="margin-top: 6px; position: relative;">
                     <div class="disclaimer-box" style="margin-bottom: 0;">
                         This certificate is granted subject to the condition that it is understood and agreed that nothing herein contained shall be deemed to relieve any designer, manufacturer, seller, repairer or operator of any warranty, expressed or implied and Safero liability shall be limited to the willful negligence or deliberate omissions of its employees. Under no circumstances shall Safero be liable for any injury or damage to any person occurring by reason of negligent operation or any defect in materials, machinery, equipment or other items other than those defects ascertainable by normally accepted testing standards and only those items actually inspected by Safero and which are covered by this certificate.
                     </div>
-                    @if(!empty($stampBase64))
-                        <div style="position: absolute; right: 25px; bottom: -15px; opacity: 0.95;">
-                            <img src="data:image/svg+xml;base64,{{ $stampBase64 }}" style="max-height: 70px;" alt="Stamp">
+                    @if(!empty($stampDataUri))
+                        <div style="position: absolute; right: 25px; bottom: -12px; opacity: 0.95;">
+                            <img src="{{ $stampDataUri }}" style="max-height: 65px;" alt="Stamp">
+                        </div>
+                    @elseif(!empty($stampBase64))
+                        <div style="position: absolute; right: 25px; bottom: -12px; opacity: 0.95;">
+                            <img src="data:{{ $stampMime ?? 'image/jpeg' }};base64,{{ $stampBase64 }}" style="max-height: 65px;" alt="Stamp">
                         </div>
                     @endif
                 </div>

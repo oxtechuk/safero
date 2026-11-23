@@ -169,6 +169,8 @@ class CertificateApiController extends Controller
                 'embed_url' => route('training-certificates.embed', ['uuid' => $trainingCertificate->uuid]),
                 'verification_url' => route('training-certificates.verify', ['uuid' => $trainingCertificate->uuid]),
                 'pdf_url' => route('training-certificates.pdf', ['trainingCertificate' => $trainingCertificate->id]),
+                'pdf_download_url' => route('training-certificates.pdf', ['trainingCertificate' => $trainingCertificate->id]).'?download=1',
+                'pdf_view_url' => route('training-certificates.pdf', ['trainingCertificate' => $trainingCertificate->id]),
             ],
         ]);
     }

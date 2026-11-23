@@ -50,6 +50,7 @@ class TrainingCertificate extends Model
         'issue_date',
         'expiry_date',
         'instructor_name',
+        'instructor_id',
         'training_manager_name',
         'accreditation_text',
         'status',
@@ -99,6 +100,42 @@ class TrainingCertificate extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function instructor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'instructor_id');
+    }
+
+    public static function defaultInstructors(): array
+    {
+        return [
+            [
+                'name' => 'Dr. Hany Nabil',
+                'title_ar' => 'استشاري ورئيس قسم التدريب والاعتماد',
+                'title_en' => 'Lead Technical Trainer & ISO Auditor',
+            ],
+            [
+                'name' => 'Eng. Mohammed fathy',
+                'title_ar' => 'كبير مهندسي فحص ومحاضر معتمد',
+                'title_en' => 'Senior Lifting Specialist & Certified Trainer',
+            ],
+            [
+                'name' => 'Eng. Ahmed Hassan',
+                'title_ar' => 'أخصائي السلامة والصحة المهنية ومحاضر HSE',
+                'title_en' => 'HSE & Defensive Driving Specialist',
+            ],
+            [
+                'name' => 'Eng. Mahmoud Soliman',
+                'title_ar' => 'مدرب تشغيل أوناش ومعدات ثقيلة',
+                'title_en' => 'Heavy Equipment & Crane Operations Trainer',
+            ],
+            [
+                'name' => 'Gehan Mahmoud',
+                'title_ar' => 'مدير العمليات التدريبية والشهادات',
+                'title_en' => 'Training Operations Director',
+            ],
+        ];
     }
 
     public function getVerificationUrlAttribute(): string

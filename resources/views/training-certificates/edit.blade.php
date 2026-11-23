@@ -3,7 +3,27 @@
 @section('title', 'تعديل شهادة تدريب - '.$trainingCertificate->certificate_serial)
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-6">
+<div class="max-w-4xl mx-auto space-y-6" x-data="{
+    customInstructor: {{ (old('instructor_name', $trainingCertificate->instructor_name) && !in_array(old('instructor_name', $trainingCertificate->instructor_name), array_column($instructors, 'name'))) ? 'true' : 'false' }},
+    onInstructorSelect(e) {
+        const val = e.target.value;
+        if (val === 'custom') {
+            this.customInstructor = true;
+            document.getElementById('instructor_name_input').value = '';
+            document.getElementById('instructor_id_hidden').value = '';
+            $nextTick(() => document.getElementById('instructor_name_input').focus());
+        } else if (val) {
+            this.customInstructor = false;
+            const opt = e.target.selectedOptions[0];
+            document.getElementById('instructor_name_input').value = opt.dataset.name;
+            document.getElementById('instructor_id_hidden').value = opt.dataset.userId || '';
+        } else {
+            this.customInstructor = false;
+            document.getElementById('instructor_name_input').value = '{{ $trainingCertificate->instructor_name }}';
+            document.getElementById('instructor_id_hidden').value = '';
+        }
+    }
+}">
 
     <div class="flex items-center justify-between">
         <div>
@@ -163,14 +183,53 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">
-                        اسم المدرب / المحاضر (Instructor) <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" 
-                           name="instructor_name" 
-                           value="{{ old('instructor_name', $trainingCertificate->instructor_name) }}"
-                           required 
-                           class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:border-[#0E4DA4] outline-none text-xs sm:text-sm font-semibold">
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-bold text-slate-700">
+                            {{ __('المدرب المعتمد (Trainer)') }} <span class="text-red-500">*</span>
+                        </label>
+                        <button type="button" class="text-[10px] text-[#0E4DA4] font-bold hover:underline cursor-pointer" @click="customInstructor = !customInstructor">
+                            <span x-show="!customInstructor">{{ __('+ مدرب آخر') }}</span>
+                            <span x-show="customInstructor">{{ __('قائمة المدربين') }}</span>
+                        </button>
+                    </div>
+
+                    <input type="hidden" name="instructor_id" id="instructor_id_hidden" value="{{ old('instructor_id', $trainingCertificate->instructor_id) }}">
+
+                    <div x-show="!customInstructor">
+                        <select id="instructor_select" @change="onInstructorSelect($event)" 
+                                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:border-[#0E4DA4] outline-none text-xs sm:text-sm bg-white font-bold">
+                            <option value="">{{ $trainingCertificate->instructor_name }}</option>
+                            <optgroup label="{{ __('قائمة المدربين المعتمدين') }}">
+                                @foreach($instructors as $inst)
+                                    <option value="{{ $inst['name'] }}" 
+                                            data-name="{{ $inst['name'] }}"
+                                            {{ old('instructor_name', $trainingCertificate->instructor_name) === $inst['name'] ? 'selected' : '' }}>
+                                        {{ $inst['name'] }} &mdash; {{ $inst['title_ar'] }}
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                            @if(isset($users) && $users->isNotEmpty())
+                                <optgroup label="{{ __('فريق العمل / المستخدمين') }}">
+                                    @foreach($users as $u)
+                                        <option value="{{ $u->name }}" data-name="{{ $u->name }}" data-user-id="{{ $u->id }}">
+                                            {{ $u->name }} ({{ $u->email }})
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+                            <option value="custom">&#9998; {{ __('+ مدرب آخر (إدخال يدوي)') }}</option>
+                        </select>
+                    </div>
+
+                    <div :class="customInstructor ? 'mt-1' : 'hidden'">
+                        <input type="text" 
+                               name="instructor_name" 
+                               id="instructor_name_input"
+                               value="{{ old('instructor_name', $trainingCertificate->instructor_name) }}"
+                               required 
+                               placeholder="{{ __('اكتب اسم المدرب المعتمد...') }}"
+                               class="w-full px-3 py-2.5 rounded-xl border border-amber-300 bg-amber-50/50 outline-none text-xs sm:text-sm font-semibold">
+                    </div>
                 </div>
 
                 <div>

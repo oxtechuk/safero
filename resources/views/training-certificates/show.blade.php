@@ -222,7 +222,11 @@
                 <div class="text-left space-y-3">
                     <div>
                         <div class="h-10 flex items-center">
-                            <span class="font-serif italic text-lg text-slate-700">{{ $trainingCertificate->instructor_name }}</span>
+                            @if(setting('engineer_signature_path') && file_exists(public_path(ltrim(setting('engineer_signature_path'), '/\\'))))
+                                <img src="{{ asset(ltrim(setting('engineer_signature_path'), '/\\')) }}" alt="Instructor Signature" class="h-10 object-contain">
+                            @else
+                                <span class="font-serif italic text-lg text-slate-700">{{ $trainingCertificate->instructor_name }}</span>
+                            @endif
                         </div>
                         <div class="w-36 border-t border-slate-700 pt-1">
                             <span class="block text-[11px] font-bold text-slate-800">Instructor Signature</span>
@@ -256,14 +260,18 @@
 
                 <!-- Right: Training Manager & Stamp -->
                 <div class="text-right flex flex-col items-end">
-                    <!-- Stamp simulation -->
+                    <!-- Stamp display -->
                     <div class="relative mb-2 pr-2">
-                        <div class="border-2 border-[#0E4DA4] text-[#0E4DA4] rounded-lg p-2 text-center text-[10px] font-black uppercase tracking-wider rotate-[-6deg] bg-white/80 shadow-sm inline-block">
-                            <div class="text-[11px] italic font-serif leading-none">{{ $trainingCertificate->training_manager_name }}</div>
-                            <div class="border-t border-[#0E4DA4] my-0.5"></div>
-                            <div>SAFERO</div>
-                            <div class="text-[8px]">Training Manager</div>
-                        </div>
+                        @if(setting('stamp_path') && file_exists(public_path(ltrim(setting('stamp_path'), '/\\'))))
+                            <img src="{{ asset(ltrim(setting('stamp_path'), '/\\')) }}" alt="Safero Stamp" class="h-20 w-20 object-contain rotate-[-4deg]">
+                        @else
+                            <div class="border-2 border-[#0E4DA4] text-[#0E4DA4] rounded-lg p-2 text-center text-[10px] font-black uppercase tracking-wider rotate-[-6deg] bg-white/80 shadow-sm inline-block">
+                                <div class="text-[11px] italic font-serif leading-none">{{ $trainingCertificate->training_manager_name }}</div>
+                                <div class="border-t border-[#0E4DA4] my-0.5"></div>
+                                <div>SAFERO</div>
+                                <div class="text-[8px]">Training Manager</div>
+                            </div>
+                        @endif
                     </div>
                     <div class="w-36 border-t border-slate-700 pt-1 text-center">
                         <span class="block text-[11px] font-bold text-slate-800">Training Manager</span>

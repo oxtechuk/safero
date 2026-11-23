@@ -107,6 +107,7 @@
             </div>
 
             @if($type === 'crane')
+                <input type="hidden" name="quantity" value="{{ old('quantity', $certificate->quantity ?: 1) }}">
                 <div class="space-y-3 text-xs">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div class="sm:col-span-2">
@@ -388,9 +389,54 @@
         <!-- CARD 5: SIGNATURES -->
         <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs items-end">
-                <div>
-                    <label for="issuer_name" class="block font-bold text-slate-700 mb-1">مهندس الفحص</label>
-                    <input type="text" name="issuer_name" id="issuer_name" value="{{ old('issuer_name', $certificate->issuer_name) }}" required class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-en outline-none">
+                <div x-data="{
+                    customInspector: {{ (old('issuer_name', $certificate->issuer_name) && $inspectors->where('name', old('issuer_name', $certificate->issuer_name))->isEmpty()) ? 'true' : 'false' }},
+                    onInspectorChange(e) {
+                        const val = e.target.value;
+                        if (val === 'custom') {
+                            this.customInspector = true;
+                            document.getElementById('issuer_name').value = '';
+                            document.getElementById('inspector_id_input').value = '';
+                            $nextTick(() => document.getElementById('issuer_name').focus());
+                        } else if (val) {
+                            this.customInspector = false;
+                            const opt = e.target.selectedOptions[0];
+                            document.getElementById('issuer_name').value = opt.dataset.name;
+                            document.getElementById('inspector_id_input').value = val;
+                        } else {
+                            this.customInspector = false;
+                            document.getElementById('issuer_name').value = '{{ $certificate->issuer_name }}';
+                            document.getElementById('inspector_id_input').value = '';
+                        }
+                    }
+                }">
+                    <div class="flex items-center justify-between mb-1">
+                        <label for="inspector_select" class="block font-bold text-slate-700 text-xs">
+                            {{ __('مهندس الفحص (Inspector)') }} <span class="text-red-500">*</span>
+                        </label>
+                        <button type="button" class="text-[10.5px] text-[#0E4DA4] hover:underline font-bold cursor-pointer" @click="customInspector = !customInspector">
+                            <span x-show="!customInspector">{{ __('+ شخص آخر قام بالفحص') }}</span>
+                            <span x-show="customInspector">{{ __('الرجوع لقائمة المفتشين') }}</span>
+                        </button>
+                    </div>
+
+                    <input type="hidden" name="inspector_id" id="inspector_id_input" value="{{ old('inspector_id', $certificate->inspector_id) }}">
+
+                    <div x-show="!customInspector">
+                        <select id="inspector_select" @change="onInspectorChange($event)" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-en text-xs outline-none">
+                            <option value="">{{ $certificate->issuer_name }}</option>
+                            @foreach($inspectors as $insp)
+                                <option value="{{ $insp->id }}" data-name="{{ $insp->name }}" {{ (old('inspector_id', $certificate->inspector_id) == $insp->id || old('issuer_name', $certificate->issuer_name) === $insp->name) ? 'selected' : '' }}>
+                                    {{ $insp->name }}
+                                </option>
+                            @endforeach
+                            <option value="custom">&#9998; {{ __('+ شخص آخر (إدخال يدوي)') }}</option>
+                        </select>
+                    </div>
+
+                    <div :class="customInspector ? 'mt-1' : 'hidden'">
+                        <input type="text" name="issuer_name" id="issuer_name" value="{{ old('issuer_name', $certificate->issuer_name) }}" required placeholder="{{ __('اسم مهندس الفحص...') }}" class="w-full px-2.5 py-1.5 rounded-lg border border-amber-300 bg-amber-50/50 font-en text-xs outline-none">
+                    </div>
                 </div>
 
                 <div>

@@ -279,7 +279,21 @@
                         <span class="text-[11px] text-slate-400 font-en block mt-0.5">Trainees CRM</span>
                     </div>
 
-                    <!-- 8. Settings & System (إعدادات النظام والمنظومة) -->
+                    <!-- 8. Expenses Module (سجل المصروفات والنفقات) -->
+                    <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-36" data-name="expenses مصاريف نفقات تكاليف صرف أرباح">
+                        <a href="{{ route('expenses.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center relative p-2 sm:p-2.5 hover:shadow-lg transition">
+                            <img src="{{ asset('branding/odoo-icons/account.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" style="filter: hue-rotate(140deg);" alt="Expenses">
+                            <span class="absolute -top-1.5 -right-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-600 text-white shadow-sm font-en">
+                                {{ __('مصاريف') }}
+                            </span>
+                        </a>
+                        <span class="text-xs sm:text-sm font-bold text-slate-800 mt-2.5 block leading-tight group-hover:text-rose-600 transition">
+                            {{ __('المصروفات والنفقات') }}
+                        </span>
+                        <span class="text-[11px] text-slate-400 font-en block mt-0.5">Expenses &amp; Costs</span>
+                    </div>
+
+                    <!-- 9. Settings & System (إعدادات النظام والمنظومة) -->
                     <div class="app-item flex flex-col items-center group cursor-pointer text-center w-28 sm:w-36" data-name="settings إعدادات النظام تهيئة مستخدمين مستخدمون صلاحيات">
                         <a href="{{ route('settings.index') }}" class="app-card-btn w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-slate-100 flex items-center justify-center p-2 sm:p-2.5 hover:shadow-lg transition">
                             <img src="{{ asset('branding/odoo-icons/settings.svg') }}" class="w-14 h-14 sm:w-16 sm:h-16 object-contain transition-transform duration-200 group-hover:scale-110" alt="Settings">

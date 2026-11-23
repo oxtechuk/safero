@@ -513,6 +513,9 @@
                                         <a href="{{ route('invoices.index', ['status' => 'unpaid']) }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-red-600 transition font-bold">
                                             {{ __('الفواتير غير المدفوعة / المعلقة') }}
                                         </a>
+                                        <a href="{{ route('expenses.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-rose-600 transition font-bold {{ request()->routeIs('expenses.*') ? 'bg-rose-50/60 text-rose-700' : '' }}">
+                                            {{ __('المصروفات والنفقات التشغيلية') }}
+                                        </a>
                                         <a href="{{ route('reports.index') }}" class="block px-3.5 py-1.5 hover:bg-slate-100/80 text-slate-700 hover:text-emerald-700 transition">
                                             {{ __('تقرير الأرباح والتحصيل السريع') }}
                                         </a>
@@ -782,6 +785,10 @@
                     <a href="{{ route('reports.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/point_of_sale.svg') }}" class="w-4 h-4">
                         <span>{{ __('تقرير الأرباح') }}</span>
+                    </a>
+                    <a href="{{ route('expenses.index') }}" class="p-2.5 rounded-xl bg-white border border-rose-200 text-rose-700 hover:bg-rose-50 transition flex items-center gap-2 shadow-2xs">
+                        <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        <span>{{ __('المصروفات') }}</span>
                     </a>
                     <a href="{{ route('customers.index') }}" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition flex items-center gap-2 shadow-2xs">
                         <img src="{{ asset('branding/IsoOx-icons/crm.svg') }}" class="w-4 h-4">
