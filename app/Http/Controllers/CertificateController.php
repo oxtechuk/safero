@@ -212,6 +212,7 @@ class CertificateController extends Controller
             'repair_particulars' => ['nullable', 'string'],
             'tests_carried_out' => ['required', 'string'],
             'is_safe_to_operate' => ['boolean'],
+            'include_checklist' => ['nullable', 'boolean'],
             'inspector_id' => ['nullable', 'exists:users,id'],
             'issuer_name' => ['required', 'string', 'max:255'],
             'authenticator_name' => ['required', 'string', 'max:255'],
@@ -221,6 +222,7 @@ class CertificateController extends Controller
         $validated['uuid'] = (string) Str::uuid();
         $validated['created_by'] = Auth::id();
         $validated['quantity'] = (int) ($validated['quantity'] ?? 1);
+        $validated['include_checklist'] = $request->boolean('include_checklist', true);
         $validated['defect_identification'] = $validated['defect_identification'] ?? 'NONE';
         $validated['repair_particulars'] = $validated['repair_particulars'] ?? 'NONE';
         $validated['equipment_type'] = $validated['equipment_type'] ?? 'general';
@@ -401,11 +403,14 @@ class CertificateController extends Controller
             'repair_particulars' => ['nullable', 'string'],
             'tests_carried_out' => ['required', 'string'],
             'is_safe_to_operate' => ['boolean'],
+            'include_checklist' => ['nullable', 'boolean'],
             'inspector_id' => ['nullable', 'exists:users,id'],
             'issuer_name' => ['required', 'string', 'max:255'],
             'authenticator_name' => ['required', 'string', 'max:255'],
             'status' => ['required', 'in:issued,draft,revoked'],
         ]);
+
+        $validated['include_checklist'] = $request->boolean('include_checklist');
 
         if (($validated['equipment_type'] ?? $certificate->equipment_type) === 'crane' && empty($validated['checklist_items']) && empty($certificate->checklist_items)) {
             $validated['checklist_items'] = Certificate::defaultCraneChecklist();
@@ -449,7 +454,7 @@ class CertificateController extends Controller
             $certificate = $found;
         }
 
-        $certificate->load('customer');
+        $certificate->load(['customer', 'inspector']);
         $verifyUrl = $certificate->verification_url;
         $qrCodeSvg = base64_encode(QrCode::format('svg')->size(130)->margin(0)->generate($verifyUrl));
 
@@ -491,14 +496,57 @@ class CertificateController extends Controller
             return ['uri' => '', 'base64' => '', 'mime' => ''];
         };
 
+        $resolveFilePath = function (?string $rawPath): ?array {
+            if (! $rawPath) {
+                return null;
+            }
+            $clean = public_path(ltrim($rawPath, '/\\'));
+            if (! file_exists($clean)) {
+                return null;
+            }
+            $ext = strtolower(pathinfo($clean, PATHINFO_EXTENSION));
+            $mime = match ($ext) {
+                'svg' => 'image/svg+xml',
+                'png' => 'image/png',
+                'jpg', 'jpeg' => 'image/jpeg',
+                'webp' => 'image/webp',
+                default => 'image/jpeg',
+            };
+            $content = file_get_contents($clean);
+            $b64 = base64_encode($content);
+
+            return [
+                'uri' => 'data:'.$mime.';base64,'.$b64,
+                'base64' => $b64,
+                'mime' => $mime,
+            ];
+        };
+
         $bgInfo = $resolveDataUri('letterhead_bg_path', 'branding/cert_inspect_bg.jpg');
         $logoInfo = $resolveDataUri('logo_path', 'branding/safero_logo.jpg');
         $stampInfo = $resolveDataUri('stamp_path', 'branding/stamp.svg');
-        $engSignInfo = $resolveDataUri('engineer_signature_path', 'branding/eng_signature.svg');
+
+        // Resolve inspector signature: check certificate inspector relation first, then fallback to setting
+        $inspectorSignInfo = null;
+        if ($certificate->inspector && $certificate->inspector->signature_path) {
+            $inspectorSignInfo = $resolveFilePath($certificate->inspector->signature_path);
+        }
+        if (! $inspectorSignInfo && $certificate->issuer_name) {
+            $matchedUser = User::where('name', $certificate->issuer_name)->first();
+            if ($matchedUser && $matchedUser->signature_path) {
+                $inspectorSignInfo = $resolveFilePath($matchedUser->signature_path);
+            }
+        }
+        $engSignInfo = $inspectorSignInfo ?: $resolveDataUri('engineer_signature_path', 'branding/eng_signature.svg');
         $dirSignInfo = $resolveDataUri('director_signature_path', 'branding/director_signature.svg');
+
+        $includeChecklist = $request->has('checklist')
+            ? $request->boolean('checklist')
+            : ($certificate->include_checklist ?? true);
 
         $pdf = Pdf::loadView('certificates.pdf', [
             'certificate' => $certificate,
+            'includeChecklist' => $includeChecklist,
             'qrCodeSvg' => $qrCodeSvg,
             'verifyUrl' => $verifyUrl,
             'bgDataUri' => $bgInfo['uri'],

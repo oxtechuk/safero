@@ -3,7 +3,7 @@
 @section('title', 'تعديل بيانات وصلاحيات المستخدم - ' . $user->name)
 
 @section('content')
-<form method="POST" action="{{ route('users.update', $user) }}" class="space-y-6" x-data="{
+<form method="POST" action="{{ route('users.update', $user) }}" enctype="multipart/form-data" class="space-y-6" x-data="{
     selectedRole: '{{ old('role_id', $user->roles->first()?->id) }}',
     toggleModule(moduleKey, check) {
         document.querySelectorAll('.perm-module-' + moduleKey).forEach(el => el.checked = check);
@@ -148,6 +148,55 @@
                            dir="ltr"
                            placeholder="e.g. Certified LOLER Lifting Inspector" 
                            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-[#714B67] focus:border-[#714B67] outline-hidden font-en transition text-left">
+                </div>
+
+                <!-- Inspector Digital Signature Upload & Preview -->
+                <div class="col-span-1 md:col-span-2 pt-3 border-t border-slate-100" x-data="{ signaturePreview: null, removeSignature: false }">
+                    <label class="block text-xs font-bold text-slate-800 mb-0.5">
+                        ✍️ توقيع المهندس الفاحص المعتمد (Inspector Digital Signature)
+                    </label>
+                    <p class="text-[11px] text-slate-500 mb-2">
+                        ارفع صورة توقيع المهندس (PNG بخلفية شفافة مفضلة أو JPG/SVG). يتم استخدام هذا التوقيع تلقائياً في خانة فاحص الشهادات عند اختياره.
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4">
+                        @php
+                            $hasSig = $user->signature_path && file_exists(public_path(ltrim($user->signature_path, '/\\')));
+                        @endphp
+
+                        @if($hasSig)
+                            <div class="flex items-center gap-3 p-2 bg-slate-50 border border-slate-200 rounded-lg" x-show="!removeSignature">
+                                <img src="{{ asset(ltrim($user->signature_path, '/\\')) }}" alt="التوقيع الحالي" class="h-10 max-w-[140px] object-contain">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    توقيع معتمد حالي
+                                </span>
+                                <label class="flex items-center gap-1.5 text-xs text-red-600 hover:text-red-700 cursor-pointer pr-2 border-r border-slate-200">
+                                    <input type="checkbox" name="remove_signature" value="1" x-model="removeSignature" class="rounded border-slate-300 text-red-600 focus:ring-red-500 w-3.5 h-3.5">
+                                    <span class="text-[11px] font-semibold">حذف التوقيع</span>
+                                </label>
+                            </div>
+                        @endif
+
+                        <label class="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 hover:bg-slate-100 text-xs font-bold text-slate-700 transition">
+                            <svg class="w-4 h-4 text-[#714B67]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                            <span>{{ $hasSig ? 'استبدال ملف التوقيع...' : 'رفع صورة التوقيع...' }}</span>
+                            <input type="file" 
+                                   name="signature" 
+                                   accept="image/png,image/jpeg,image/svg+xml,image/webp" 
+                                   class="hidden" 
+                                   @change="const file = $event.target.files[0]; if (file) { removeSignature = false; const reader = new FileReader(); reader.onload = (e) => signaturePreview = e.target.result; reader.readAsDataURL(file); }">
+                        </label>
+
+                        <template x-if="signaturePreview">
+                            <div class="flex items-center gap-3 p-1.5 bg-emerald-50 border border-emerald-200 rounded-lg">
+                                <img :src="signaturePreview" alt="معاينة التوقيع الجديد" class="h-10 max-w-[140px] object-contain">
+                                <span class="text-[11px] font-bold text-emerald-700">توقيع جديد جاهز للحفظ</span>
+                            </div>
+                        </template>
+                    </div>
+                    @error('signature')
+                        <p class="text-red-600 text-[11px] mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
             </div>

@@ -238,13 +238,52 @@
                                class="w-full text-xs font-semibold rounded-lg border-slate-300 focus:border-[#0E4DA4] focus:ring-[#0E4DA4] py-2">
                     </div>
 
-                    <!-- Inspector Name -->
-                    <div>
-                        <label for="inspector_name" class="block text-xs font-bold text-slate-700 mb-1.5">
-                            اسم الفاحص المعتمد (Inspector Name) <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" name="inspector_name" id="inspector_name" required value="{{ old('inspector_name', $user->name) }}"
-                               class="w-full text-xs font-semibold rounded-lg border-slate-300 focus:border-[#0E4DA4] focus:ring-[#0E4DA4] py-2">
+                    <!-- Inspector Name & Selection -->
+                    <div x-data="{
+                        customInspector: false,
+                        onInspectorChange(e) {
+                            const val = e.target.value;
+                            if (val === 'custom') {
+                                this.customInspector = true;
+                                document.getElementById('inspector_id_input').value = '';
+                                document.getElementById('inspector_name').value = '';
+                                $nextTick(() => document.getElementById('inspector_name').focus());
+                            } else {
+                                this.customInspector = false;
+                                document.getElementById('inspector_id_input').value = val;
+                                const opt = e.target.selectedOptions[0];
+                                document.getElementById('inspector_name').value = opt ? opt.getAttribute('data-name') : '';
+                            }
+                        }
+                    }">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="block text-xs font-bold text-slate-700">
+                                المهندس الفاحص (Inspector) <span class="text-red-500">*</span>
+                            </label>
+                            <button type="button" @click="customInspector = !customInspector; if (customInspector) { document.getElementById('inspector_id_input').value = ''; } else { document.getElementById('inspector_id_input').value = '{{ $user->id }}'; document.getElementById('inspector_name').value = '{{ $user->name }}'; }" class="text-[11px] text-[#0E4DA4] hover:underline font-semibold">
+                                <span x-show="!customInspector">+ مهندس فحص آخر</span>
+                                <span x-show="customInspector" style="display:none;">اختيار من القائمة المسجلة</span>
+                            </button>
+                        </div>
+
+                        <input type="hidden" name="inspector_id" id="inspector_id_input" value="{{ old('inspector_id', $user->id) }}">
+
+                        <div x-show="!customInspector">
+                            <select @change="onInspectorChange($event)" class="w-full text-xs font-semibold rounded-lg border-slate-300 focus:border-[#0E4DA4] focus:ring-[#0E4DA4] py-2 bg-white">
+                                @foreach($inspectors as $insp)
+                                    <option value="{{ $insp->id }}" data-name="{{ $insp->name }}" {{ (old('inspector_id', $user->id) == $insp->id) ? 'selected' : '' }}>
+                                        {{ $insp->name }} ({{ $insp->job_title_ar ?: ($insp->primaryRoleName() ?? 'فاحص') }}) {{ $insp->signature_path ? '✍️' : '' }}
+                                    </option>
+                                @endforeach
+                                <option value="custom">-- مهندس غير مسجل (إدخال يدوي) --</option>
+                            </select>
+                        </div>
+
+                        <div :class="customInspector ? 'block mt-1' : 'hidden'">
+                            <input type="text" name="inspector_name" id="inspector_name" required value="{{ old('inspector_name', $user->name) }}"
+                                   placeholder="اكتب اسم مهندس الفحص..."
+                                   class="w-full text-xs font-semibold rounded-lg border-slate-300 focus:border-[#0E4DA4] focus:ring-[#0E4DA4] py-2">
+                        </div>
                     </div>
 
                     <!-- Competency / Certification Ref -->

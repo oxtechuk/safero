@@ -6,12 +6,16 @@ use App\Models\Certificate;
 use App\Models\Customer;
 use App\Models\Expense;
 use App\Models\Invoice;
+use App\Models\Role;
 use App\Models\Setting;
 use App\Models\Trainee;
 use App\Models\TrainingCertificate;
 use App\Models\User;
 use App\Support\ArabicShaper;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class NewPlatformFeaturesTest extends TestCase
@@ -298,5 +302,78 @@ class NewPlatformFeaturesTest extends TestCase
         $this->assertStringContainsString('Eyebolts', $shaped);
         // Shaped should contain Presentation Forms-B characters (e.g. 0xFE80-0xFEFC)
         $this->assertTrue((bool) preg_match('/[\x{FE70}-\x{FEFF}]/u', $shaped));
+    }
+
+    /**
+     * Requirement 8: User inspector signature upload and linking to certificates.
+     */
+    public function test_user_inspector_signature_upload_and_linking_to_certificate(): void
+    {
+        Storage::fake('public');
+        $role = Role::firstOrCreate(
+            ['name' => 'inspector'],
+            ['label_ar' => 'مهندس فاحص', 'label_en' => 'Inspector', 'hierarchy_level' => 50]
+        );
+
+        $fakeSignature = UploadedFile::fake()->image('my_signature.png', 200, 80);
+
+        $response = $this->actingAs($this->user)->post(route('users.store'), [
+            'name' => 'Eng. Tamer Al-Sayed',
+            'email' => 'tamer@example.com',
+            'password' => 'Password123!',
+            'password_confirmation' => 'Password123!',
+            'role_id' => $role->id,
+            'job_title_ar' => 'مهندس فحص أوناش معتمد',
+            'job_title_en' => 'Certified Crane Inspector',
+            'signature' => $fakeSignature,
+            'is_active' => 1,
+        ]);
+
+        $response->assertRedirect(route('users.index'));
+        $createdUser = User::where('email', 'tamer@example.com')->first();
+        $this->assertNotNull($createdUser);
+        $this->assertNotNull($createdUser->signature_path);
+        $this->assertFileExists(public_path(ltrim($createdUser->signature_path, '/\\')));
+
+        // Now create a certificate with this inspector
+        $customer = Customer::create([
+            'name' => 'Alexandria Port Logistics',
+            'email' => 'port@example.com',
+            'phone' => '01234567890',
+            'address' => 'Alexandria Port',
+        ]);
+
+        $cert = Certificate::create([
+            'uuid' => (string) Str::uuid(),
+            'certificate_number' => 'SAF/2026/TEST-TAMER',
+            'customer_id' => $customer->id,
+            'examination_address' => 'Berth 55',
+            'thorough_examination_date' => now(),
+            'next_examination_due_date' => now()->addMonths(12),
+            'reference_standard' => 'BS EN 12079',
+            'equipment_type' => 'general',
+            'equipment_description' => 'Offshore Basket',
+            'swl' => '5 Ton',
+            'quantity' => 1,
+            'tests_carried_out' => 'Visual and Load Test',
+            'is_safe_to_operate' => true,
+            'inspector_id' => $createdUser->id,
+            'issuer_name' => $createdUser->name,
+            'authenticator_name' => 'Director',
+            'status' => 'issued',
+            'created_by' => $this->user->id,
+        ]);
+
+        $pdfResponse = $this->actingAs($this->user)->get(route('certificates.pdf', $cert));
+        $pdfResponse->assertOk();
+
+        $showResponse = $this->actingAs($this->user)->get(route('certificates.show', $cert));
+        $showResponse->assertOk();
+        $showResponse->assertSee(ltrim($createdUser->signature_path, '/\\'));
+
+        // Clean up created fake signature file
+        if ($createdUser->signature_path && file_exists(public_path(ltrim($createdUser->signature_path, '/\\')))) {
+            @unlink(public_path(ltrim($createdUser->signature_path, '/\\')));
+        }
     }
 }

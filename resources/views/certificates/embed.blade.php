@@ -76,7 +76,7 @@
         <!-- Official Report Title -->
         <div class="text-center my-3">
             <h1 class="text-sm sm:text-base font-black text-slate-900 tracking-wide uppercase underline decoration-[#0E4DA4] decoration-2">
-                REPORT THOROUGH EXAMINATION OF LIFTING EQUIPMENT
+                REPORT OF THOROUGH EXAMINATION OF LIFTING EQUIPMENT
             </h1>
             <p class="text-[10px] text-slate-600 italic mt-0.5">
                 This report complies with the requirements of the Lifting Operations and Lifting Equipment Regulations 1998

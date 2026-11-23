@@ -74,6 +74,7 @@ class UserController extends Controller
             'job_title_en' => ['nullable', 'string', 'max:100'],
             'role_id' => ['required', 'exists:roles,id'],
             'is_active' => ['nullable', 'boolean'],
+            'signature' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,webp', 'max:5120'],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['exists:permissions,id'],
         ]);
@@ -90,6 +91,19 @@ class UserController extends Controller
             'role' => $selectedRole->name,
             'is_active' => $request->boolean('is_active', true),
         ]);
+
+        // Handle signature upload
+        if ($request->hasFile('signature') && $request->file('signature')->isValid()) {
+            $file = $request->file('signature');
+            $dir = public_path('signatures');
+            if (! file_exists($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $ext = $file->getClientOriginalExtension() ?: 'png';
+            $filename = 'sig_user_'.$user->id.'_'.time().'.'.$ext;
+            $file->move($dir, $filename);
+            $user->update(['signature_path' => '/signatures/'.$filename]);
+        }
 
         // Assign selected role
         $user->roles()->sync([$selectedRole->id]);
@@ -131,6 +145,8 @@ class UserController extends Controller
             'job_title_en' => ['nullable', 'string', 'max:100'],
             'role_id' => ['required', 'exists:roles,id'],
             'is_active' => ['nullable', 'boolean'],
+            'signature' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,webp', 'max:5120'],
+            'remove_signature' => ['nullable', 'boolean'],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['exists:permissions,id'],
         ]);
@@ -149,6 +165,33 @@ class UserController extends Controller
 
         if (! empty($validated['password'])) {
             $userData['password'] = Hash::make($validated['password']);
+        }
+
+        // Handle signature upload or removal
+        if ($request->hasFile('signature') && $request->file('signature')->isValid()) {
+            if ($user->signature_path && str_starts_with($user->signature_path, '/signatures/')) {
+                $oldFile = public_path(ltrim($user->signature_path, '/\\'));
+                if (file_exists($oldFile)) {
+                    @unlink($oldFile);
+                }
+            }
+            $file = $request->file('signature');
+            $dir = public_path('signatures');
+            if (! file_exists($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $ext = $file->getClientOriginalExtension() ?: 'png';
+            $filename = 'sig_user_'.$user->id.'_'.time().'.'.$ext;
+            $file->move($dir, $filename);
+            $userData['signature_path'] = '/signatures/'.$filename;
+        } elseif ($request->boolean('remove_signature')) {
+            if ($user->signature_path && str_starts_with($user->signature_path, '/signatures/')) {
+                $oldFile = public_path(ltrim($user->signature_path, '/\\'));
+                if (file_exists($oldFile)) {
+                    @unlink($oldFile);
+                }
+            }
+            $userData['signature_path'] = null;
         }
 
         $user->update($userData);

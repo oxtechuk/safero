@@ -107,6 +107,17 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
+            @if($certificate->equipment_type === 'crane' || (!empty($certificate->checklist_items) && count($certificate->checklist_items) > 0))
+                @php
+                    $isChecklistActive = $includeChecklist ?? ($certificate->include_checklist ?? true);
+                @endphp
+                <a href="{{ request()->fullUrlWithQuery(['checklist' => $isChecklistActive ? '0' : '1']) }}" 
+                   class="px-3 py-2.5 rounded-xl border {{ $isChecklistActive ? 'border-blue-300 bg-blue-50 text-[#0E4DA4]' : 'border-slate-200 bg-slate-50 text-slate-500' }} font-bold text-xs sm:text-sm transition flex items-center gap-1.5"
+                   title="{{ $isChecklistActive ? __('إخفاء الشيك ليست من الشهادة') : __('إظهار الشيك ليست في الشهادة') }}">
+                    <span>{{ $isChecklistActive ? '📋 الشيك ليست: مفعّل (صفحتين)' : '📋 الشيك ليست: ملغي (صفحة 1 فقط)' }}</span>
+                </a>
+            @endif
+
             <!-- Print Equipment Sticker Button -->
             <a href="{{ route('certificates.sticker', $certificate) }}" 
                target="_blank"
@@ -154,7 +165,7 @@
         <!-- Official Report Title -->
         <div class="text-center mb-3">
             <h1 class="text-base sm:text-lg font-black text-[#0E4DA4] tracking-wide uppercase font-en">
-                REPORT THOROUGH EXAMINATION OF LIFTING EQUIPMENT
+                REPORT OF THOROUGH EXAMINATION OF LIFTING EQUIPMENT
             </h1>
             <p class="text-[10px] text-slate-600 font-en italic mt-0.5">
                 This report complies with the requirements of the Lifting Operations and Lifting Equipment Regulations 1998
@@ -357,8 +368,29 @@
                     <span class="text-[9.5px] font-bold text-slate-600">Name and Signature of the person issue this certificate</span>
                     <div class="my-auto">
                         @php
-                            $engSign = setting('engineer_signature_path');
-                            $engSignPath = $engSign ? ltrim($engSign, '/\\') : null;
+                            $engSignPath = null;
+                            if ($certificate->inspector && $certificate->inspector->signature_path) {
+                                $cand = ltrim($certificate->inspector->signature_path, '/\\');
+                                if (file_exists(public_path($cand))) {
+                                    $engSignPath = $cand;
+                                }
+                            }
+                            if (! $engSignPath && $certificate->issuer_name) {
+                                $matchedUser = \App\Models\User::where('name', $certificate->issuer_name)->first();
+                                if ($matchedUser && $matchedUser->signature_path) {
+                                    $cand = ltrim($matchedUser->signature_path, '/\\');
+                                    if (file_exists(public_path($cand))) {
+                                        $engSignPath = $cand;
+                                    }
+                                }
+                            }
+                            if (! $engSignPath) {
+                                $engSign = setting('engineer_signature_path');
+                                $cand = $engSign ? ltrim($engSign, '/\\') : null;
+                                if ($cand && file_exists(public_path($cand))) {
+                                    $engSignPath = $cand;
+                                }
+                            }
                         @endphp
                         @if($engSignPath && file_exists(public_path($engSignPath)))
                             <img src="{{ asset($engSignPath) }}" alt="Engineer Signature" class="h-10 mx-auto object-contain">
@@ -419,7 +451,7 @@
     </div>
 
     <!-- ================= PAGE 2: Crane Inspection Checklist (When Applicable) ================= -->
-    @if($certificate->equipment_type === 'crane' || (!empty($certificate->checklist_items) && count($certificate->checklist_items) > 0))
+    @if(($includeChecklist ?? ($certificate->include_checklist ?? true)) && ($certificate->equipment_type === 'crane' || (!empty($certificate->checklist_items) && count($certificate->checklist_items) > 0)))
         @php
             $page2Title = $certificate->equipment_type === 'crane' 
                 ? 'MOBILE CRANE INSPECTION CHECKLIST' 

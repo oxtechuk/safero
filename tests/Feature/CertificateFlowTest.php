@@ -150,7 +150,7 @@ class CertificateFlowTest extends TestCase
         // Test viewing certificate page
         $showResponse = $this->actingAs($user)->get(route('certificates.show', $certificate));
         $showResponse->assertStatus(200);
-        $showResponse->assertSee('REPORT THOROUGH EXAMINATION OF LIFTING EQUIPMENT');
+        $showResponse->assertSee('REPORT OF THOROUGH EXAMINATION OF LIFTING EQUIPMENT');
         $showResponse->assertSee('Move Pallet');
         $showResponse->assertSee('70 Ton');
         $showResponse->assertSee('SCAN TO VERIFY');
@@ -234,7 +234,7 @@ class CertificateFlowTest extends TestCase
         $response = $this->get('/embed/certificate/'.$certificate->uuid);
         $response->assertStatus(200);
         $response->assertHeader('X-Frame-Options', 'ALLOWALL');
-        $response->assertSee('REPORT THOROUGH EXAMINATION OF LIFTING EQUIPMENT');
+        $response->assertSee('REPORT OF THOROUGH EXAMINATION OF LIFTING EQUIPMENT');
         $response->assertSee('Move Pallet');
         $response->assertSee('70 Ton');
     }

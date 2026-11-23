@@ -49,17 +49,17 @@
         .content-area {
             position: relative;
             z-index: 10;
-            padding-top: 154px;
+            padding-top: 172px;
             padding-left: 28px;
             padding-right: 28px;
             padding-bottom: 25px;
         }
         .title-block {
             text-align: center;
-            margin-bottom: 6px;
+            margin-bottom: 7px;
         }
         .main-heading {
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 900;
             color: #0E4DA4;
             letter-spacing: 0.5px;
@@ -76,19 +76,19 @@
             width: 100%;
             border-collapse: collapse;
             border: 1.5px solid #0f172a;
-            margin-bottom: 5px;
-            font-size: 8.5px;
+            margin-bottom: 6px;
+            font-size: 9px;
         }
         .cert-table th, .cert-table td {
             border: 1px solid #1e293b;
-            padding: 3px 5px;
+            padding: 3.5px 5.5px;
             vertical-align: middle;
         }
         .th-cell {
-            background-color: #E2EEFB;
+            background-color: #DCECFB;
             font-weight: bold;
             color: #0A3778;
-            font-size: 8.5px;
+            font-size: 9px;
         }
         .bold-val {
             font-weight: bold;
@@ -183,7 +183,7 @@
             
             <!-- Document Title -->
             <div class="title-block">
-                <h1 class="main-heading">REPORT THOROUGH EXAMINATION OF LIFTING EQUIPMENT</h1>
+                <h1 class="main-heading">REPORT OF THOROUGH EXAMINATION OF LIFTING EQUIPMENT</h1>
                 <div class="compliance-subtext">This report complies with the requirements of the Lifting Operations and Lifting Equipment Regulations 1998</div>
             </div>
 
@@ -436,8 +436,8 @@
         </div>
     </div>
 
-    <!-- ================= PAGE 2: Inspection Checklist (Only when checklist items exist) ================= -->
-    @if($certificate->equipment_type === 'crane' || (!empty($certificate->checklist_items) && count($certificate->checklist_items) > 0))
+    <!-- ================= PAGE 2: Inspection Checklist (Only when checklist items exist and printing is enabled) ================= -->
+    @if(($includeChecklist ?? ($certificate->include_checklist ?? true)) && ($certificate->equipment_type === 'crane' || (!empty($certificate->checklist_items) && count($certificate->checklist_items) > 0)))
         @php
             $checklist = $certificate->checklist_items ?: \App\Models\Certificate::defaultCraneChecklist();
             $page2Title = $certificate->equipment_type === 'crane' 

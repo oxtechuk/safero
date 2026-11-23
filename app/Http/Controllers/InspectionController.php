@@ -6,6 +6,7 @@ use App\Models\Certificate;
 use App\Models\CertificateTemplate;
 use App\Models\Customer;
 use App\Models\Inspection;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -66,6 +67,7 @@ class InspectionController extends Controller
         $nextNumber = Inspection::generateNextInspectionNumber();
         $today = Carbon::today()->toDateString();
         $user = Auth::user();
+        $inspectors = User::where('is_active', true)->orderBy('name')->get();
 
         $selectedTemplate = null;
         if ($templateId = $request->input('template_id')) {
@@ -80,6 +82,7 @@ class InspectionController extends Controller
             'nextNumber',
             'today',
             'user',
+            'inspectors',
             'selectedTemplate',
             'selectedCustomerId'
         ));
@@ -106,6 +109,7 @@ class InspectionController extends Controller
             'swl' => ['nullable', 'string', 'max:100'],
             'inspection_type' => ['required', 'string', 'in:initial,periodic,post_repair,post_incident'],
             'inspection_date' => ['required', 'date'],
+            'inspector_id' => ['nullable', 'exists:users,id'],
             'inspector_name' => ['required', 'string', 'max:190'],
             'inspector_cert_ref' => ['nullable', 'string', 'max:190'],
             'notes' => ['nullable', 'string'],
@@ -163,7 +167,7 @@ class InspectionController extends Controller
             'next_inspection_date' => $nextInspectionDate,
             'inspector_name' => $validated['inspector_name'],
             'inspector_cert_ref' => $validated['inspector_cert_ref'] ?? null,
-            'inspector_id' => Auth::id(),
+            'inspector_id' => $validated['inspector_id'] ?? Auth::id(),
             'checklist_results' => $formattedChecklist,
             'overall_condition' => 'safe',
             'status' => 'draft',
@@ -320,7 +324,8 @@ class InspectionController extends Controller
             'repair_particulars' => $inspection->corrective_actions ?: 'None required.',
             'tests_carried_out' => 'Thorough Visual Examination, Operational & Safety Limit Verification in accordance with '.$inspection->reference_standard,
             'is_safe_to_operate' => ($inspection->overall_condition === 'safe'),
-            'issuer_name' => $inspection->inspector_name ?: (Auth::user()?->name ?? 'Eng. Technical Inspector'),
+            'inspector_id' => $inspection->inspector_id ?: Auth::id(),
+            'issuer_name' => $inspection->inspector?->name ?: ($inspection->inspector_name ?: (Auth::user()?->name ?? 'Eng. Technical Inspector')),
             'authenticator_name' => setting('authenticator_name', 'Eng. Technical Manager (ISO 17020)'),
             'status' => 'issued',
             'created_by' => Auth::id(),

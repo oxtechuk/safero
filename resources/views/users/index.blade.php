@@ -127,9 +127,16 @@
 
                                 <!-- User Name & Email -->
                                 <td class="px-4 py-2.5 whitespace-nowrap">
-                                    <a href="{{ route('users.edit', $user) }}" class="font-bold text-slate-900 group-hover:text-[#714B67] transition">
-                                        {{ $user->name }}
-                                    </a>
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ route('users.edit', $user) }}" class="font-bold text-slate-900 group-hover:text-[#714B67] transition">
+                                            {{ $user->name }}
+                                        </a>
+                                        @if($user->signature_path)
+                                            <span class="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200" title="يوجد توقيع معتمد للمهندس">
+                                                ✍️ توقيع معتمد
+                                            </span>
+                                        @endif
+                                    </div>
                                     <div class="text-[11px] text-slate-500 font-en flex items-center gap-1.5 mt-0.5">
                                         <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                         <span>{{ $user->email }}</span>
@@ -294,9 +301,16 @@
 
                     <!-- Footer: Role Badge + Action Button -->
                     <div class="flex items-center justify-between pt-2">
-                        <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
-                            {{ $user->primaryRoleName() }}
-                        </span>
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                                {{ $user->primaryRoleName() }}
+                            </span>
+                            @if($user->signature_path)
+                                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200" title="يوجد توقيع معتمد">
+                                    ✍️ توقيع
+                                </span>
+                            @endif
+                        </div>
 
                         <a href="{{ route('users.edit', $user) }}" class="text-xs font-bold text-[#714B67] hover:underline flex items-center gap-1">
                             <span>تعديل الصلاحيات</span>
