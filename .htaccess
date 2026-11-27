@@ -1,0 +1,25 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes +FollowSymLinks
+    </IfModule>
+
+    RewriteEngine On
+
+    # 1. Protect Sensitive Files & Dotfiles (Environment, Git, Composer, Package, Artisan)
+    <FilesMatch "^\.(env|git|editorconfig|npmrc|ai)|(composer|package|package-lock|phpunit|vite\.config)\.(json|lock|xml|js)|artisan|boost\.json|CLAUDE\.md|AGENTS\.md">
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+            Order allow,deny
+            Deny from all
+        </IfModule>
+    </FilesMatch>
+
+    # 2. Block direct HTTP access to internal Laravel directories
+    RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests|vendor)/ - [F,L,NC]
+
+    # 3. Transparently rewrite all web traffic to the public/ directory
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
